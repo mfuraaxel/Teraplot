@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeraPlot — Rwanda Land Marketplace</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Leaflet -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<style>
+/* ─── RESET & VARIABLES ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0c0b09;
+  --bg2:      #161410;
+  --bg3:      #1e1b16;
+  --border:   rgba(212, 184, 150, 0.10);
+  --border2:  rgba(212, 184, 150, 0.18);
+  --sand:     #d4b896;
+  --sand-dim: #8a7a68;
+  --cream:    #f0ebe3;
+  --terra:    #c2622a;
+  --terra-h:  #d97840;
+  --fog:      #4e4840;
+  --mist:     #7a6e62;
+  --serif:    'Playfair Display', Georgia, serif;
+  --sans:     'DM Sans', system-ui, sans-serif;
+  --nav-h:    54px;
+  --tab-h:    40px;
+  --chrome:   94px; /* nav + tab combined */
+}
+
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--sand);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ─── TYPOGRAPHY ───────────────────────────────────────────────── */
+.serif { font-family: var(--serif); }
+.cream { color: var(--cream); }
+.dim   { color: var(--mist); }
+.tiny  { font-size: 11px; letter-spacing: 0.6px; }
+.upper { text-transform: uppercase; }
+
+/* ─── SCROLLABLE CONTENT ───────────────────────────────────────── */
+.scroll { overflow-y: auto; height: 100%; }
+.scroll::-webkit-scrollbar { width: 3px; }
+.scroll::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* ─── NAV ───────────────────────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  height: var(--nav-h);
+  background: rgba(12, 11, 9, 0.95);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px;
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--cream);
+  font-style: italic;
+  letter-spacing: -0.5px;
+  cursor: pointer;
+}
+.nav-logo span { color: var(--terra); font-style: normal; }
+.nav-links { display: flex; gap: 32px; }
+.nav-link {
+  font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--mist); cursor: pointer; transition: color 0.15s;
+  background: none; border: none; font-family: var(--sans);
+}
+.nav-link:hover { color: var(--sand); }
+.nav-actions { display: flex; gap: 10px; }
+
+/* ─── BUTTONS ───────────────────────────────────────────────────── */
+.btn {
+  font-family: var(--sans); font-size: 12px; font-weight: 500;
+  padding: 9px 18px; border-radius: 3px; cursor: pointer;
+  border: none; transition: all 0.15s; letter-spacing: 0.3px;
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--mist);
+}
+.btn-ghost:hover { color: var(--sand); border-color: var(--sand-dim); }
+.btn-primary { background: var(--terra); color: var(--cream); }
+.btn-primary:hover { background: var(--terra-h); }
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--terra);
+  color: var(--terra);
+  font-size: 11px; padding: 7px 14px;
+}
+.btn-outline:hover { background: var(--terra); color: var(--cream); }
+
+/* ─── TABS ──────────────────────────────────────────────────────── */
+.tabs {
+  position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 499;
+  height: var(--tab-h);
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: stretch;
+  padding: 0 40px;
+}
+.tab-btn {
+  font-family: var(--sans); font-size: 11px; letter-spacing: 0.8px;
+  text-transform: uppercase; color: var(--fog); cursor: pointer;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  padding: 0 18px; transition: all 0.15s;
+}
+.tab-btn:hover { color: var(--mist); }
+.tab-btn.active { color: var(--sand); border-bottom-color: var(--terra); }
+
+/* ─── PAGES ─────────────────────────────────────────────────────── */
+.page {
+  display: none;
+  position: fixed;
+  top: var(--chrome);
+  left: 0; right: 0; bottom: 0;
+  overflow-y: auto;
+}
+.page.active { display: block; }
+
+/* MAP page needs flex, not scroll */
+#page-map {
+  display: none;
+  overflow: hidden;
+}
+#page-map.active {
+  display: flex;
+}
+
+/* ─── HOME PAGE ──────────────────────────────────────────────────── */
+.hero {
+  display: grid;
+  grid-template-columns: 58% 42%;
+  height: calc(100vh - var(--chrome));
+  overflow: hidden;
+}
+.hero-left {
+  padding: 60px 52px 60px 52px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+}
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--terra); margin-bottom: 20px;
+}
+.hero-eyebrow::before {
+  content: ''; width: 28px; height: 1px; background: var(--terra);
+}
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(38px, 4.8vw, 68px);
+  color: var(--cream);
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  margin-bottom: 22px;
+}
+.hero-title em { color: var(--terra); }
+.hero-desc {
+  font-size: 15px; color: var(--mist); line-height: 1.8;
+  max-width: 420px; margin-bottom: 40px; font-weight: 300;
+}
+.hero-search {
+  display: flex;
+  align-items: stretch;
+  background: rgba(255,255,255,0.05);
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  height: 58px;
+  margin-bottom: 48px;
+}
+.hero-search select {
+  background: transparent;
+  border: none;
+  border-right: 1px solid rgba(212,184,150,0.2);
+  outline: none;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: #f0ebe3;
+  padding: 0 28px 0 14px;
+  width: 115px;
+  min-width: 115px;
+  max-width: 115px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4b896' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  flex-shrink: 0;
+}
+.hero-search select option { background: #1e1b16; color: #f0ebe3; }
+.hero-search input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--sans);
+  font-size: 15px;
+  color: #f0ebe3;
+  padding: 0 18px;
+  min-width: 0;
+}
+.hero-search input::placeholder {
+  color: rgba(240,235,227,0.6);
+  font-size: 15px;
+}
+.hero-search .btn-primary {
+  border-radius: 6px;
+  margin: 6px 8px;
+  padding: 0 22px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--terra);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.hero-search .btn-primary:hover { background: var(--terra-h); }
+
+.hero-stats { display: flex; gap: 40px; }
+.stat-num {
+  font-family: var(--serif);
+  font-size: 32px; color: var(--cream);
+  line-height: 1;
+}
+.stat-label { font-size: 11px; color: var(--fog); margin-top: 4px; letter-spacing: 0.3px; }
+
+.hero-right {
+  position: relative;
+  background: var(--bg2);
+  overflow: hidden;
+}
+.hero-map-art {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-featured {
+  position: absolute;
+  bottom: 32px; left: 24px; right: 24px;
+  background: rgba(12, 11, 9, 0.88);
+  border: 1px solid var(--border2);
+  backdrop-filter: blur(10px);
+  padding: 20px 22px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.hero-featured:hover { border-color: var(--terra); }
+.featured-tag {
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--terra); margin-bottom: 10px;
+}
+.featured-title {
+  font-family: var(--serif); font-size: 20px; color: var(--cream);
+  margin-bottom: 5px;
+}
+.featured-loc { font-size: 12px; color: var(--mist); margin-bottom: 14px; }
+.featured-row { display: flex; justify-content: space-between; align-items: center; }
+.featured-price { font-family: var(--serif); font-size: 22px; color: var(--sand); }
+
+/* ─── LISTINGS SECTION ───────────────────────────────────────────── */
+.listings-section { padding: 56px 52px 80px; }
+.section-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.section-hed { font-family: var(--serif); font-size: 28px; color: var(--cream); font-style: italic; }
+.section-sub { font-size: 12px; color: var(--fog); margin-top: 4px; }
+.section-controls { display: flex; gap: 12px; align-items: center; }
+.filter-group { display: flex; gap: 5px; }
+.filter-chip {
+  font-family: var(--sans); font-size: 10px; letter-spacing: 0.5px;
+  text-transform: uppercase; padding: 6px 13px;
+  border: 1px solid var(--border); color: var(--fog);
+  background: transparent; cursor: pointer; border-radius: 2px;
+  transition: all 0.15s;
+}
+.filter-chip:hover { color: var(--mist); border-color: var(--border2); }
+.filter-chip.active { background: var(--terra); border-color: var(--terra); color: var(--cream); }
+.sort-select {
+  font-family: var(--sans); font-size: 12px; color: var(--mist);
+  background: transparent; border: 1px solid var(--border);
+  padding: 6px 10px; outline: none; cursor: pointer; border-radius: 2px;
+}
+.sort-select option { background: var(--bg2); }
+
+/* ─── LISTING CARDS ──────────────────────────────────────────────── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+}
+.listing-card {
+  background: var(--bg);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.listing-card:hover { background: var(--bg2); }
+.card-image {
+  height: 185px;
+  position: relative;
+  overflow: hidden;
+}
+.card-type-badge {
+  position: absolute; top: 12px; left: 12px; z-index: 1;
+  font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 4px 9px;
+  background: rgba(12,11,9,0.82);
+  border: 1px solid;
+  border-radius: 2px;
+}
+.card-save {
+  position: absolute; top: 10px; right: 10px; z-index: 1;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(12,11,9,0.72);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--fog); cursor: pointer;
+  transition: color 0.15s;
+}
+.card-save:hover { color: var(--terra); }
+.card-body { padding: 18px 20px; }
+.card-price { font-family: var(--serif); font-size: 19px; margin-bottom: 5px; }
+.card-title { font-size: 13px; color: var(--cream); margin-bottom: 3px; font-weight: 400; }
+.card-location { font-size: 12px; color: var(--fog); margin-bottom: 14px; }
+.card-specs {
+  display: flex;
+  border-top: 1px solid var(--border);
+  padding-top: 12px; margin-bottom: 12px;
+}
+.spec-item { flex: 1; }
+.spec-item + .spec-item { border-left: 1px solid var(--border); padding-left: 10px; margin-left: 10px; }
+.spec-val { font-size: 12px; color: var(--cream); font-weight: 500; }
+.spec-key { font-size: 10px; color: var(--fog); margin-top: 2px; }
+.card-seller { display: flex; align-items: center; gap: 8px; }
+.seller-av {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--cream); font-weight: 600;
+}
+.seller-name { font-size: 11px; color: var(--mist); }
+.verified-tag {
+  margin-left: auto;
+  font-size: 10px; color: var(--terra);
+  border: 1px solid rgba(194,98,42,0.35);
+  padding: 2px 7px; border-radius: 2px;
+}
+
+/* ─── MAP PAGE ───────────────────────────────────────────────────── */
+.map-sidebar {
+  width: 340px; min-width: 340px;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.map-sidebar-head {
+  padding: 20px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.map-sidebar-title {
+  font-family: var(--serif); font-size: 20px; color: var(--cream);
+  font-style: italic; margin-bottom: 12px;
+}
+.map-search-bar {
+  display: flex;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.map-search-bar input {
+  flex: 1; background: transparent; border: none; outline: none;
+  font-family: var(--sans); font-size: 13px; color: var(--cream);
+  padding: 10px 13px;
+}
+.map-search-bar input::placeholder { color: var(--fog); }
+.map-search-bar button {
+  background: var(--terra); border: none; color: var(--cream);
+  padding: 0 14px; cursor: pointer; font-size: 14px;
+  transition: background 0.15s;
+}
+.map-search-bar button:hover { background: var(--terra-h); }
+.map-filter-row {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; gap: 6px; flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.map-results-count {
+  padding: 9px 20px 5px;
+  font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--fog);
+  flex-shrink: 0;
+}
+.map-cards-list {
+  flex: 1;
+  overflow-y: auto;
+}
+.map-cards-list::-webkit-scrollbar { width: 2px; }
+.map-cards-list::-webkit-scrollbar-thumb { background: var(--border2); }
+
+.map-plot-card {
+  display: flex; gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+  align-items: flex-start;
+}
+.map-plot-card:hover { background: var(--bg2); }
+.map-plot-card.active {
+  background: var(--bg2);
+  border-left: 2px solid var(--terra);
+  padding-left: 18px;
+}
+.map-plot-icon {
+  width: 50px; height: 46px; min-width: 50px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; border-radius: 2px; flex-shrink: 0;
+}
+.map-plot-price { font-family: var(--serif); font-size: 14px; color: var(--sand); margin-bottom: 2px; }
+.map-plot-title { font-size: 12px; color: var(--cream); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.map-plot-loc { font-size: 11px; color: var(--fog); }
+.map-plot-tags { display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap; }
+.map-plot-tag {
+  font-size: 10px; padding: 2px 7px;
+  border: 1px solid var(--border);
+  color: var(--mist); border-radius: 2px;
+}
+
+.map-canvas-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+#map {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+.map-top-badge {
+  position: absolute; top: 14px; right: 14px; z-index: 400;
+  background: rgba(12,11,9,0.88);
+  border: 1px solid var(--border2);
+  backdrop-filter: blur(8px);
+  padding: 8px 14px;
+  font-size: 12px; color: var(--mist);
+  pointer-events: none;
+}
+.map-legend-box {
+  position: absolute; bottom: 22px; right: 14px; z-index: 400;
+  background: rgba(12,11,9,0.88);
+  border: 1px solid var(--border2);
+  backdrop-filter: blur(8px);
+  padding: 12px 14px;
+  pointer-events: none;
+}
+.legend-title { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--fog); margin-bottom: 8px; }
+.legend-row { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--mist); margin-bottom: 5px; }
+.legend-row:last-child { margin-bottom: 0; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* Leaflet popup customization */
+.leaflet-popup-content-wrapper {
+  background: #fff !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18) !important;
+  padding: 0 !important;
+}
+.leaflet-popup-content { margin: 16px 18px !important; }
+.leaflet-popup-tip { background: #fff !important; }
+.leaflet-popup-close-button { top: 10px !important; right: 12px !important; color: #aaa !important; font-size: 18px !important; }
+
+/* ─── DETAIL PAGE ────────────────────────────────────────────────── */
+.detail-layout { display: grid; grid-template-columns: 1fr 320px; }
+.detail-main { padding: 40px 48px; border-right: 1px solid var(--border); }
+.detail-eyebrow {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--terra); margin-bottom: 16px;
+}
+.detail-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--terra); }
+.detail-title {
+  font-family: var(--serif); font-size: 38px; color: var(--cream);
+  line-height: 1.08; letter-spacing: -0.5px; margin-bottom: 10px;
+}
+.detail-meta { font-size: 13px; color: var(--mist); margin-bottom: 28px; }
+.detail-image {
+  height: 300px; background: var(--bg2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px; position: relative; overflow: hidden;
+}
+.detail-thumbs { display: flex; gap: 8px; margin-bottom: 28px; }
+.detail-thumb {
+  flex: 1; height: 54px; background: var(--bg2);
+  border: 1.5px solid var(--border); cursor: pointer; transition: border-color 0.15s;
+}
+.detail-thumb.active { border-color: var(--terra); }
+.detail-specs {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--border);
+  margin-bottom: 28px;
+}
+.detail-spec { background: var(--bg); padding: 16px 14px; text-align: center; }
+.detail-spec-val { font-family: var(--serif); font-size: 18px; color: var(--sand); margin-bottom: 3px; }
+.detail-spec-key { font-size: 10px; color: var(--fog); letter-spacing: 0.5px; text-transform: uppercase; }
+.detail-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 22px; }
+.detail-tag {
+  font-size: 11px; padding: 5px 11px;
+  border: 1px solid var(--border);
+  color: var(--mist); border-radius: 2px;
+}
+.detail-description { font-size: 14px; color: var(--mist); line-height: 1.8; font-weight: 300; margin-bottom: 28px; }
+.docs-heading { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--fog); margin-bottom: 10px; }
+.doc-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border: 1px solid var(--border);
+  margin-bottom: 7px; cursor: pointer; transition: border-color 0.15s;
+}
+.doc-row:hover { border-color: var(--border2); }
+.doc-icon {
+  width: 30px; height: 30px;
+  background: rgba(194,98,42,0.12);
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.doc-name { font-size: 12px; color: var(--cream); }
+.doc-sub { font-size: 11px; color: var(--fog); }
+.doc-arrow { margin-left: auto; color: var(--fog); font-size: 12px; }
+
+.detail-sidebar { padding: 40px 28px; }
+.price-label { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--fog); margin-bottom: 8px; }
+.price-main { font-family: var(--serif); font-size: 30px; color: var(--cream); margin-bottom: 4px; }
+.price-sub { font-size: 12px; color: var(--mist); margin-bottom: 20px; }
+.action-btn {
+  width: 100%; padding: 13px; font-family: var(--sans); font-size: 13px; font-weight: 500;
+  cursor: pointer; border-radius: 3px; margin-bottom: 9px; border: none; transition: all 0.15s;
+}
+.action-primary { background: var(--terra); color: var(--cream); }
+.action-primary:hover { background: var(--terra-h); }
+.action-secondary {
+  background: transparent; color: var(--mist);
+  border: 1px solid var(--border2);
+}
+.action-secondary:hover { color: var(--sand); border-color: var(--sand-dim); }
+.disclaimer {
+  font-size: 11px; color: var(--fog); line-height: 1.65;
+  padding: 12px 14px; background: var(--bg2);
+  border-left: 2px solid rgba(194,98,42,0.3);
+  margin: 14px 0 28px;
+}
+.sidebar-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+.seller-section-title { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--fog); margin-bottom: 14px; }
+.seller-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.seller-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--cream); font-weight: 600;
+}
+.seller-name-main { font-size: 15px; color: var(--cream); }
+.seller-since { font-size: 11px; color: var(--mist); }
+.seller-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+.seller-stat { background: var(--bg2); padding: 10px 13px; }
+.seller-stat-val { font-size: 16px; font-weight: 500; color: var(--cream); }
+.seller-stat-key { font-size: 10px; color: var(--fog); margin-top: 1px; }
+.report-link {
+  display: block; text-align: center; font-size: 11px;
+  color: var(--fog); text-decoration: underline; cursor: pointer;
+  margin-top: 14px; opacity: 0.6;
+}
+
+/* ─── POST FORM PAGE ─────────────────────────────────────────────── */
+.form-page { max-width: 660px; margin: 0 auto; padding: 52px 40px 80px; }
+.form-title { font-family: var(--serif); font-size: 36px; color: var(--cream); font-style: italic; letter-spacing: -0.5px; margin-bottom: 6px; }
+.form-subtitle { font-size: 13px; color: var(--mist); margin-bottom: 40px; }
+.progress-steps { display: flex; margin-bottom: 40px; position: relative; }
+.progress-steps::before {
+  content: ''; position: absolute;
+  top: 13px; left: 0; right: 0; height: 1px;
+  background: var(--border); z-index: 0;
+}
+.progress-step { flex: 1; text-align: center; position: relative; z-index: 1; }
+.step-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 7px;
+  font-size: 11px; font-weight: 500;
+  background: var(--bg); border: 1px solid var(--border); color: var(--fog);
+}
+.progress-step.done .step-dot { background: var(--terra); border-color: var(--terra); color: var(--cream); }
+.progress-step.current .step-dot { background: var(--bg2); border-color: var(--sand); color: var(--sand); }
+.step-label { font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--fog); }
+.progress-step.done .step-label { color: var(--terra); }
+.progress-step.current .step-label { color: var(--sand); }
+.form-notice {
+  padding: 12px 15px; margin-bottom: 24px;
+  border-left: 2px solid var(--terra);
+  background: rgba(194,98,42,0.07);
+  font-size: 12px; color: var(--mist); line-height: 1.65;
+}
+.form-section { border: 1px solid var(--border); margin-bottom: 14px; }
+.form-section-head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--mist);
+}
+.form-section-body { padding: 20px; }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { margin-bottom: 14px; }
+.form-group:last-child { margin-bottom: 0; }
+.form-label {
+  display: block; font-size: 11px; letter-spacing: 0.5px;
+  text-transform: uppercase; color: var(--fog); margin-bottom: 6px;
+}
+.form-required { color: var(--terra); }
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 3px; padding: 11px 13px;
+  font-family: var(--sans); font-size: 13px; color: var(--cream); outline: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus { border-color: var(--border2); }
+.form-select option { background: var(--bg2); }
+.form-textarea { height: 84px; resize: none; }
+.form-input::placeholder { color: var(--fog); }
+.land-type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.land-type-btn {
+  padding: 13px 8px; text-align: center; cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg2); color: var(--fog);
+  font-size: 12px; font-family: var(--sans);
+  transition: all 0.15s; border-radius: 3px;
+}
+.land-type-btn:hover { border-color: var(--border2); color: var(--mist); }
+.land-type-btn.active { border-color: var(--terra); color: var(--terra); background: rgba(194,98,42,0.07); }
+.land-type-icon { font-size: 20px; margin-bottom: 6px; }
+.upload-zone {
+  border: 1px dashed var(--border);
+  padding: 28px; text-align: center; cursor: pointer;
+  background: var(--bg2); border-radius: 3px; transition: all 0.15s;
+}
+.upload-zone:hover { border-color: var(--border2); background: var(--bg3); }
+.upload-icon { font-size: 24px; margin-bottom: 9px; opacity: 0.5; }
+.upload-text { font-size: 13px; color: var(--mist); }
+.upload-hint { font-size: 11px; color: var(--fog); margin-top: 4px; }
+.form-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 24px; padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* ─── HOW IT WORKS PAGE ────────────────────────────────────────── */
+.hiw-page { max-width: 860px; margin: 0 auto; padding: 64px 40px 100px; }
+.hiw-eyebrow {
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--terra); margin-bottom: 18px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hiw-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--terra); }
+.hiw-title {
+  font-family: var(--serif); font-size: clamp(32px, 4vw, 52px);
+  color: var(--cream); line-height: 1.1; letter-spacing: -1px;
+  margin-bottom: 16px;
+}
+.hiw-subtitle { font-size: 16px; color: var(--mist); max-width: 520px; line-height: 1.75; margin-bottom: 72px; font-weight: 300; }
+.hiw-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-bottom: 80px; }
+.hiw-step { background: var(--bg); padding: 36px 32px; position: relative; }
+.hiw-step-num {
+  font-family: var(--serif); font-size: 56px; color: var(--terra);
+  opacity: 0.18; line-height: 1; margin-bottom: 20px; font-style: italic;
+}
+.hiw-step-title { font-family: var(--serif); font-size: 22px; color: var(--cream); margin-bottom: 12px; }
+.hiw-step-desc { font-size: 14px; color: var(--mist); line-height: 1.75; font-weight: 300; }
+.hiw-step-icon { font-size: 32px; margin-bottom: 18px; }
+.hiw-arrow {
+  position: absolute; right: -18px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px; color: var(--terra); opacity: 0.4; z-index: 2;
+}
+.hiw-disclaimer {
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 28px 32px; margin-bottom: 72px;
+  border-left: 3px solid var(--terra);
+}
+.hiw-disclaimer-title { font-family: var(--serif); font-size: 18px; color: var(--cream); margin-bottom: 10px; }
+.hiw-disclaimer-text { font-size: 14px; color: var(--mist); line-height: 1.75; font-weight: 300; }
+.hiw-faq { }
+.hiw-faq-title { font-family: var(--serif); font-size: 28px; color: var(--cream); font-style: italic; margin-bottom: 28px; }
+.faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; cursor: pointer; }
+.faq-item:first-of-type { border-top: 1px solid var(--border); }
+.faq-q { display: flex; justify-content: space-between; align-items: center; }
+.faq-question { font-size: 15px; color: var(--cream); font-weight: 400; }
+.faq-toggle { color: var(--terra); font-size: 18px; transition: transform 0.2s; font-weight: 300; }
+.faq-toggle.open { transform: rotate(45deg); }
+.faq-answer { font-size: 14px; color: var(--mist); line-height: 1.75; font-weight: 300; padding-top: 12px; display: none; }
+.faq-answer.open { display: block; }
+.hiw-cta {
+  margin-top: 72px; text-align: center;
+  padding: 56px 40px;
+  background: var(--bg2); border: 1px solid var(--border);
+}
+.hiw-cta-title { font-family: var(--serif); font-size: 32px; color: var(--cream); font-style: italic; margin-bottom: 12px; }
+.hiw-cta-sub { font-size: 14px; color: var(--mist); margin-bottom: 28px; font-weight: 300; }
+.hiw-cta-btns { display: flex; gap: 14px; justify-content: center; }
+
+/* ─── ABOUT PAGE ───────────────────────────────────────────────── */
+.about-page { max-width: 860px; margin: 0 auto; padding: 64px 40px 100px; }
+.about-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 88px; align-items: center; }
+.about-hero-left { }
+.about-eyebrow {
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--terra); margin-bottom: 18px;
+  display: flex; align-items: center; gap: 12px;
+}
+.about-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--terra); }
+.about-title { font-family: var(--serif); font-size: clamp(30px, 3.5vw, 46px); color: var(--cream); line-height: 1.12; letter-spacing: -0.8px; margin-bottom: 20px; }
+.about-lead { font-size: 15px; color: var(--mist); line-height: 1.8; font-weight: 300; }
+.about-art {
+  background: var(--bg2); border: 1px solid var(--border);
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.about-mission {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 56px 0; margin-bottom: 80px;
+  display: grid; grid-template-columns: 1fr 2fr; gap: 60px; align-items: start;
+}
+.about-mission-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--terra); padding-top: 6px; }
+.about-mission-text { font-family: var(--serif); font-size: 22px; color: var(--cream); line-height: 1.6; font-style: italic; }
+.about-values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-bottom: 80px; }
+.about-value { background: var(--bg); padding: 32px 28px; }
+.about-value-icon { font-size: 28px; margin-bottom: 14px; }
+.about-value-title { font-family: var(--serif); font-size: 18px; color: var(--cream); margin-bottom: 10px; }
+.about-value-desc { font-size: 13px; color: var(--mist); line-height: 1.7; font-weight: 300; }
+.about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); margin-bottom: 80px; }
+.about-stat { background: var(--bg2); padding: 28px 24px; text-align: center; }
+.about-stat-num { font-family: var(--serif); font-size: 36px; color: var(--terra); margin-bottom: 6px; }
+.about-stat-label { font-size: 11px; color: var(--fog); letter-spacing: 0.5px; text-transform: uppercase; }
+.about-team { margin-bottom: 80px; }
+.about-team-title { font-family: var(--serif); font-size: 28px; color: var(--cream); font-style: italic; margin-bottom: 32px; }
+.about-team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+.team-card { background: var(--bg); padding: 28px 24px; }
+.team-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--cream); font-weight: 600;
+  margin-bottom: 14px;
+}
+.team-name { font-size: 15px; color: var(--cream); margin-bottom: 3px; }
+.team-role { font-size: 12px; color: var(--terra); margin-bottom: 8px; letter-spacing: 0.3px; }
+.team-bio { font-size: 12px; color: var(--mist); line-height: 1.65; font-weight: 300; }
+.about-contact {
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 48px 40px; text-align: center;
+  border-left: 3px solid var(--terra);
+}
+.about-contact-title { font-family: var(--serif); font-size: 26px; color: var(--cream); font-style: italic; margin-bottom: 10px; }
+.about-contact-sub { font-size: 14px; color: var(--mist); margin-bottom: 24px; font-weight: 300; }
+.about-contact-email { font-size: 18px; color: var(--terra); font-family: var(--serif); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ NAV ══════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-logo" onclick="switchTab('home')">Tera<span>Plot</span></div>
+  <div class="nav-links">
+    <button class="nav-link" onclick="switchTab('home')">Browse</button>
+    <button class="nav-link" onclick="switchTab('map')">Map view</button>
+    <button class="nav-link" onclick="switchTab('how')">How it works</button>
+    <button class="nav-link" onclick="switchTab('about')">About</button>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-ghost">Sign in</button>
+    <button class="btn btn-primary" onclick="switchTab('post')">List your plot</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════ TABS ══════════════════════════════ -->
+<div class="tabs">
+  <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">Home</button>
+  <button class="tab-btn" data-tab="map"  onclick="switchTab('map')">Map view</button>
+  <button class="tab-btn" data-tab="detail" onclick="switchTab('detail')">Listing detail</button>
+  <button class="tab-btn" data-tab="post" onclick="switchTab('post')">Post a plot</button>
+</div>
+
+<!-- ═══════════════════════════════ HOME ═════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Rwanda Land Marketplace</div>
+      <h1 class="hero-title">Own a piece of <em>Rwanda's</em> soil.</h1>
+      <p class="hero-desc">A direct marketplace connecting land owners and buyers across all 30 districts. No agents. No commission. Just people and land.</p>
+      <div class="hero-search">
+        <select>
+          <option>All districts</option>
+          <option>Kigali</option>
+          <option>Musanze</option>
+          <option>Huye</option>
+          <option>Rubavu</option>
+          <option>Kayonza</option>
+          <option>Rwamagana</option>
+        </select>
+        <input type="text" placeholder="Location, keyword, size...">
+        <button class="btn btn-primary">Search</button>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">1,240</div>
+          <div class="stat-label">Active plots</div>
+        </div>
+        <div>
+          <div class="stat-num">430+</div>
+          <div class="stat-label">Verified sellers</div>
+        </div>
+        <div>
+          <div class="stat-num">30</div>
+          <div class="stat-label">Districts covered</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-map-art">
+        <svg width="100%" height="100%" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="700" fill="#161410"/>
+          <g stroke="#d4b896" stroke-width="0.4" opacity="0.07">
+            <line x1="0" y1="100" x2="600" y2="100"/><line x1="0" y1="200" x2="600" y2="200"/>
+            <line x1="0" y1="300" x2="600" y2="300"/><line x1="0" y1="400" x2="600" y2="400"/>
+            <line x1="0" y1="500" x2="600" y2="500"/><line x1="0" y1="600" x2="600" y2="600"/>
+            <line x1="100" y1="0" x2="100" y2="700"/><line x1="200" y1="0" x2="200" y2="700"/>
+            <line x1="300" y1="0" x2="300" y2="700"/><line x1="400" y1="0" x2="400" y2="700"/>
+            <line x1="500" y1="0" x2="500" y2="700"/>
+          </g>
+          <g opacity="0.12" stroke="#d4b896" stroke-width="1" fill="none">
+            <rect x="55" y="75" width="115" height="95"/><rect x="178" y="75" width="145" height="65"/>
+            <rect x="330" y="75" width="85" height="125"/><rect x="420" y="75" width="135" height="80"/>
+            <rect x="55" y="180" width="85" height="115"/><rect x="148" y="148" width="175" height="85"/>
+            <rect x="55" y="305" width="205" height="105"/><rect x="268" y="208" width="105" height="135"/>
+            <rect x="378" y="162" width="175" height="105"/><rect x="195" y="318" width="165" height="125"/>
+            <rect x="55" y="418" width="135" height="85"/><rect x="368" y="282" width="95" height="108"/>
+          </g>
+          <rect x="148" y="148" width="175" height="85" fill="#c2622a" opacity="0.2"/>
+          <rect x="148" y="148" width="175" height="85" stroke="#c2622a" stroke-width="1.5" fill="none"/>
+          <circle cx="235" cy="190" r="6" fill="#c2622a" opacity="0.9"/>
+          <circle cx="235" cy="190" r="16" fill="#c2622a" opacity="0.12"/>
+          <g stroke="#7a6e62" stroke-width="2.5" opacity="0.08">
+            <path d="M0 288 Q148 275 300 298 Q452 320 600 288"/>
+            <path d="M258 0 Q268 178 258 398 Q248 598 263 700"/>
+          </g>
+        </svg>
+      </div>
+      <div class="hero-featured" onclick="switchTab('detail')">
+        <div class="featured-tag">Featured listing</div>
+        <div class="featured-title">600 sqm Residential Plot</div>
+        <div class="featured-loc">📍 Kicukiro, Kigali &middot; Title deed available</div>
+        <div class="featured-row">
+          <div class="featured-price">RWF 12,000,000</div>
+          <button class="btn btn-outline">View plot →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="listings-section">
+    <div class="section-header">
+      <div>
+        <div class="section-hed">Recent plots</div>
+        <div class="section-sub">1,240 plots available across Rwanda</div>
+      </div>
+      <div class="section-controls">
+        <div class="filter-group">
+          <button class="filter-chip active">All</button>
+          <button class="filter-chip">Residential</button>
+          <button class="filter-chip">Commercial</button>
+          <button class="filter-chip">Agricultural</button>
+        </div>
+        <select class="sort-select">
+          <option>Newest first</option>
+          <option>Price: Low to high</option>
+          <option>Largest first</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <!-- Card 1 -->
+      <div class="listing-card" data-type="residential" data-title="600 sqm plot kicukiro kigali" onclick="switchTab('detail')">
+        <div class="card-image" style="background:#181512">
+          <svg width="100%" height="100%" viewBox="0 0 400 185"><rect width="400" height="185" fill="#181512"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.08"><line x1="0" y1="46" x2="400" y2="46"/><line x1="0" y1="92" x2="400" y2="92"/><line x1="0" y1="138" x2="400" y2="138"/><line x1="80" y1="0" x2="80" y2="185"/><line x1="160" y1="0" x2="160" y2="185"/><line x1="240" y1="0" x2="240" y2="185"/><line x1="320" y1="0" x2="320" y2="185"/></g><rect x="95" y="38" width="210" height="109" stroke="#c2622a" stroke-width="1" fill="rgba(194,98,42,0.08)"/><circle cx="200" cy="92" r="5" fill="#c2622a" opacity="0.7"/></svg>
+          <div class="card-type-badge" style="color:#c2622a;border-color:rgba(194,98,42,0.3)">Residential</div>
+          <div class="card-save">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-price" style="color:#d4b896">RWF 12,000,000</div>
+          <div class="card-title">600 sqm plot, Kicukiro</div>
+          <div class="card-location">📍 Kicukiro, Kigali</div>
+          <div class="card-specs">
+            <div class="spec-item"><div class="spec-val">600 m²</div><div class="spec-key">Area</div></div>
+            <div class="spec-item"><div class="spec-val">Title deed</div><div class="spec-key">Documents</div></div>
+            <div class="spec-item"><div class="spec-val">3 days ago</div><div class="spec-key">Posted</div></div>
+          </div>
+          <div class="card-seller">
+            <div class="seller-av" style="background:#3a2a22">JN</div>
+            <div class="seller-name">Jean Nkusi</div>
+            <div class="verified-tag">✓ Verified</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="listing-card" data-type="commercial" data-title="1200 sqm commercial nyarugenge kigali" onclick="switchTab('detail')">
+        <div class="card-image" style="background:#151310">
+          <svg width="100%" height="100%" viewBox="0 0 400 185"><rect width="400" height="185" fill="#151310"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.08"><line x1="0" y1="46" x2="400" y2="46"/><line x1="0" y1="92" x2="400" y2="92"/><line x1="0" y1="138" x2="400" y2="138"/><line x1="80" y1="0" x2="80" y2="185"/><line x1="200" y1="0" x2="200" y2="185"/><line x1="320" y1="0" x2="320" y2="185"/></g><rect x="52" y="26" width="296" height="133" stroke="#b87830" stroke-width="1" fill="rgba(184,120,48,0.07)"/><rect x="115" y="52" width="84" height="74" stroke="#b87830" stroke-width="0.8" fill="rgba(184,120,48,0.05)"/></svg>
+          <div class="card-type-badge" style="color:#b87830;border-color:rgba(184,120,48,0.3)">Commercial</div>
+          <div class="card-save">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-price" style="color:#b87830">RWF 45,000,000</div>
+          <div class="card-title">1,200 sqm commercial land</div>
+          <div class="card-location">📍 Nyarugenge, Kigali</div>
+          <div class="card-specs">
+            <div class="spec-item"><div class="spec-val">1,200 m²</div><div class="spec-key">Area</div></div>
+            <div class="spec-item"><div class="spec-val">Title deed</div><div class="spec-key">Documents</div></div>
+            <div class="spec-item"><div class="spec-val">1 week ago</div><div class="spec-key">Posted</div></div>
+          </div>
+          <div class="card-seller">
+            <div class="seller-av" style="background:#352514">AM</div>
+            <div class="seller-name">Alice Mukamana</div>
+            <div class="verified-tag">✓ Verified</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="listing-card" data-type="agricultural" data-title="2 acres farmland musanze northern province" onclick="switchTab('detail')">
+        <div class="card-image" style="background:#111520">
+          <svg width="100%" height="100%" viewBox="0 0 400 185"><rect width="400" height="185" fill="#111520"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.07"><line x1="0" y1="62" x2="400" y2="62"/><line x1="0" y1="124" x2="400" y2="124"/><line x1="100" y1="0" x2="100" y2="185"/><line x1="200" y1="0" x2="200" y2="185"/><line x1="300" y1="0" x2="300" y2="185"/></g><path d="M52 152 L172 48 L348 94 L400 64 L400 164 L52 164 Z" stroke="#4a7a8a" stroke-width="1" fill="rgba(74,122,138,0.07)"/></svg>
+          <div class="card-type-badge" style="color:#6a9eb5;border-color:rgba(74,122,138,0.3)">Agricultural</div>
+          <div class="card-save">❤️</div>
+        </div>
+        <div class="card-body">
+          <div class="card-price" style="color:#7ab0c8">RWF 8,500,000</div>
+          <div class="card-title">2 acres farmland, Musanze</div>
+          <div class="card-location">📍 Musanze, Northern Province</div>
+          <div class="card-specs">
+            <div class="spec-item"><div class="spec-val">8,094 m²</div><div class="spec-key">Area</div></div>
+            <div class="spec-item"><div class="spec-val">Land cert.</div><div class="spec-key">Documents</div></div>
+            <div class="spec-item"><div class="spec-val">Today</div><div class="spec-key">Posted</div></div>
+          </div>
+          <div class="card-seller">
+            <div class="seller-av" style="background:#182030">PH</div>
+            <div class="seller-name">Patrick Habimana</div>
+            <div class="verified-tag">✓ Verified</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ MAP ═════════════════════════════ -->
+<div id="page-map" class="page">
+  <div class="map-sidebar">
+    <div class="map-sidebar-head">
+      <div class="map-sidebar-title">Plots in Kigali</div>
+      <div class="map-search-bar">
+        <input id="map-search" type="text" placeholder="Search sector, keyword...">
+        <button onclick="applyMapFilter()">→</button>
+      </div>
+    </div>
+    <div class="map-filter-row">
+      <button class="filter-chip active" onclick="setMapType('all', this)">All</button>
+      <button class="filter-chip" onclick="setMapType('residential', this)">Residential</button>
+      <button class="filter-chip" onclick="setMapType('commercial', this)">Commercial</button>
+      <button class="filter-chip" onclick="setMapType('agricultural', this)">Agricultural</button>
+    </div>
+    <div class="map-results-count" id="map-count">12 plots found</div>
+    <div class="map-cards-list" id="map-cards"></div>
+  </div>
+
+  <div class="map-canvas-wrap">
+    <div id="map"></div>
+    <div class="map-top-badge" id="map-badge">12 active plots</div>
+    <div class="map-legend-box">
+      <div class="legend-title">Land type</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#e84040"></div>Residential</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#1a73e8"></div>Commercial</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#2e8c50"></div>Agricultural</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ DETAIL ═══════════════════════════ -->
+<div id="page-detail" class="page">
+  <div class="detail-layout">
+    <div class="detail-main">
+      <div class="detail-eyebrow">Residential &middot; Kigali</div>
+      <h1 class="detail-title">600 sqm plot in Kicukiro District</h1>
+      <div class="detail-meta">📍 Kicukiro, Kigali &nbsp;&middot;&nbsp; Posted 3 days ago &nbsp;&middot;&nbsp; Ref: TP-2024-0812</div>
+      <div class="detail-image">
+        <svg width="100%" height="100%" viewBox="0 0 720 300"><rect width="720" height="300" fill="#161410"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.08"><line x1="0" y1="75" x2="720" y2="75"/><line x1="0" y1="150" x2="720" y2="150"/><line x1="0" y1="225" x2="720" y2="225"/><line x1="120" y1="0" x2="120" y2="300"/><line x1="240" y1="0" x2="240" y2="300"/><line x1="360" y1="0" x2="360" y2="300"/><line x1="480" y1="0" x2="480" y2="300"/><line x1="600" y1="0" x2="600" y2="300"/></g><rect x="155" y="58" width="410" height="184" stroke="#c2622a" stroke-width="1.5" fill="rgba(194,98,42,0.08)"/><g stroke="#d4b896" opacity="0.12" stroke-width="1" stroke-dasharray="5 5"><line x1="155" y1="58" x2="90" y2="30"/><line x1="565" y1="58" x2="630" y2="30"/><line x1="155" y1="242" x2="90" y2="270"/><line x1="565" y1="242" x2="630" y2="270"/></g><circle cx="360" cy="150" r="7" fill="#c2622a" opacity="0.85"/><circle cx="360" cy="150" r="20" fill="#c2622a" opacity="0.1"/><text x="360" y="175" font-family="serif" font-size="13" fill="#d4b896" opacity="0.28" text-anchor="middle">600 m²</text><g transform="translate(44,44)"><line x1="0" y1="14" x2="0" y2="-14" stroke="#d4b896" stroke-width="1" opacity="0.25"/><polygon points="0,-14 -4,-6 0,-10 4,-6" fill="#d4b896" opacity="0.25"/><text x="0" y="26" font-family="sans-serif" font-size="9" fill="#d4b896" opacity="0.22" text-anchor="middle">N</text></g><g transform="translate(640,272)"><line x1="0" y1="0" x2="64" y2="0" stroke="#d4b896" stroke-width="1" opacity="0.22"/><line x1="0" y1="-4" x2="0" y2="4" stroke="#d4b896" stroke-width="1" opacity="0.22"/><line x1="64" y1="-4" x2="64" y2="4" stroke="#d4b896" stroke-width="1" opacity="0.22"/><text x="32" y="-8" font-family="sans-serif" font-size="9" fill="#d4b896" opacity="0.2" text-anchor="middle">20m</text></g></svg>
+      </div>
+      <div class="detail-thumbs">
+        <div class="detail-thumb active"></div>
+        <div class="detail-thumb"></div>
+        <div class="detail-thumb"></div>
+        <div class="detail-thumb"></div>
+      </div>
+      <div class="detail-specs">
+        <div class="detail-spec"><div class="detail-spec-val">600 m²</div><div class="detail-spec-key">Total area</div></div>
+        <div class="detail-spec"><div class="detail-spec-val">RWF 20k</div><div class="detail-spec-key">Per m²</div></div>
+        <div class="detail-spec"><div class="detail-spec-val">Level</div><div class="detail-spec-key">Terrain</div></div>
+        <div class="detail-spec"><div class="detail-spec-val">Zone R1</div><div class="detail-spec-key">Zoning</div></div>
+      </div>
+      <div class="detail-tags">
+        <div class="detail-tag">Title deed</div>
+        <div class="detail-tag">Tarmac road access</div>
+        <div class="detail-tag">Water connection</div>
+        <div class="detail-tag">Electricity nearby</div>
+        <div class="detail-tag">No structures</div>
+        <div class="detail-tag">Negotiable</div>
+      </div>
+      <p class="detail-description">A well-positioned 600 sqm residential plot in the heart of Kicukiro, close to main tarmac roads and public transport. Fully level terrain. Water and electricity available on-street. Title deed is in the owner's name and ready for transfer. No encumbrances or disputes on the land.</p>
+      <div class="docs-heading">Documents uploaded by seller</div>
+      <div class="doc-row">
+        <div class="doc-icon">📄</div>
+        <div><div class="doc-name">Title deed — Kicukiro plot.pdf</div><div class="doc-sub">Request access from seller to view</div></div>
+        <div class="doc-arrow">→</div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon">🗺️</div>
+        <div><div class="doc-name">Plot survey map.pdf</div><div class="doc-sub">Request access from seller to view</div></div>
+        <div class="doc-arrow">→</div>
+      </div>
+    </div>
+    <div class="detail-sidebar">
+      <div class="price-label">Asking price</div>
+      <div class="price-main">RWF 12,000,000</div>
+      <div class="price-sub">≈ RWF 20,000 / m² &middot; Negotiable</div>
+      <button class="action-btn action-primary">📞 Contact seller</button>
+      <button class="action-btn action-secondary">💬 Send a message</button>
+      <div class="disclaimer">TeraPlot connects buyers and sellers directly. We are not party to any transaction and bear no responsibility for deal outcomes.</div>
+      <hr class="sidebar-divider">
+      <div class="seller-section-title">Listed by</div>
+      <div class="seller-row">
+        <div class="seller-avatar" style="background:#3a2a22">JN</div>
+        <div>
+          <div class="seller-name-main">Jean Nkusi</div>
+          <div class="seller-since">✓ Verified seller &middot; Since 2024</div>
+        </div>
+      </div>
+      <div class="seller-stats">
+        <div class="seller-stat"><div class="seller-stat-val">5</div><div class="seller-stat-key">Listings</div></div>
+        <div class="seller-stat"><div class="seller-stat-val">4.8★</div><div class="seller-stat-key">Rating</div></div>
+        <div class="seller-stat"><div class="seller-stat-val">3</div><div class="seller-stat-key">Deals closed</div></div>
+        <div class="seller-stat"><div class="seller-stat-val">~2h</div><div class="seller-stat-key">Reply time</div></div>
+      </div>
+      <a class="report-link">Report this listing</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ POST ═════════════════════════════ -->
+<div id="page-post" class="page">
+  <div class="form-page">
+    <h1 class="form-title">List your plot</h1>
+    <p class="form-subtitle">Your listing will be reviewed before going live — usually within 24 hours.</p>
+    <div class="progress-steps">
+      <div class="progress-step done"><div class="step-dot">✓</div><div class="step-label">Account</div></div>
+      <div class="progress-step current"><div class="step-dot">2</div><div class="step-label">Plot details</div></div>
+      <div class="progress-step"><div class="step-dot">3</div><div class="step-label">Photos & docs</div></div>
+      <div class="progress-step"><div class="step-dot">4</div><div class="step-label">Review</div></div>
+    </div>
+    <div class="form-notice">Providing false or misleading information — including fake documents or incorrect pricing — will result in permanent account suspension.</div>
+    <div class="form-section">
+      <div class="form-section-head">Basic information</div>
+      <div class="form-section-body">
+        <div class="form-group">
+          <label class="form-label">Listing title <span class="form-required">*</span></label>
+          <input class="form-input" id="f-title" type="text" placeholder="e.g. 500 sqm residential plot in Kicukiro">
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">District <span class="form-required">*</span></label>
+            <select class="form-select" id="f-district">
+              <option value="">Select district</option>
+              <option>Kigali</option><option>Musanze</option>
+              <option>Huye</option><option>Rubavu</option><option>Kayonza</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sector <span class="form-required">*</span></label>
+            <input class="form-input" id="f-sector" type="text" placeholder="e.g. Niboye">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" placeholder="Access roads, utilities, terrain, surroundings, anything buyers should know..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-head">Plot specifications</div>
+      <div class="form-section-body">
+        <div class="form-group">
+          <label class="form-label">Land type <span class="form-required">*</span></label>
+          <div class="land-type-grid">
+            <button class="land-type-btn active" onclick="selectLandType(this)"><div class="land-type-icon">🏘️</div>Residential</button>
+            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🏢</div>Commercial</button>
+            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🌾</div>Agricultural</button>
+            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🏗️</div>Industrial</button>
+            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🏛️</div>Mixed use</button>
+            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">❓</div>Other</button>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Plot size <span class="form-required">*</span></label>
+            <input class="form-input" id="f-size" type="number" placeholder="e.g. 600">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Unit</label>
+            <select class="form-select"><option>m²</option><option>acres</option><option>hectares</option></select>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Asking price (RWF) <span class="form-required">*</span></label>
+            <input class="form-input" id="f-price" type="number" placeholder="e.g. 12000000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Price negotiable?</label>
+            <select class="form-select" id="f-negotiable"><option>Yes</option><option>No</option><option>Open to offers</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-head">Photos &amp; documents</div>
+      <div class="form-section-body">
+        <div class="form-group">
+          <label class="form-label">Plot photos (up to 10)</label>
+          <div class="upload-zone">
+            <div class="upload-icon">📷</div>
+            <div class="upload-text">Drag & drop or click to upload photos</div>
+            <div class="upload-hint">JPG, PNG &middot; max 5MB each</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Land documents</label>
+          <div class="upload-zone">
+            <div class="upload-icon">📄</div>
+            <div class="upload-text">Title deed, land certificate, survey map</div>
+            <div class="upload-hint">PDF &middot; Only shared with buyers upon your approval</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-footer">
+      <button class="btn btn-ghost">Save draft</button>
+      <button class="btn btn-primary" onclick="submitPlot()">Submit listing →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════════
+//  TAB ROUTING
+// ════════════════════════════════════════════════════════════════════
+var mapInitialized = false;
+
+function switchTab(tabId) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(function(p) {
+    p.classList.remove('active');
+  });
+  // Deactivate all tab buttons
+  document.querySelectorAll('.tab-btn').forEach(function(t) {
+    t.classList.remove('active');
+  });
+  // Show target page
+  document.getElementById('page-' + tabId).classList.add('active');
+  // Activate target tab
+  var tabBtn = document.querySelector('[data-tab="' + tabId + '"]');
+  if (tabBtn) tabBtn.classList.add('active');
+
+  // Init map on first visit
+  if (tabId === 'map') {
+    if (!mapInitialized) {
+      setTimeout(function() {
+        initLeafletMap();
+        mapInitialized = true;
+      }, 80);
+    } else {
+      setTimeout(function() {
+        if (window.leafletMap) window.leafletMap.invalidateSize();
+      }, 80);
+    }
+    renderMapSidebar();
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  HOME PAGE INTERACTIONS
+// ════════════════════════════════════════════════════════════════════
+
+// ── Filter chips (type filter) ───────────────────────────────────
+var homeTypeFilter = 'all';
+
+document.querySelectorAll('.filter-group .filter-chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('.filter-group .filter-chip').forEach(function(c) { c.classList.remove('active'); });
+    chip.classList.add('active');
+    homeTypeFilter = chip.textContent.trim().toLowerCase();
+    filterHomeListings();
+  });
+});
+
+// ── Hero search bar ───────────────────────────────────────────────
+document.querySelector('.hero-search .btn-primary').addEventListener('click', function() {
+  filterHomeListings();
+});
+document.querySelector('.hero-search input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') filterHomeListings();
+});
+
+function filterHomeListings() {
+  var query = document.querySelector('.hero-search input').value.trim().toLowerCase();
+  var district = document.querySelector('.hero-search select').value.toLowerCase();
+  var cards = document.querySelectorAll('.listing-card');
+  var visible = 0;
+
+  cards.forEach(function(card) {
+    var type  = card.getAttribute('data-type') || '';
+    var title = card.getAttribute('data-title') || '';
+
+    var matchType     = homeTypeFilter === 'all' || type === homeTypeFilter;
+    var matchQuery    = !query   || title.includes(query);
+    var matchDistrict = !district || district === 'all districts' || district === '' || title.includes(district);
+
+    var show = matchType && matchQuery && matchDistrict;
+    card.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+
+  // Update count label
+  var sub = document.querySelector('.section-sub');
+  if (sub) {
+    sub.textContent = visible + ' plot' + (visible !== 1 ? 's' : '') + ' found';
+  }
+
+  // Show empty state if nothing matches
+  var grid = document.querySelector('.cards-grid');
+  var existing = document.getElementById('no-results-msg');
+  if (visible === 0) {
+    if (!existing) {
+      var msg = document.createElement('div');
+      msg.id = 'no-results-msg';
+      msg.style.cssText = 'grid-column:1/-1;padding:48px;text-align:center;color:var(--mist);font-size:14px;';
+      msg.innerHTML = '<div style="font-size:32px;margin-bottom:12px;opacity:.4">🔍</div>No plots match your search. Try different keywords or filters.';
+      grid.appendChild(msg);
+    }
+  } else {
+    if (existing) existing.remove();
+  }
+}
+
+// ── Detail thumbnails ────────────────────────────────────────────
+document.querySelectorAll('.detail-thumb').forEach(function(thumb) {
+  thumb.addEventListener('click', function() {
+    document.querySelectorAll('.detail-thumb').forEach(function(t) { t.classList.remove('active'); });
+    thumb.classList.add('active');
+  });
+});
+
+function selectLandType(btn) {
+  document.querySelectorAll('.land-type-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  PLOT DATA
+// ════════════════════════════════════════════════════════════════════
+var PLOTS = [
+  { id:1,  title:'600 sqm plot',           sector:'Kicukiro',   type:'residential', price:'RWF 12,000,000', size:'600 m²',   lat:-1.9806, lng:30.1044, verified:true  },
+  { id:2,  title:'1,200 sqm commercial',   sector:'Nyarugenge', type:'commercial',  price:'RWF 45,000,000', size:'1,200 m²', lat:-1.9441, lng:30.0619, verified:true  },
+  { id:3,  title:'400 sqm plot',           sector:'Gasabo',     type:'residential', price:'RWF 9,500,000',  size:'400 m²',   lat:-1.9275, lng:30.1128, verified:true  },
+  { id:4,  title:'800 sqm mixed-use',      sector:'Remera',     type:'commercial',  price:'RWF 28,000,000', size:'800 m²',   lat:-1.9556, lng:30.1120, verified:false },
+  { id:5,  title:'300 sqm plot',           sector:'Kimironko',  type:'residential', price:'RWF 7,200,000',  size:'300 m²',   lat:-1.9360, lng:30.1313, verified:true  },
+  { id:6,  title:'1,500 sqm warehouse',    sector:'Gikondo',    type:'commercial',  price:'RWF 62,000,000', size:'1,500 m²', lat:-1.9800, lng:30.0830, verified:true  },
+  { id:7,  title:'500 sqm plot',           sector:'Kanombe',    type:'residential', price:'RWF 10,800,000', size:'500 m²',   lat:-1.9681, lng:30.1383, verified:true  },
+  { id:8,  title:'700 sqm corner plot',    sector:'Kinyinya',   type:'residential', price:'RWF 14,500,000', size:'700 m²',   lat:-1.9142, lng:30.1192, verified:false },
+  { id:9,  title:'2,000 sqm farmland',     sector:'Rusororo',   type:'agricultural',price:'RWF 8,000,000',  size:'2,000 m²', lat:-1.8930, lng:30.1350, verified:true  },
+  { id:10, title:'450 sqm plot',           sector:'Gisozi',     type:'residential', price:'RWF 11,000,000', size:'450 m²',   lat:-1.9188, lng:30.0940, verified:true  },
+  { id:11, title:'900 sqm office land',    sector:'Muhima',     type:'commercial',  price:'RWF 38,500,000', size:'900 m²',   lat:-1.9530, lng:30.0570, verified:true  },
+  { id:12, title:'1,800 sqm farm plot',    sector:'Jabana',     type:'agricultural',price:'RWF 6,500,000',  size:'1,800 m²', lat:-1.8975, lng:30.1580, verified:false }
+];
+
+var TYPE_COLORS = { residential:'#e84040', commercial:'#1a73e8', agricultural:'#2e8c50' };
+var TYPE_ICONS  = { residential:'🏘️', commercial:'🏢', agricultural:'🌾' };
+var mapTypeFilter = 'all';
+var leafletMarkers = [];
+
+// ════════════════════════════════════════════════════════════════════
+//  LEAFLET MAP
+// ════════════════════════════════════════════════════════════════════
+function initLeafletMap() {
+  window.leafletMap = L.map('map', {
+    center: [-1.9441, 30.0619],
+    zoom: 13,
+    zoomControl: false
+  });
+
+  // OpenStreetMap — free, no key, full Kigali roads visible
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19,
+    subdomains: ['a','b','c']
+  }).addTo(window.leafletMap);
+
+  L.control.zoom({ position: 'bottomright' }).addTo(window.leafletMap);
+  placeMapMarkers(getFilteredPlots());
+}
+
+function makeMarkerIcon(color, large) {
+  var size = large ? 38 : 28;
+  var height = large ? 52 : 38;
+  var svg = [
+    '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + height + '" viewBox="0 0 28 38">',
+    '<filter id="ds"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.35"/></filter>',
+    '<path d="M14 0C6.27 0 0 6.27 0 14c0 9.8 14 24 14 24S28 23.8 28 14C28 6.27 21.73 0 14 0z" fill="' + color + '" filter="url(#ds)" stroke="white" stroke-width="1.2"/>',
+    '<circle cx="14" cy="14" r="5.5" fill="white" opacity="0.92"/>',
+    '</svg>'
+  ].join('');
+  return L.divIcon({
+    html: svg,
+    className: '',
+    iconSize: [size, height],
+    iconAnchor: [size / 2, height],
+    popupAnchor: [0, -(height + 4)]
+  });
+}
+
+function placeMapMarkers(plots) {
+  // Remove old markers
+  leafletMarkers.forEach(function(m) { window.leafletMap.removeLayer(m); });
+  leafletMarkers = [];
+
+  plots.forEach(function(plot) {
+    var color = TYPE_COLORS[plot.type] || '#e84040';
+    var marker = L.marker([plot.lat, plot.lng], {
+      icon: makeMarkerIcon(color, false)
+    }).addTo(window.leafletMap);
+
+    // Popup content
+    var popup = [
+      '<div style="font-family: -apple-system, sans-serif; min-width: 210px;">',
+      '  <div style="font-size:17px;font-weight:700;color:#111;margin-bottom:3px">' + plot.price + '</div>',
+      '  <div style="font-size:13px;color:#333;margin-bottom:2px">' + plot.title + '</div>',
+      '  <div style="font-size:11px;color:#888;margin-bottom:12px">📍 ' + plot.sector + ', Kigali</div>',
+      '  <div style="display:flex;gap:14px;padding:10px 0;border-top:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;margin-bottom:12px">',
+      '    <div style="text-align:center"><div style="font-size:13px;font-weight:600;color:#222">' + plot.size + '</div><div style="font-size:10px;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.3px">Area</div></div>',
+      '    <div style="text-align:center"><div style="font-size:13px;font-weight:600;color:' + color + ';text-transform:capitalize">' + plot.type + '</div><div style="font-size:10px;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.3px">Type</div></div>',
+      '    <div style="text-align:center"><div style="font-size:13px;font-weight:600;color:' + (plot.verified ? '#2e8c50' : '#aaa') + '">' + (plot.verified ? '✓ Verified' : 'Unverified') + '</div><div style="font-size:10px;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.3px">Seller</div></div>',
+      '  </div>',
+      '  <button onclick="switchTab(\'detail\')" style="width:100%;padding:10px;background:' + color + ';color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.3px">View listing →</button>',
+      '</div>'
+    ].join('');
+
+    marker.bindPopup(popup, { maxWidth: 260, closeButton: true });
+
+    // Sync with sidebar on marker click
+    marker.on('click', function() {
+      document.querySelectorAll('.map-plot-card').forEach(function(c) { c.classList.remove('active'); });
+      var card = document.querySelector('[data-plot-id="' + plot.id + '"]');
+      if (card) {
+        card.classList.add('active');
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+
+    leafletMarkers.push({ marker: marker, plot: plot });
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  MAP SIDEBAR
+// ════════════════════════════════════════════════════════════════════
+function getFilteredPlots() {
+  var query = (document.getElementById('map-search').value || '').toLowerCase().trim();
+  return PLOTS.filter(function(p) {
+    var matchType = mapTypeFilter === 'all' || p.type === mapTypeFilter;
+    var matchSearch = !query ||
+      p.title.toLowerCase().indexOf(query) > -1 ||
+      p.sector.toLowerCase().indexOf(query) > -1;
+    return matchType && matchSearch;
+  });
+}
+
+function renderMapSidebar() {
+  var filtered = getFilteredPlots();
+  var container = document.getElementById('map-cards');
+  container.innerHTML = '';
+
+  var count = filtered.length;
+  document.getElementById('map-count').textContent = count + ' plot' + (count !== 1 ? 's' : '') + ' found';
+  document.getElementById('map-badge').textContent = count + ' active plots';
+
+  if (window.leafletMap) placeMapMarkers(filtered);
+
+  filtered.forEach(function(plot, idx) {
+    var color = TYPE_COLORS[plot.type] || '#e84040';
+    var icon  = TYPE_ICONS[plot.type]  || '🏡';
+
+    var card = document.createElement('div');
+    card.className = 'map-plot-card';
+    card.setAttribute('data-plot-id', plot.id);
+
+    card.innerHTML = [
+      '<div class="map-plot-icon">' + icon + '</div>',
+      '<div style="flex:1;min-width:0">',
+      '  <div class="map-plot-price">' + plot.price + '</div>',
+      '  <div class="map-plot-title">' + plot.title + ', ' + plot.sector + '</div>',
+      '  <div class="map-plot-loc">📍 ' + plot.sector + ', Kigali</div>',
+      '  <div class="map-plot-tags">',
+      '    <div class="map-plot-tag">' + plot.size + '</div>',
+      '    <div class="map-plot-tag" style="color:' + color + ';border-color:' + color + '44;text-transform:capitalize">' + plot.type + '</div>',
+      (plot.verified ? '    <div class="map-plot-tag" style="color:#2e8c50;border-color:#2e8c5044">✓ Verified</div>' : ''),
+      '  </div>',
+      '</div>'
+    ].join('');
+
+    card.addEventListener('click', function() {
+      // Highlight card
+      document.querySelectorAll('.map-plot-card').forEach(function(c) { c.classList.remove('active'); });
+      card.classList.add('active');
+
+      if (window.leafletMap) {
+        // Fly to plot
+        window.leafletMap.flyTo([plot.lat, plot.lng], 16, { duration: 0.7, easeLinearity: 0.4 });
+        // Open popup after fly completes
+        var entry = leafletMarkers[idx];
+        if (entry) {
+          setTimeout(function() { entry.marker.openPopup(); }, 750);
+        }
+      }
+    });
+
+    container.appendChild(card);
+  });
+}
+
+function setMapType(type, btn) {
+  document.querySelectorAll('.map-filter-row .filter-chip').forEach(function(c) { c.classList.remove('active'); });
+  btn.classList.add('active');
+  mapTypeFilter = type;
+  renderMapSidebar();
+}
+
+function applyMapFilter() { renderMapSidebar(); }
+
+document.getElementById('map-search').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') applyMapFilter();
+});
+
+// ── FAQ toggle ───────────────────────────────────────────────────
+function toggleFaq(item) {
+  var answer = item.querySelector('.faq-answer');
+  var toggle = item.querySelector('.faq-toggle');
+  var isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.faq-answer').forEach(function(a) { a.classList.remove('open'); });
+  document.querySelectorAll('.faq-toggle').forEach(function(t) { t.classList.remove('open'); });
+  if (!isOpen) {
+    answer.classList.add('open');
+    toggle.classList.add('open');
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  PLOT SUBMISSION & PERSISTENCE
+// ════════════════════════════════════════════════════════════════════
+
+// District approximate center coordinates for map pinning
+var DISTRICT_COORDS = {
+  'kigali':   { lat: -1.9441, lng: 30.0619 },
+  'musanze':  { lat: -1.4987, lng: 29.6340 },
+  'huye':     { lat: -2.5967, lng: 29.7394 },
+  'rubavu':   { lat: -1.6814, lng: 29.3575 },
+  'kayonza':  { lat: -1.8840, lng: 30.6470 },
+  'rwamagana':{ lat: -1.9490, lng: 30.4347 }
+};
+
+// Sector offsets within Kigali to spread pins slightly
+var SECTOR_OFFSETS = {
+  'kicukiro':  { dlat: -0.038, dlng:  0.044 },
+  'gasabo':    { dlat:  0.013, dlng:  0.053 },
+  'nyarugenge':{ dlat: -0.003, dlng: -0.001 },
+  'remera':    { dlat: -0.015, dlng:  0.051 },
+  'kimironko': { dlat:  0.006, dlng:  0.072 },
+  'gikondo':   { dlat: -0.039, dlng:  0.013 },
+  'kanombe':   { dlat: -0.027, dlng:  0.079 },
+  'kinyinya':  { dlat:  0.028, dlng:  0.060 },
+  'rusororo':  { dlat:  0.049, dlng:  0.076 },
+  'gisozi':    { dlat:  0.022, dlng:  0.021 },
+  'muhima':    { dlat: -0.012, dlng: -0.012 },
+  'jabana':    { dlat:  0.053, dlng:  0.099 }
+};
+
+function getCoords(district, sector) {
+  var base = DISTRICT_COORDS[(district || 'kigali').toLowerCase()] || DISTRICT_COORDS['kigali'];
+  var off  = SECTOR_OFFSETS[(sector || '').toLowerCase()] || { dlat: (Math.random()-0.5)*0.04, dlng: (Math.random()-0.5)*0.04 };
+  return { lat: base.lat + off.dlat, lng: base.lng + off.dlng };
+}
+
+function formatPrice(raw) {
+  var n = parseInt(raw, 10);
+  if (!n) return 'Price on request';
+  return 'RWF ' + n.toLocaleString();
+}
+
+// Load any previously saved user plots from localStorage
+function loadSavedPlots() {
+  try {
+    var saved = JSON.parse(localStorage.getItem('teraplot_user_plots') || '[]');
+    saved.forEach(function(p) { PLOTS.push(p); });
+  } catch(e) {}
+}
+
+function savePlotToStorage(plot) {
+  try {
+    var saved = JSON.parse(localStorage.getItem('teraplot_user_plots') || '[]');
+    saved.push(plot);
+    localStorage.setItem('teraplot_user_plots', JSON.stringify(saved));
+  } catch(e) {}
+}
+
+function submitPlot() {
+  // Read form values
+  var title      = (document.getElementById('f-title')      || {}).value || '';
+  var district   = (document.getElementById('f-district')   || {}).value || '';
+  var sector     = (document.getElementById('f-sector')     || {}).value || '';
+  var size       = (document.getElementById('f-size')       || {}).value || '';
+  var unit       = (document.getElementById('f-unit')       || {}).value || 'm²';
+  var price      = (document.getElementById('f-price')      || {}).value || '';
+  var negotiable = (document.getElementById('f-negotiable') || {}).value || 'Yes';
+  var landTypeBtn = document.querySelector('.land-type-btn.active');
+  var landType   = landTypeBtn ? landTypeBtn.textContent.trim().toLowerCase() : 'residential';
+
+  // Validation
+  if (!title.trim()) { alert('Please add a listing title.'); return; }
+  if (!district)     { alert('Please select a district.');   return; }
+  if (!sector.trim()){ alert('Please enter the sector.');    return; }
+  if (!size)         { alert('Please enter the plot size.'); return; }
+  if (!price)        { alert('Please enter the asking price.'); return; }
+
+  // Build coords from district + sector
+  var coords = getCoords(district, sector);
+
+  // Build new plot object
+  var newPlot = {
+    id:       Date.now(),
+    title:    title.trim() || (size + ' ' + unit + ' plot'),
+    sector:   sector.trim() || district,
+    district: district,
+    type:     landType,
+    price:    formatPrice(price),
+    size:     size + ' ' + unit,
+    lat:      coords.lat,
+    lng:      coords.lng,
+    verified: false,
+    isNew:    true
+  };
+
+  // Add to live PLOTS array
+  PLOTS.push(newPlot);
+
+  // Persist to localStorage
+  savePlotToStorage(newPlot);
+
+  // Show success modal
+  var summary = document.getElementById('modal-plot-summary');
+  summary.innerHTML =
+    '<div style="font-family:var(--serif);font-size:16px;color:var(--sand);margin-bottom:6px">' + newPlot.price + '</div>' +
+    '<div style="font-size:13px;color:var(--cream);margin-bottom:3px">' + newPlot.title + '</div>' +
+    '<div style="font-size:12px;color:var(--mist);margin-bottom:10px">&#128205; ' + newPlot.sector + ', ' + newPlot.district + '</div>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+      '<span style="font-size:11px;padding:3px 9px;border:1px solid var(--border);color:var(--mist);border-radius:2px">' + newPlot.size + '</span>' +
+      '<span style="font-size:11px;padding:3px 9px;border:1px solid rgba(194,98,42,.3);color:var(--terra);border-radius:2px;text-transform:capitalize">' + newPlot.type + '</span>' +
+      '<span style="font-size:11px;padding:3px 9px;border:1px solid var(--border);color:var(--mist);border-radius:2px">Negotiable: ' + negotiable + '</span>' +
+    '</div>';
+
+  var modal = document.getElementById('submit-modal');
+  modal.style.display = 'flex';
+
+  // If map is open, refresh markers immediately
+  if (window.leafletMap && mapInitialized) {
+    renderMapSidebar();
+  }
+}
+
+function closeModal() {
+  document.getElementById('submit-modal').style.display = 'none';
+  switchTab('home');
+  // Reset form
+  var inputs = document.querySelectorAll('#page-post .form-input, #page-post .form-textarea');
+  inputs.forEach(function(i){ i.value = ''; });
+  var selects = document.querySelectorAll('#page-post .form-select');
+  selects.forEach(function(s){ s.selectedIndex = 0; });
+  document.querySelectorAll('.land-type-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelector('.land-type-btn').classList.add('active');
+}
+
+function goToMap() {
+  document.getElementById('submit-modal').style.display = 'none';
+  switchTab('map');
+}
+
+// Load saved plots on startup
+loadSavedPlots();
+
+</script>
+
+<!-- ═══════════════════════════════ HOW IT WORKS ══════════════════ -->
+<div id="page-how" class="page">
+  <div class="hiw-page">
+    <div class="hiw-eyebrow">The process</div>
+    <h1 class="hiw-title">Simple. Direct.<br>No middlemen.</h1>
+    <p class="hiw-subtitle">TeraPlot connects land owners and buyers directly across Rwanda. No agents, no commissions, no gatekeepers — just people and land.</p>
+
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="hiw-step-icon">📝</div>
+        <div class="hiw-step-num">01</div>
+        <div class="hiw-step-title">Seller posts a plot</div>
+        <div class="hiw-step-desc">A land owner creates a free listing with photos, documents, location, price and plot details. Every listing is reviewed by our team before going live.</div>
+        <div class="hiw-arrow">→</div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-icon">🔍</div>
+        <div class="hiw-step-num">02</div>
+        <div class="hiw-step-title">Buyer finds the plot</div>
+        <div class="hiw-step-desc">Buyers browse listings, filter by district, land type and price, and explore the live map to see exactly where each plot is located in Kigali and beyond.</div>
+        <div class="hiw-arrow">→</div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-icon">🤝</div>
+        <div class="hiw-step-num">03</div>
+        <div class="hiw-step-title">They connect directly</div>
+        <div class="hiw-step-desc">The buyer contacts the seller through TeraPlot's messaging system. From there, the two parties negotiate and close the deal entirely between themselves.</div>
+      </div>
+    </div>
+
+    <div class="hiw-disclaimer">
+      <div class="hiw-disclaimer-title">Our role — and our limits</div>
+      <div class="hiw-disclaimer-text">TeraPlot is a marketplace platform only. We connect buyers and sellers — we do not participate in, verify, guarantee, or take responsibility for any land transaction. All deals are made directly between the buyer and seller. We strongly recommend verifying land documents independently through Rwanda's Land Authority (RLMA) before completing any transaction.</div>
+    </div>
+
+    <div class="hiw-faq">
+      <div class="hiw-faq-title">Common questions</div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <div class="faq-question">Is it free to list a plot on TeraPlot?</div>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">Yes. Creating a basic listing is completely free. In the future we will offer promoted listings for sellers who want more visibility, but the core platform will always have a free tier.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <div class="faq-question">How do I know a seller is legitimate?</div>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">Sellers with a ✓ Verified badge have submitted their national ID and land documents to our team for manual review. We also show each seller's rating and deal history. That said, we always recommend doing your own due diligence and verifying the title deed at RLMA before any payment.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <div class="faq-question">Does TeraPlot take a commission on deals?</div>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">No. TeraPlot does not take any commission on land transactions. We are not involved in the deal at all — we simply introduce the buyer and seller to each other.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <div class="faq-question">Which districts are covered?</div>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">Currently the platform focuses on Kigali (Kicukiro, Gasabo, Nyarugenge) and is expanding to all 30 districts of Rwanda. Sellers from any district can post listings today.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <div class="faq-question">What documents should a seller upload?</div>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">We recommend uploading the title deed (Certificat d'enregistrement), the plot survey map, and any RLMA transfer documentation. Documents are stored securely and only shared with buyers you approve.</div>
+      </div>
+    </div>
+
+    <div class="hiw-cta">
+      <div class="hiw-cta-title">Ready to get started?</div>
+      <div class="hiw-cta-sub">Browse available plots or list your own land today — free, fast and direct.</div>
+      <div class="hiw-cta-btns">
+        <button class="btn btn-ghost" onclick="switchTab('home')">Browse plots</button>
+        <button class="btn btn-primary" onclick="switchTab('post')">List your plot</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ ABOUT ═══════════════════════ -->
+<div id="page-about" class="page">
+  <div class="about-page">
+
+    <div class="about-hero">
+      <div class="about-hero-left">
+        <div class="about-eyebrow">Who we are</div>
+        <h1 class="about-title">Rwanda's land marketplace, built by Rwandans.</h1>
+        <p class="about-lead">TeraPlot was built to solve a real problem — finding and selling land in Rwanda is slow, opaque, and dominated by brokers who add cost without adding value. We built a direct platform that puts buyers and sellers in the same room.</p>
+      </div>
+      <div class="about-art">
+        <svg width="100%" height="100%" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" fill="none">
+          <rect width="400" height="400" fill="#161410"/>
+          <g stroke="#d4b896" stroke-width="0.5" opacity="0.07">
+            <line x1="0" y1="80" x2="400" y2="80"/><line x1="0" y1="160" x2="400" y2="160"/>
+            <line x1="0" y1="240" x2="400" y2="240"/><line x1="0" y1="320" x2="400" y2="320"/>
+            <line x1="80" y1="0" x2="80" y2="400"/><line x1="160" y1="0" x2="160" y2="400"/>
+            <line x1="240" y1="0" x2="240" y2="400"/><line x1="320" y1="0" x2="320" y2="400"/>
+          </g>
+          <g opacity="0.15" stroke="#d4b896" stroke-width="1" fill="none">
+            <rect x="40" y="50" width="100" height="80"/><rect x="150" y="50" width="80" height="55"/>
+            <rect x="240" y="50" width="120" height="100"/><rect x="40" y="140" width="70" height="90"/>
+            <rect x="120" y="115" width="140" height="70"/><rect x="40" y="240" width="160" height="80"/>
+            <rect x="210" y="160" width="90" height="110"/><rect x="310" y="160" width="50" height="80"/>
+            <rect x="40" y="330" width="80" height="50"/><rect x="130" y="320" width="120" height="60"/>
+            <rect x="260" y="280" width="100" height="80"/>
+          </g>
+          <rect x="120" y="115" width="140" height="70" fill="#c2622a" opacity="0.18"/>
+          <rect x="120" y="115" width="140" height="70" stroke="#c2622a" stroke-width="1.5" fill="none"/>
+          <circle cx="190" cy="150" r="7" fill="#c2622a" opacity="0.8"/>
+          <circle cx="190" cy="150" r="20" fill="#c2622a" opacity="0.1"/>
+          <text x="190" y="108" font-family="serif" font-size="11" fill="#d4b896" opacity="0.4" text-anchor="middle" font-style="italic">Kigali</text>
+          <g stroke="#7a6e62" stroke-width="2" opacity="0.1">
+            <path d="M0 200 Q100 190 200 205 Q300 220 400 200"/>
+            <path d="M175 0 Q180 120 175 260 Q170 380 178 400"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="about-mission">
+      <div class="about-mission-label">Our mission</div>
+      <div class="about-mission-text">"To make land ownership in Rwanda more accessible, transparent and fair — by removing the barriers between the people who own land and the people who want it."</div>
+    </div>
+
+    <div class="about-values">
+      <div class="about-value">
+        <div class="about-value-icon">🔎</div>
+        <div class="about-value-title">Transparency</div>
+        <div class="about-value-desc">Every listing shows real prices, real documents and verified seller identities. No hidden fees, no inflated broker prices.</div>
+      </div>
+      <div class="about-value">
+        <div class="about-value-icon">🤝</div>
+        <div class="about-value-title">Direct connection</div>
+        <div class="about-value-desc">Buyers talk directly to sellers. No middlemen taking commissions. The deal is between two people — we just make the introduction.</div>
+      </div>
+      <div class="about-value">
+        <div class="about-value-icon">🇷🇼</div>
+        <div class="about-value-title">Rwanda first</div>
+        <div class="about-value-desc">Built specifically for Rwanda's land market, with all 30 districts, Kinyarwanda context, and RWF pricing. Not a generic template.</div>
+      </div>
+    </div>
+
+    <div class="about-stats">
+      <div class="about-stat"><div class="about-stat-num">1,240</div><div class="about-stat-label">Active listings</div></div>
+      <div class="about-stat"><div class="about-stat-num">430+</div><div class="about-stat-label">Verified sellers</div></div>
+      <div class="about-stat"><div class="about-stat-num">30</div><div class="about-stat-label">Districts covered</div></div>
+      <div class="about-stat"><div class="about-stat-num">0%</div><div class="about-stat-label">Commission taken</div></div>
+    </div>
+
+    <div class="about-team">
+      <div class="about-team-title">The team</div>
+      <div class="about-team-grid">
+        <div class="team-card">
+          <div class="team-avatar" style="background:#3a2a22">AX</div>
+          <div class="team-name">Axel</div>
+          <div class="team-role">Founder & Engineer</div>
+          <div class="team-bio">Software engineering student at ALU, Kigali. Built TeraPlot to solve the land access problem he saw firsthand in Rwanda.</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:#1e2a1e">—</div>
+          <div class="team-name">Open role</div>
+          <div class="team-role">Product & Growth</div>
+          <div class="team-bio">We're looking for someone who understands Rwanda's property market and wants to help grow TeraPlot across all 30 districts.</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:#1e1e2a">—</div>
+          <div class="team-name">Open role</div>
+          <div class="team-role">Legal & Compliance</div>
+          <div class="team-bio">Rwanda land law expertise needed. Help us build the trust layer that makes TeraPlot the safest place to transact land online.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-contact">
+      <div class="about-contact-title">Get in touch</div>
+      <div class="about-contact-sub">Questions, partnerships, press, or just want to talk about land in Rwanda?</div>
+      <div class="about-contact-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8ee6ebe2e2e1cefaebfceffee2e1faa0fcf9">[email&#160;protected]</a></div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ── Submit success modal ─────────────────────────────────────── -->
+<div id="submit-modal" style="display:none;position:fixed;inset:0;z-index:900;background:rgba(12,11,9,0.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
+  <div style="background:var(--bg2);border:1px solid var(--border2);max-width:440px;width:92%;padding:44px 40px;text-align:center;position:relative;">
+    <div style="font-size:44px;margin-bottom:18px;">📍</div>
+    <div style="font-family:var(--serif);font-size:26px;color:var(--cream);font-style:italic;margin-bottom:10px;">Plot submitted!</div>
+    <div style="font-size:14px;color:var(--mist);line-height:1.75;margin-bottom:28px;font-weight:300;">Your plot has been listed and pinned on the map. It will be reviewed by our team before going fully public — usually within 24 hours.</div>
+    <div id="modal-plot-summary" style="background:var(--bg);border:1px solid var(--border);padding:16px 18px;margin-bottom:28px;text-align:left;"></div>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-ghost" onclick="closeModal()">Back to home</button>
+      
