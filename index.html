@@ -802,23 +802,23 @@ body {
 <nav class="nav">
   <div class="nav-logo" onclick="switchTab('home')">Tera<span>Plot</span></div>
   <div class="nav-links">
-    <button class="nav-link" onclick="switchTab('home')">Browse</button>
-    <button class="nav-link" onclick="switchTab('map')">Map view</button>
-    <button class="nav-link" onclick="switchTab('how')">How it works</button>
-    <button class="nav-link" onclick="switchTab('about')">About</button>
+    <button class="nav-link" onclick="switchTab('home')">Shakisha</button>
+    <button class="nav-link" onclick="switchTab('map')">Ikarita</button>
+    <button class="nav-link" onclick="switchTab('how')">Uko bigenda</button>
+    <button class="nav-link" onclick="switchTab('about')">Abo turi bo</button>
   </div>
   <div class="nav-actions">
-    <button class="btn btn-ghost">Sign in</button>
-    <button class="btn btn-primary" onclick="switchTab('post')">List your plot</button>
+    <button class="btn btn-ghost">Injira</button>
+    <button class="btn btn-primary" onclick="switchTab('post')">Andika ubutaka</button>
   </div>
 </nav>
 
 <!-- ══════════════════════════════ TABS ══════════════════════════════ -->
 <div class="tabs">
-  <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">Home</button>
-  <button class="tab-btn" data-tab="map"  onclick="switchTab('map')">Map view</button>
-  <button class="tab-btn" data-tab="detail" onclick="switchTab('detail')">Listing detail</button>
-  <button class="tab-btn" data-tab="post" onclick="switchTab('post')">Post a plot</button>
+  <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">Ahabanza</button>
+  <button class="tab-btn" data-tab="map"  onclick="switchTab('map')">Ikarita</button>
+  <button class="tab-btn" data-tab="detail" onclick="switchTab('detail')">Amakuru y'ubutaka</button>
+  <button class="tab-btn" data-tab="post" onclick="switchTab('post')">Tangaza ubutaka</button>
 </div>
 
 <!-- ═══════════════════════════════ HOME ═════════════════════════════ -->
@@ -826,12 +826,12 @@ body {
 
   <div class="hero">
     <div class="hero-left">
-      <div class="hero-eyebrow">Rwanda Land Marketplace</div>
-      <h1 class="hero-title">Own a piece of <em>Rwanda's</em> soil.</h1>
-      <p class="hero-desc">A direct marketplace connecting land owners and buyers across all 30 districts. No agents. No commission. Just people and land.</p>
+      <div class="hero-eyebrow">Isoko y'Ubutaka rw'u Rwanda</div>
+      <h1 class="hero-title">Oba umuntu w'ubutaka bw'<em>u Rwanda</em>.</h1>
+      <p class="hero-desc">Isoko rya kigezweho ryunganira abafite ubutaka n'abashaka kubugura mu turere twose 30. Nta bantu baho hagati. Nta komisyo. Abantu n'ubutaka gusa.</p>
       <div class="hero-search">
         <select>
-          <option>All districts</option>
+          <option>Turere twose</option>
           <option>Kigali</option>
           <option>Musanze</option>
           <option>Huye</option>
@@ -839,21 +839,21 @@ body {
           <option>Kayonza</option>
           <option>Rwamagana</option>
         </select>
-        <input type="text" placeholder="Location, keyword, size...">
-        <button class="btn btn-primary">Search</button>
+        <input type="text" placeholder="Aho buherereye, ijambo, ingano...">
+        <button class="btn btn-primary">Shakisha</button>
       </div>
       <div class="hero-stats">
         <div>
           <div class="stat-num">1,240</div>
-          <div class="stat-label">Active plots</div>
+          <div class="stat-label">Ubutaka bugaragara</div>
         </div>
         <div>
           <div class="stat-num">430+</div>
-          <div class="stat-label">Verified sellers</div>
+          <div class="stat-label">Abatanga bemewe</div>
         </div>
         <div>
           <div class="stat-num">30</div>
-          <div class="stat-label">Districts covered</div>
+          <div class="stat-label">Turere twakwiwe</div>
         </div>
       </div>
     </div>
@@ -888,12 +888,12 @@ body {
         </svg>
       </div>
       <div class="hero-featured" onclick="switchTab('detail')">
-        <div class="featured-tag">Featured listing</div>
-        <div class="featured-title">600 sqm Residential Plot</div>
+        <div class="featured-tag">Tangaza ryatanzwe</div>
+        <div class="featured-title">Ubutaka bw'amazu bwa 600 sqm</div>
         <div class="featured-loc">📍 Kicukiro, Kigali &middot; Title deed available</div>
         <div class="featured-row">
           <div class="featured-price">RWF 12,000,000</div>
-          <button class="btn btn-outline">View plot →</button>
+          <button class="btn btn-outline">Reba ubutaka →</button>
         </div>
       </div>
     </div>
@@ -902,20 +902,20 @@ body {
   <div class="listings-section">
     <div class="section-header">
       <div>
-        <div class="section-hed">Recent plots</div>
-        <div class="section-sub">1,240 plots available across Rwanda</div>
+        <div class="section-hed">Ubutaka bushya</div>
+        <div class="section-sub">Ubutaka 1,240 bugaragara mu Rwanda</div>
       </div>
       <div class="section-controls">
         <div class="filter-group">
-          <button class="filter-chip active">All</button>
-          <button class="filter-chip">Residential</button>
-          <button class="filter-chip">Commercial</button>
-          <button class="filter-chip">Agricultural</button>
+          <button class="filter-chip active">Byose</button>
+          <button class="filter-chip">Amazu</button>
+          <button class="filter-chip">Ubucuruzi</button>
+          <button class="filter-chip">Ubuhinzi</button>
         </div>
         <select class="sort-select">
-          <option>Newest first</option>
-          <option>Price: Low to high</option>
-          <option>Largest first</option>
+          <option>Bushya bwa mbere</option>
+          <option>Igiciro: Hasi kugeza hejuru</option>
+          <option>Kinini bwa mbere</option>
         </select>
       </div>
     </div>
@@ -925,22 +925,22 @@ body {
       <div class="listing-card" data-type="residential" data-title="600 sqm plot kicukiro kigali" onclick="switchTab('detail')">
         <div class="card-image" style="background:#181512">
           <svg width="100%" height="100%" viewBox="0 0 400 185"><rect width="400" height="185" fill="#181512"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.08"><line x1="0" y1="46" x2="400" y2="46"/><line x1="0" y1="92" x2="400" y2="92"/><line x1="0" y1="138" x2="400" y2="138"/><line x1="80" y1="0" x2="80" y2="185"/><line x1="160" y1="0" x2="160" y2="185"/><line x1="240" y1="0" x2="240" y2="185"/><line x1="320" y1="0" x2="320" y2="185"/></g><rect x="95" y="38" width="210" height="109" stroke="#c2622a" stroke-width="1" fill="rgba(194,98,42,0.08)"/><circle cx="200" cy="92" r="5" fill="#c2622a" opacity="0.7"/></svg>
-          <div class="card-type-badge" style="color:#c2622a;border-color:rgba(194,98,42,0.3)">Residential</div>
+          <div class="card-type-badge" style="color:#c2622a;border-color:rgba(194,98,42,0.3)">Amazu</div>
           <div class="card-save">♡</div>
         </div>
         <div class="card-body">
           <div class="card-price" style="color:#d4b896">RWF 12,000,000</div>
-          <div class="card-title">600 sqm plot, Kicukiro</div>
+          <div class="card-title">Ubutaka bwa 600 sqm, Kicukiro</div>
           <div class="card-location">📍 Kicukiro, Kigali</div>
           <div class="card-specs">
-            <div class="spec-item"><div class="spec-val">600 m²</div><div class="spec-key">Area</div></div>
-            <div class="spec-item"><div class="spec-val">Title deed</div><div class="spec-key">Documents</div></div>
-            <div class="spec-item"><div class="spec-val">3 days ago</div><div class="spec-key">Posted</div></div>
+            <div class="spec-item"><div class="spec-val">600 m²</div><div class="spec-key">Ingano</div></div>
+            <div class="spec-item"><div class="spec-val">Impapuro z'ubutaka</div><div class="spec-key">Impapuro</div></div>
+            <div class="spec-item"><div class="spec-val">Hashize iminsi 3</div><div class="spec-key">Yatangazwe</div></div>
           </div>
           <div class="card-seller">
             <div class="seller-av" style="background:#3a2a22">JN</div>
             <div class="seller-name">Jean Nkusi</div>
-            <div class="verified-tag">✓ Verified</div>
+            <div class="verified-tag">✓ Byemejwe</div>
           </div>
         </div>
       </div>
@@ -949,22 +949,22 @@ body {
       <div class="listing-card" data-type="commercial" data-title="1200 sqm commercial nyarugenge kigali" onclick="switchTab('detail')">
         <div class="card-image" style="background:#151310">
           <svg width="100%" height="100%" viewBox="0 0 400 185"><rect width="400" height="185" fill="#151310"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.08"><line x1="0" y1="46" x2="400" y2="46"/><line x1="0" y1="92" x2="400" y2="92"/><line x1="0" y1="138" x2="400" y2="138"/><line x1="80" y1="0" x2="80" y2="185"/><line x1="200" y1="0" x2="200" y2="185"/><line x1="320" y1="0" x2="320" y2="185"/></g><rect x="52" y="26" width="296" height="133" stroke="#b87830" stroke-width="1" fill="rgba(184,120,48,0.07)"/><rect x="115" y="52" width="84" height="74" stroke="#b87830" stroke-width="0.8" fill="rgba(184,120,48,0.05)"/></svg>
-          <div class="card-type-badge" style="color:#b87830;border-color:rgba(184,120,48,0.3)">Commercial</div>
+          <div class="card-type-badge" style="color:#b87830;border-color:rgba(184,120,48,0.3)">Ubucuruzi</div>
           <div class="card-save">♡</div>
         </div>
         <div class="card-body">
           <div class="card-price" style="color:#b87830">RWF 45,000,000</div>
-          <div class="card-title">1,200 sqm commercial land</div>
+          <div class="card-title">Ubutaka bw'ubucuruzi bwa 1,200 sqm</div>
           <div class="card-location">📍 Nyarugenge, Kigali</div>
           <div class="card-specs">
-            <div class="spec-item"><div class="spec-val">1,200 m²</div><div class="spec-key">Area</div></div>
-            <div class="spec-item"><div class="spec-val">Title deed</div><div class="spec-key">Documents</div></div>
-            <div class="spec-item"><div class="spec-val">1 week ago</div><div class="spec-key">Posted</div></div>
+            <div class="spec-item"><div class="spec-val">1,200 m²</div><div class="spec-key">Ingano</div></div>
+            <div class="spec-item"><div class="spec-val">Impapuro z'ubutaka</div><div class="spec-key">Impapuro</div></div>
+            <div class="spec-item"><div class="spec-val">Hashize icyumweru</div><div class="spec-key">Yatangazwe</div></div>
           </div>
           <div class="card-seller">
             <div class="seller-av" style="background:#352514">AM</div>
             <div class="seller-name">Alice Mukamana</div>
-            <div class="verified-tag">✓ Verified</div>
+            <div class="verified-tag">✓ Byemejwe</div>
           </div>
         </div>
       </div>
@@ -973,22 +973,22 @@ body {
       <div class="listing-card" data-type="agricultural" data-title="2 acres farmland musanze northern province" onclick="switchTab('detail')">
         <div class="card-image" style="background:#111520">
           <svg width="100%" height="100%" viewBox="0 0 400 185"><rect width="400" height="185" fill="#111520"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.07"><line x1="0" y1="62" x2="400" y2="62"/><line x1="0" y1="124" x2="400" y2="124"/><line x1="100" y1="0" x2="100" y2="185"/><line x1="200" y1="0" x2="200" y2="185"/><line x1="300" y1="0" x2="300" y2="185"/></g><path d="M52 152 L172 48 L348 94 L400 64 L400 164 L52 164 Z" stroke="#4a7a8a" stroke-width="1" fill="rgba(74,122,138,0.07)"/></svg>
-          <div class="card-type-badge" style="color:#6a9eb5;border-color:rgba(74,122,138,0.3)">Agricultural</div>
+          <div class="card-type-badge" style="color:#6a9eb5;border-color:rgba(74,122,138,0.3)">Ubuhinzi</div>
           <div class="card-save">❤️</div>
         </div>
         <div class="card-body">
           <div class="card-price" style="color:#7ab0c8">RWF 8,500,000</div>
-          <div class="card-title">2 acres farmland, Musanze</div>
+          <div class="card-title">Ubutaka bwo guhinza bwa hegitari 2, Musanze</div>
           <div class="card-location">📍 Musanze, Northern Province</div>
           <div class="card-specs">
-            <div class="spec-item"><div class="spec-val">8,094 m²</div><div class="spec-key">Area</div></div>
-            <div class="spec-item"><div class="spec-val">Land cert.</div><div class="spec-key">Documents</div></div>
-            <div class="spec-item"><div class="spec-val">Today</div><div class="spec-key">Posted</div></div>
+            <div class="spec-item"><div class="spec-val">8,094 m²</div><div class="spec-key">Ingano</div></div>
+            <div class="spec-item"><div class="spec-val">Icyemezo cy'ubutaka</div><div class="spec-key">Impapuro</div></div>
+            <div class="spec-item"><div class="spec-val">Uyu munsi</div><div class="spec-key">Yatangazwe</div></div>
           </div>
           <div class="card-seller">
             <div class="seller-av" style="background:#182030">PH</div>
             <div class="seller-name">Patrick Habimana</div>
-            <div class="verified-tag">✓ Verified</div>
+            <div class="verified-tag">✓ Byemejwe</div>
           </div>
         </div>
       </div>
@@ -1000,30 +1000,30 @@ body {
 <div id="page-map" class="page">
   <div class="map-sidebar">
     <div class="map-sidebar-head">
-      <div class="map-sidebar-title">Plots in Kigali</div>
+      <div class="map-sidebar-title">Ubutaka i Kigali</div>
       <div class="map-search-bar">
-        <input id="map-search" type="text" placeholder="Search sector, keyword...">
+        <input id="map-search" type="text" placeholder="Shakisha akarere, ijambo...">
         <button onclick="applyMapFilter()">→</button>
       </div>
     </div>
     <div class="map-filter-row">
       <button class="filter-chip active" onclick="setMapType('all', this)">All</button>
-      <button class="filter-chip" onclick="setMapType('residential', this)">Residential</button>
-      <button class="filter-chip" onclick="setMapType('commercial', this)">Commercial</button>
-      <button class="filter-chip" onclick="setMapType('agricultural', this)">Agricultural</button>
+      <button class="filter-chip" onclick="setMapType('residential', this)">Amazu</button>
+      <button class="filter-chip" onclick="setMapType('commercial', this)">Ubucuruzi</button>
+      <button class="filter-chip" onclick="setMapType('agricultural', this)">Ubuhinzi</button>
     </div>
-    <div class="map-results-count" id="map-count">12 plots found</div>
+    <div class="map-results-count" id="map-count">Ubutaka 12 bwabonetse</div>
     <div class="map-cards-list" id="map-cards"></div>
   </div>
 
   <div class="map-canvas-wrap">
     <div id="map"></div>
-    <div class="map-top-badge" id="map-badge">12 active plots</div>
+    <div class="map-top-badge" id="map-badge">Ubutaka 12 bugaragara</div>
     <div class="map-legend-box">
-      <div class="legend-title">Land type</div>
-      <div class="legend-row"><div class="legend-dot" style="background:#e84040"></div>Residential</div>
-      <div class="legend-row"><div class="legend-dot" style="background:#1a73e8"></div>Commercial</div>
-      <div class="legend-row"><div class="legend-dot" style="background:#2e8c50"></div>Agricultural</div>
+      <div class="legend-title">Ubwoko bw'ubutaka</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#e84040"></div>Amazu</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#1a73e8"></div>Ubucuruzi</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#2e8c50"></div>Ubuhinzi</div>
     </div>
   </div>
 </div>
@@ -1033,7 +1033,7 @@ body {
   <div class="detail-layout">
     <div class="detail-main">
       <div class="detail-eyebrow">Residential &middot; Kigali</div>
-      <h1 class="detail-title">600 sqm plot in Kicukiro District</h1>
+      <h1 class="detail-title">Ubutaka bwa 600 sqm mu Karere ka Kicukiro</h1>
       <div class="detail-meta">📍 Kicukiro, Kigali &nbsp;&middot;&nbsp; Posted 3 days ago &nbsp;&middot;&nbsp; Ref: TP-2024-0812</div>
       <div class="detail-image">
         <svg width="100%" height="100%" viewBox="0 0 720 300"><rect width="720" height="300" fill="#161410"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.08"><line x1="0" y1="75" x2="720" y2="75"/><line x1="0" y1="150" x2="720" y2="150"/><line x1="0" y1="225" x2="720" y2="225"/><line x1="120" y1="0" x2="120" y2="300"/><line x1="240" y1="0" x2="240" y2="300"/><line x1="360" y1="0" x2="360" y2="300"/><line x1="480" y1="0" x2="480" y2="300"/><line x1="600" y1="0" x2="600" y2="300"/></g><rect x="155" y="58" width="410" height="184" stroke="#c2622a" stroke-width="1.5" fill="rgba(194,98,42,0.08)"/><g stroke="#d4b896" opacity="0.12" stroke-width="1" stroke-dasharray="5 5"><line x1="155" y1="58" x2="90" y2="30"/><line x1="565" y1="58" x2="630" y2="30"/><line x1="155" y1="242" x2="90" y2="270"/><line x1="565" y1="242" x2="630" y2="270"/></g><circle cx="360" cy="150" r="7" fill="#c2622a" opacity="0.85"/><circle cx="360" cy="150" r="20" fill="#c2622a" opacity="0.1"/><text x="360" y="175" font-family="serif" font-size="13" fill="#d4b896" opacity="0.28" text-anchor="middle">600 m²</text><g transform="translate(44,44)"><line x1="0" y1="14" x2="0" y2="-14" stroke="#d4b896" stroke-width="1" opacity="0.25"/><polygon points="0,-14 -4,-6 0,-10 4,-6" fill="#d4b896" opacity="0.25"/><text x="0" y="26" font-family="sans-serif" font-size="9" fill="#d4b896" opacity="0.22" text-anchor="middle">N</text></g><g transform="translate(640,272)"><line x1="0" y1="0" x2="64" y2="0" stroke="#d4b896" stroke-width="1" opacity="0.22"/><line x1="0" y1="-4" x2="0" y2="4" stroke="#d4b896" stroke-width="1" opacity="0.22"/><line x1="64" y1="-4" x2="64" y2="4" stroke="#d4b896" stroke-width="1" opacity="0.22"/><text x="32" y="-8" font-family="sans-serif" font-size="9" fill="#d4b896" opacity="0.2" text-anchor="middle">20m</text></g></svg>
@@ -1045,41 +1045,41 @@ body {
         <div class="detail-thumb"></div>
       </div>
       <div class="detail-specs">
-        <div class="detail-spec"><div class="detail-spec-val">600 m²</div><div class="detail-spec-key">Total area</div></div>
-        <div class="detail-spec"><div class="detail-spec-val">RWF 20k</div><div class="detail-spec-key">Per m²</div></div>
-        <div class="detail-spec"><div class="detail-spec-val">Level</div><div class="detail-spec-key">Terrain</div></div>
-        <div class="detail-spec"><div class="detail-spec-val">Zone R1</div><div class="detail-spec-key">Zoning</div></div>
+        <div class="detail-spec"><div class="detail-spec-val">600 m²</div><div class="detail-spec-key">Ingano yose</div></div>
+        <div class="detail-spec"><div class="detail-spec-val">RWF 20k</div><div class="detail-spec-key">Kuri buri m²</div></div>
+        <div class="detail-spec"><div class="detail-spec-val">Level</div><div class="detail-spec-key">Imiterere</div></div>
+        <div class="detail-spec"><div class="detail-spec-val">Zone R1</div><div class="detail-spec-key">Icyiciro</div></div>
       </div>
       <div class="detail-tags">
-        <div class="detail-tag">Title deed</div>
+        <div class="detail-tag">Impapuro z'ubutaka</div>
         <div class="detail-tag">Tarmac road access</div>
-        <div class="detail-tag">Water connection</div>
-        <div class="detail-tag">Electricity nearby</div>
-        <div class="detail-tag">No structures</div>
-        <div class="detail-tag">Negotiable</div>
+        <div class="detail-tag">Amazi</div>
+        <div class="detail-tag">Amashanyarazi hafi</div>
+        <div class="detail-tag">Nta yubatse</div>
+        <div class="detail-tag">Bishobora kuganirwaho</div>
       </div>
-      <p class="detail-description">A well-positioned 600 sqm residential plot in the heart of Kicukiro, close to main tarmac roads and public transport. Fully level terrain. Water and electricity available on-street. Title deed is in the owner's name and ready for transfer. No encumbrances or disputes on the land.</p>
-      <div class="docs-heading">Documents uploaded by seller</div>
+      <p class="detail-description">Ubutaka bwo kubaka amazu bwa 600 sqm, buherereye neza mu mutima wa Kicukiro, hafi y'inzira za tarmac n'ubwikorezi rusange. Ubutaka buringanye neza. Amazi n'amashanyarazi bihari mu muhanda. Impapuro z'ubutaka ziri mu izina ry'nyir'ubutaka kandi ziteguye gurekura. Nta nkomyi cyangwa amakimbirane ku butaka.</p>
+      <div class="docs-heading">Impapuro zatanzwe n'umuguzi</div>
       <div class="doc-row">
         <div class="doc-icon">📄</div>
-        <div><div class="doc-name">Title deed — Kicukiro plot.pdf</div><div class="doc-sub">Request access from seller to view</div></div>
+        <div><div class="doc-name">Impapuro z'ubutaka — Kicukiro.pdf</div><div class="doc-sub">Request access from seller to view</div></div>
         <div class="doc-arrow">→</div>
       </div>
       <div class="doc-row">
         <div class="doc-icon">🗺️</div>
-        <div><div class="doc-name">Plot survey map.pdf</div><div class="doc-sub">Request access from seller to view</div></div>
+        <div><div class="doc-name">Ikarita y'ubutaka.pdf</div><div class="doc-sub">Request access from seller to view</div></div>
         <div class="doc-arrow">→</div>
       </div>
     </div>
     <div class="detail-sidebar">
-      <div class="price-label">Asking price</div>
+      <div class="price-label">Igiciro cyasabwe</div>
       <div class="price-main">RWF 12,000,000</div>
-      <div class="price-sub">≈ RWF 20,000 / m² &middot; Negotiable</div>
-      <button class="action-btn action-primary">📞 Contact seller</button>
-      <button class="action-btn action-secondary">💬 Send a message</button>
-      <div class="disclaimer">TeraPlot connects buyers and sellers directly. We are not party to any transaction and bear no responsibility for deal outcomes.</div>
+      <div class="price-sub">≈ RWF 20,000 / m² &middot; Bishobora kuganirwaho</div>
+      <button class="action-btn action-primary">📞 Vugana n'umuguzi</button>
+      <button class="action-btn action-secondary">💬 Ohereza ubutumwa</button>
+      <div class="disclaimer">TeraPlot ihuza abaguzi n'abagunzi kuri buryo bwa kigezweho. Ntitwitangira mu makurirane kandi ntitwita ingaruka z'amasezerano.</div>
       <hr class="sidebar-divider">
-      <div class="seller-section-title">Listed by</div>
+      <div class="seller-section-title">Yatangazwe na</div>
       <div class="seller-row">
         <div class="seller-avatar" style="background:#3a2a22">JN</div>
         <div>
@@ -1088,12 +1088,12 @@ body {
         </div>
       </div>
       <div class="seller-stats">
-        <div class="seller-stat"><div class="seller-stat-val">5</div><div class="seller-stat-key">Listings</div></div>
-        <div class="seller-stat"><div class="seller-stat-val">4.8★</div><div class="seller-stat-key">Rating</div></div>
-        <div class="seller-stat"><div class="seller-stat-val">3</div><div class="seller-stat-key">Deals closed</div></div>
-        <div class="seller-stat"><div class="seller-stat-val">~2h</div><div class="seller-stat-key">Reply time</div></div>
+        <div class="seller-stat"><div class="seller-stat-val">5</div><div class="seller-stat-key">Ibitangazwa</div></div>
+        <div class="seller-stat"><div class="seller-stat-val">4.8★</div><div class="seller-stat-key">Ipfundo</div></div>
+        <div class="seller-stat"><div class="seller-stat-val">3</div><div class="seller-stat-key">Amasezerano</div></div>
+        <div class="seller-stat"><div class="seller-stat-val">~2h</div><div class="seller-stat-key">Igihe cyo gusubiza</div></div>
       </div>
-      <a class="report-link">Report this listing</a>
+      <a class="report-link">Tanga ikibazo kuri iri tangazo</a>
     </div>
   </div>
 </div>
@@ -1101,102 +1101,102 @@ body {
 <!-- ═══════════════════════════════ POST ═════════════════════════════ -->
 <div id="page-post" class="page">
   <div class="form-page">
-    <h1 class="form-title">List your plot</h1>
-    <p class="form-subtitle">Your listing will be reviewed before going live — usually within 24 hours.</p>
+    <h1 class="form-title">Andika ubutaka</h1>
+    <p class="form-subtitle">Itangazo ryawe rizasuzumwa mbere yo gushyirwa mu isoko — gusumbya amasaha 24.</p>
     <div class="progress-steps">
-      <div class="progress-step done"><div class="step-dot">✓</div><div class="step-label">Account</div></div>
-      <div class="progress-step current"><div class="step-dot">2</div><div class="step-label">Plot details</div></div>
+      <div class="progress-step done"><div class="step-dot">✓</div><div class="step-label">Konti</div></div>
+      <div class="progress-step current"><div class="step-dot">2</div><div class="step-label">Amakuru y'ubutaka</div></div>
       <div class="progress-step"><div class="step-dot">3</div><div class="step-label">Photos & docs</div></div>
-      <div class="progress-step"><div class="step-dot">4</div><div class="step-label">Review</div></div>
+      <div class="progress-step"><div class="step-dot">4</div><div class="step-label">Isuzuma</div></div>
     </div>
-    <div class="form-notice">Providing false or misleading information — including fake documents or incorrect pricing — will result in permanent account suspension.</div>
+    <div class="form-notice">Gutanga amakuru y'ikinyoma — harimo impapuro z'ikinyoma cyangwa igiciro kidakwiye — bizatuma konti yawe isibwa burundu.</div>
     <div class="form-section">
-      <div class="form-section-head">Basic information</div>
+      <div class="form-section-head">Amakuru Rusange</div>
       <div class="form-section-body">
         <div class="form-group">
           <label class="form-label">Listing title <span class="form-required">*</span></label>
-          <input class="form-input" id="f-title" type="text" placeholder="e.g. 500 sqm residential plot in Kicukiro">
+          <input class="form-input" id="f-title" type="text" placeholder="Urugero: Ubutaka bwa 500 sqm i Kicukiro">
         </div>
         <div class="form-row-2">
           <div class="form-group">
             <label class="form-label">District <span class="form-required">*</span></label>
             <select class="form-select" id="f-district">
-              <option value="">Select district</option>
+              <option value="">Hitamo akarere</option>
               <option>Kigali</option><option>Musanze</option>
               <option>Huye</option><option>Rubavu</option><option>Kayonza</option>
             </select>
           </div>
           <div class="form-group">
             <label class="form-label">Sector <span class="form-required">*</span></label>
-            <input class="form-input" id="f-sector" type="text" placeholder="e.g. Niboye">
+            <input class="form-input" id="f-sector" type="text" placeholder="Urugero: Niboye">
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Description</label>
-          <textarea class="form-textarea" placeholder="Access roads, utilities, terrain, surroundings, anything buyers should know..."></textarea>
+          <label class="form-label">Ibisobanuro</label>
+          <textarea class="form-textarea" placeholder="Inzira z'ubutaka, ibyiciro, imiterere, ibintu abaguzi bagomba kumenya..."></textarea>
         </div>
       </div>
     </div>
     <div class="form-section">
-      <div class="form-section-head">Plot specifications</div>
+      <div class="form-section-head">Ibisobanuro by'ubutaka</div>
       <div class="form-section-body">
         <div class="form-group">
           <label class="form-label">Land type <span class="form-required">*</span></label>
           <div class="land-type-grid">
-            <button class="land-type-btn active" onclick="selectLandType(this)"><div class="land-type-icon">🏘️</div>Residential</button>
-            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🏢</div>Commercial</button>
-            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🌾</div>Agricultural</button>
-            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🏗️</div>Industrial</button>
-            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🏛️</div>Mixed use</button>
-            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">❓</div>Other</button>
+            <button class="land-type-btn active" onclick="selectLandType(this)"><div class="land-type-icon">🏘️</div>Amazu</button>
+            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🏢</div>Ubucuruzi</button>
+            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🌾</div>Ubuhinzi</button>
+            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🏗️</div>Inganda</button>
+            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">🏛️</div>Gukoresha byinshi</button>
+            <button class="land-type-btn" onclick="selectLandType(this)"><div class="land-type-icon">❓</div>Ibindi</button>
           </div>
         </div>
         <div class="form-row-2">
           <div class="form-group">
             <label class="form-label">Plot size <span class="form-required">*</span></label>
-            <input class="form-input" id="f-size" type="number" placeholder="e.g. 600">
+            <input class="form-input" id="f-size" type="number" placeholder="Urugero: 600">
           </div>
           <div class="form-group">
-            <label class="form-label">Unit</label>
+            <label class="form-label">Igipimo</label>
             <select class="form-select"><option>m²</option><option>acres</option><option>hectares</option></select>
           </div>
         </div>
         <div class="form-row-2">
           <div class="form-group">
             <label class="form-label">Asking price (RWF) <span class="form-required">*</span></label>
-            <input class="form-input" id="f-price" type="number" placeholder="e.g. 12000000">
+            <input class="form-input" id="f-price" type="number" placeholder="Urugero: 12000000">
           </div>
           <div class="form-group">
-            <label class="form-label">Price negotiable?</label>
-            <select class="form-select" id="f-negotiable"><option>Yes</option><option>No</option><option>Open to offers</option></select>
+            <label class="form-label">Igiciro gishobora kuganirwaho?</label>
+            <select class="form-select" id="f-negotiable"><option>Yego</option><option>Oya</option><option>Byemera ibirego</option></select>
           </div>
         </div>
       </div>
     </div>
     <div class="form-section">
-      <div class="form-section-head">Photos &amp; documents</div>
+      <div class="form-section-head">Amafoto n'impapuro</div>
       <div class="form-section-body">
         <div class="form-group">
-          <label class="form-label">Plot photos (up to 10)</label>
+          <label class="form-label">Amafoto y'ubutaka (kugeza 10)</label>
           <div class="upload-zone">
             <div class="upload-icon">📷</div>
             <div class="upload-text">Drag & drop or click to upload photos</div>
-            <div class="upload-hint">JPG, PNG &middot; max 5MB each</div>
+            <div class="upload-hint">JPG, PNG &middot; ingano ntarengwa 5MB buri kimwe</div>
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Land documents</label>
+          <label class="form-label">Impapuro z'ubutaka</label>
           <div class="upload-zone">
             <div class="upload-icon">📄</div>
-            <div class="upload-text">Title deed, land certificate, survey map</div>
+            <div class="upload-text">Impapuro z'ubutaka, icyemezo, ikarita y'ubutaka</div>
             <div class="upload-hint">PDF &middot; Only shared with buyers upon your approval</div>
           </div>
         </div>
       </div>
     </div>
     <div class="form-footer">
-      <button class="btn btn-ghost">Save draft</button>
-      <button class="btn btn-primary" onclick="submitPlot()">Submit listing →</button>
+      <button class="btn btn-ghost">Bika</button>
+      <button class="btn btn-primary" onclick="submitPlot()">Ohereza itangazo →</button>
     </div>
   </div>
 </div>
@@ -1397,7 +1397,7 @@ function placeMapMarkers(plots) {
       '  <div style="font-size:13px;color:#333;margin-bottom:2px">' + plot.title + '</div>',
       '  <div style="font-size:11px;color:#888;margin-bottom:12px">📍 ' + plot.sector + ', Kigali</div>',
       '  <div style="display:flex;gap:14px;padding:10px 0;border-top:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;margin-bottom:12px">',
-      '    <div style="text-align:center"><div style="font-size:13px;font-weight:600;color:#222">' + plot.size + '</div><div style="font-size:10px;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.3px">Area</div></div>',
+      '    <div style="text-align:center"><div style="font-size:13px;font-weight:600;color:#222">' + plot.size + '</div><div style="font-size:10px;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.3px">Ingano</div></div>',
       '    <div style="text-align:center"><div style="font-size:13px;font-weight:600;color:' + color + ';text-transform:capitalize">' + plot.type + '</div><div style="font-size:10px;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.3px">Type</div></div>',
       '    <div style="text-align:center"><div style="font-size:13px;font-weight:600;color:' + (plot.verified ? '#2e8c50' : '#aaa') + '">' + (plot.verified ? '✓ Verified' : 'Unverified') + '</div><div style="font-size:10px;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.3px">Seller</div></div>',
       '  </div>',
@@ -1463,7 +1463,7 @@ function renderMapSidebar() {
       '  <div class="map-plot-tags">',
       '    <div class="map-plot-tag">' + plot.size + '</div>',
       '    <div class="map-plot-tag" style="color:' + color + ';border-color:' + color + '44;text-transform:capitalize">' + plot.type + '</div>',
-      (plot.verified ? '    <div class="map-plot-tag" style="color:#2e8c50;border-color:#2e8c5044">✓ Verified</div>' : ''),
+      (plot.verified ? '    <div class="map-plot-tag" style="color:#2e8c50;border-color:#2e8c5044">✓ Byemejwe</div>' : ''),
       '  </div>',
       '</div>'
     ].join('');
@@ -1661,88 +1661,88 @@ loadSavedPlots();
 <!-- ═══════════════════════════════ HOW IT WORKS ══════════════════ -->
 <div id="page-how" class="page">
   <div class="hiw-page">
-    <div class="hiw-eyebrow">The process</div>
-    <h1 class="hiw-title">Simple. Direct.<br>No middlemen.</h1>
-    <p class="hiw-subtitle">TeraPlot connects land owners and buyers directly across Rwanda. No agents, no commissions, no gatekeepers — just people and land.</p>
+    <div class="hiw-eyebrow">Uburyo bigenda</div>
+    <h1 class="hiw-title">Byoroshye. Kuri buryo bwa kigezweho.<br>Nta bantu baho hagati.</h1>
+    <p class="hiw-subtitle">TeraPlot ihuza abafite ubutaka n'abashaka kubugura mu Rwanda hose kuri buryo bwa kigezweho. Nta bantu baho hagati, nta komisyo — abantu n'ubutaka gusa.</p>
 
     <div class="hiw-steps">
       <div class="hiw-step">
         <div class="hiw-step-icon">📝</div>
         <div class="hiw-step-num">01</div>
-        <div class="hiw-step-title">Seller posts a plot</div>
-        <div class="hiw-step-desc">A land owner creates a free listing with photos, documents, location, price and plot details. Every listing is reviewed by our team before going live.</div>
+        <div class="hiw-step-title">Umuguzi atangaza ubutaka</div>
+        <div class="hiw-step-desc">Nyir'ubutaka aremera itangazo ry'ubuntu rifite amafoto, impapuro, aho buherereye, igiciro n'amakuru y'ubutaka. Buri tangazo risuzumwa na team yacu mbere yo gushyirwa mu isoko.</div>
         <div class="hiw-arrow">→</div>
       </div>
       <div class="hiw-step">
         <div class="hiw-step-icon">🔍</div>
         <div class="hiw-step-num">02</div>
-        <div class="hiw-step-title">Buyer finds the plot</div>
-        <div class="hiw-step-desc">Buyers browse listings, filter by district, land type and price, and explore the live map to see exactly where each plot is located in Kigali and beyond.</div>
+        <div class="hiw-step-title">Umuguzi abona ubutaka</div>
+        <div class="hiw-step-desc">Abaguzi bashaka ibitangazwa, babihuza n'akarere, ubwoko bw'ubutaka n'igiciro, kandi basura ikarita kugirango barebe neza aho ubutaka buri i Kigali no hanze.</div>
         <div class="hiw-arrow">→</div>
       </div>
       <div class="hiw-step">
         <div class="hiw-step-icon">🤝</div>
         <div class="hiw-step-num">03</div>
-        <div class="hiw-step-title">They connect directly</div>
-        <div class="hiw-step-desc">The buyer contacts the seller through TeraPlot's messaging system. From there, the two parties negotiate and close the deal entirely between themselves.</div>
+        <div class="hiw-step-title">Bahuza kuri buryo bwa kigezweho</div>
+        <div class="hiw-step-desc">Umuguzi avugana na nyir'ubutaka binyuze mu nzira za TeraPlot. Bahera aho, impande zombi ziyunvikanaho kandi zirangiriza amasezerano ziri hagati zazo.</div>
       </div>
     </div>
 
     <div class="hiw-disclaimer">
-      <div class="hiw-disclaimer-title">Our role — and our limits</div>
-      <div class="hiw-disclaimer-text">TeraPlot is a marketplace platform only. We connect buyers and sellers — we do not participate in, verify, guarantee, or take responsibility for any land transaction. All deals are made directly between the buyer and seller. We strongly recommend verifying land documents independently through Rwanda's Land Authority (RLMA) before completing any transaction.</div>
+      <div class="hiw-disclaimer-title">Uruhare rwacu — n'aho tugarukira</div>
+      <div class="hiw-disclaimer-text">TeraPlot ni platform y'isoko gusa. Tuhuza abaguzi na nyir'ubutaka — ntitwiyemeza, ntitwemeza, ntitwahonga, kandi ntitwita ku makurirane y'ubutaka ubwo aribwo bwose. Amasezerano yose aterwa hagati y'umuguzi na nyir'ubutaka. Turasaba cyane ko usuzuma impapuro z'ubutaka wenyine binyuze mu Kigo cy'ubutaka cy'u Rwanda (RLMA) mbere yo kurangiza amasezerano.</div>
     </div>
 
     <div class="hiw-faq">
-      <div class="hiw-faq-title">Common questions</div>
+      <div class="hiw-faq-title">Ibibazo bikunze kubazwa</div>
 
       <div class="faq-item" onclick="toggleFaq(this)">
         <div class="faq-q">
-          <div class="faq-question">Is it free to list a plot on TeraPlot?</div>
+          <div class="faq-question">Gutangaza ubutaka kuri TeraPlot birahenze?</div>
           <div class="faq-toggle">+</div>
         </div>
-        <div class="faq-answer">Yes. Creating a basic listing is completely free. In the future we will offer promoted listings for sellers who want more visibility, but the core platform will always have a free tier.</div>
+        <div class="faq-answer">Yego. Gukora itangazo risanzwe ni ubuntu burundu. Mu gihe kizaza tuzatanga ibitangazwa byihariye ku bagunzi bashaka kugaragara cyane, ariko platform nyamukuru izagira ibyiciro bya ubuntu buri gihe.</div>
       </div>
 
       <div class="faq-item" onclick="toggleFaq(this)">
         <div class="faq-q">
-          <div class="faq-question">How do I know a seller is legitimate?</div>
+          <div class="faq-question">Nzibaze nte ko nyir'ubutaka ari uwo kwizera?</div>
           <div class="faq-toggle">+</div>
         </div>
-        <div class="faq-answer">Sellers with a ✓ Verified badge have submitted their national ID and land documents to our team for manual review. We also show each seller's rating and deal history. That said, we always recommend doing your own due diligence and verifying the title deed at RLMA before any payment.</div>
+        <div class="faq-answer">Abagunzi bafite ikimenyetso ✓ Byemejwe batanze indangamuntu n'impapuro z'ubutaka kuri team yacu kugirango bisuzumwe. Kandi twereka ipfundo ry'umuguzi n'amateka y'amasezerano. Nyamara, turasaba buri gihe ko ukora ubushakashatsi bwawe bwite kandi ukemeza impapuro z'ubutaka kuri RLMA mbere yo kwishyura.</div>
       </div>
 
       <div class="faq-item" onclick="toggleFaq(this)">
         <div class="faq-q">
-          <div class="faq-question">Does TeraPlot take a commission on deals?</div>
+          <div class="faq-question">TeraPlot ifata komisyo ku makurirane?</div>
           <div class="faq-toggle">+</div>
         </div>
-        <div class="faq-answer">No. TeraPlot does not take any commission on land transactions. We are not involved in the deal at all — we simply introduce the buyer and seller to each other.</div>
+        <div class="faq-answer">Oya. TeraPlot ntifata komisyo ku makurirane y'ubutaka. Ntitwiyemeza mu makurirane na hamwe — duhuza gusa umuguzi na nyir'ubutaka.</div>
       </div>
 
       <div class="faq-item" onclick="toggleFaq(this)">
         <div class="faq-q">
-          <div class="faq-question">Which districts are covered?</div>
+          <div class="faq-question">Ni ayahe turere akwiwe?</div>
           <div class="faq-toggle">+</div>
         </div>
-        <div class="faq-answer">Currently the platform focuses on Kigali (Kicukiro, Gasabo, Nyarugenge) and is expanding to all 30 districts of Rwanda. Sellers from any district can post listings today.</div>
+        <div class="faq-answer">Ubu platform iha agaciro Kigali (Kicukiro, Gasabo, Nyarugenge) kandi irimo kwaguka kugeza mu turere twose 30 tw'u Rwanda. Abagunzi baturuka akarere kose bashobora gutangaza ubu.</div>
       </div>
 
       <div class="faq-item" onclick="toggleFaq(this)">
         <div class="faq-q">
-          <div class="faq-question">What documents should a seller upload?</div>
+          <div class="faq-question">Ni ikihe mpapuro nyir'ubutaka agomba gushyiraho?</div>
           <div class="faq-toggle">+</div>
         </div>
-        <div class="faq-answer">We recommend uploading the title deed (Certificat d'enregistrement), the plot survey map, and any RLMA transfer documentation. Documents are stored securely and only shared with buyers you approve.</div>
+        <div class="faq-answer">Turasaba gushyiraho impapuro z'ubutaka (Certificat d'enregistrement), ikarita y'ubutaka, n'andi makuru ya RLMA yo gurekura. Impapuro zirabikwa neza kandi zigabanywa n'abaguzi wemeje gusa.</div>
       </div>
     </div>
 
     <div class="hiw-cta">
-      <div class="hiw-cta-title">Ready to get started?</div>
-      <div class="hiw-cta-sub">Browse available plots or list your own land today — free, fast and direct.</div>
+      <div class="hiw-cta-title">Witeguye gutangira?</div>
+      <div class="hiw-cta-sub">Shakisha ubutaka bugaragara cyangwa tangaza ubutaka bwawe uyu munsi — ubuntu, vuba kandi kuri buryo bwa kigezweho.</div>
       <div class="hiw-cta-btns">
-        <button class="btn btn-ghost" onclick="switchTab('home')">Browse plots</button>
-        <button class="btn btn-primary" onclick="switchTab('post')">List your plot</button>
+        <button class="btn btn-ghost" onclick="switchTab('home')">Shakisha ubutaka</button>
+        <button class="btn btn-primary" onclick="switchTab('post')">Andika ubutaka</button>
       </div>
     </div>
   </div>
@@ -1754,9 +1754,9 @@ loadSavedPlots();
 
     <div class="about-hero">
       <div class="about-hero-left">
-        <div class="about-eyebrow">Who we are</div>
-        <h1 class="about-title">Rwanda's land marketplace, built by Rwandans.</h1>
-        <p class="about-lead">TeraPlot was built to solve a real problem — finding and selling land in Rwanda is slow, opaque, and dominated by brokers who add cost without adding value. We built a direct platform that puts buyers and sellers in the same room.</p>
+        <div class="about-eyebrow">Abo turi bo</div>
+        <h1 class="about-title">Isoko y'ubutaka rw'u Rwanda, ryubatswe n'Abanyarwanda.</h1>
+        <p class="about-lead">TeraPlot yubatswe gukemura ikibazo nyacyo — gushaka no kugurisha ubutaka mu Rwanda ni byihuta, bitarambuye, kandi bikoreshwa n'abagiraneza bongera igiciro nta nyungu. Twubatse platform ya kigezweho ishyira abaguzi na nyir'ubutaka hamwe.</p>
       </div>
       <div class="about-art">
         <svg width="100%" height="100%" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" fill="none">
@@ -1789,63 +1789,63 @@ loadSavedPlots();
     </div>
 
     <div class="about-mission">
-      <div class="about-mission-label">Our mission</div>
-      <div class="about-mission-text">"To make land ownership in Rwanda more accessible, transparent and fair — by removing the barriers between the people who own land and the people who want it."</div>
+      <div class="about-mission-label">Intego yacu</div>
+      <div class="about-mission-text">"Gukora ko ubutaka mu Rwanda bushoboka, burambuye kandi buringanye — binyuze mu gukuraho inzitizi hagati y'abafite ubutaka n'abashaka kubugura."</div>
     </div>
 
     <div class="about-values">
       <div class="about-value">
         <div class="about-value-icon">🔎</div>
-        <div class="about-value-title">Transparency</div>
-        <div class="about-value-desc">Every listing shows real prices, real documents and verified seller identities. No hidden fees, no inflated broker prices.</div>
+        <div class="about-value-title">Uburambuzi</div>
+        <div class="about-value-desc">Buri tangazo rigaragaza ibiciro nyabyo, impapuro nyabyo n'amazina y'abagunzi bemejwe. Nta mishahara ihishe, nta bigiciro byuzuye by'abagiraneza.</div>
       </div>
       <div class="about-value">
         <div class="about-value-icon">🤝</div>
-        <div class="about-value-title">Direct connection</div>
-        <div class="about-value-desc">Buyers talk directly to sellers. No middlemen taking commissions. The deal is between two people — we just make the introduction.</div>
+        <div class="about-value-title">Guhuza kuri buryo bwa kigezweho</div>
+        <div class="about-value-desc">Abaguzi bavugana na nyir'ubutaka kuri buryo bwa kigezweho. Nta bantu baho hagati bifata komisyo. Amasezerano ari hagati y'abantu babiri — tuhuza gusa.</div>
       </div>
       <div class="about-value">
         <div class="about-value-icon">🇷🇼</div>
-        <div class="about-value-title">Rwanda first</div>
-        <div class="about-value-desc">Built specifically for Rwanda's land market, with all 30 districts, Kinyarwanda context, and RWF pricing. Not a generic template.</div>
+        <div class="about-value-title">U Rwanda rwa mbere</div>
+        <div class="about-value-desc">Yubatswe by'umwihariko ku isoko ry'ubutaka rw'u Rwanda, harimo turere twose 30, inyandiko z'Ikinyarwanda, n'ibiciro mu RWF. Si template isanzwe.</div>
       </div>
     </div>
 
     <div class="about-stats">
-      <div class="about-stat"><div class="about-stat-num">1,240</div><div class="about-stat-label">Active listings</div></div>
-      <div class="about-stat"><div class="about-stat-num">430+</div><div class="about-stat-label">Verified sellers</div></div>
-      <div class="about-stat"><div class="about-stat-num">30</div><div class="about-stat-label">Districts covered</div></div>
-      <div class="about-stat"><div class="about-stat-num">0%</div><div class="about-stat-label">Commission taken</div></div>
+      <div class="about-stat"><div class="about-stat-num">1,240</div><div class="about-stat-label">Ibitangazwa bigaragara</div></div>
+      <div class="about-stat"><div class="about-stat-num">430+</div><div class="about-stat-label">Abatanga bemewe</div></div>
+      <div class="about-stat"><div class="about-stat-num">30</div><div class="about-stat-label">Turere twakwiwe</div></div>
+      <div class="about-stat"><div class="about-stat-num">0%</div><div class="about-stat-label">Komisyo</div></div>
     </div>
 
     <div class="about-team">
-      <div class="about-team-title">The team</div>
+      <div class="about-team-title">Itsinda</div>
       <div class="about-team-grid">
         <div class="team-card">
           <div class="team-avatar" style="background:#3a2a22">AX</div>
           <div class="team-name">Axel</div>
           <div class="team-role">Founder & Engineer</div>
-          <div class="team-bio">Software engineering student at ALU, Kigali. Built TeraPlot to solve the land access problem he saw firsthand in Rwanda.</div>
+          <div class="team-bio">Umunyeshuri wa software engineering kuri ALU, Kigali. Yubatse TeraPlot gukemura ikibazo cy'ubutaka yabonye ubwe mu Rwanda.</div>
         </div>
         <div class="team-card">
           <div class="team-avatar" style="background:#1e2a1e">—</div>
           <div class="team-name">Open role</div>
           <div class="team-role">Product & Growth</div>
-          <div class="team-bio">We're looking for someone who understands Rwanda's property market and wants to help grow TeraPlot across all 30 districts.</div>
+          <div class="team-bio">Dushaka umuntu usobanukirwa isoko ry'ubutaka rw'u Rwanda kandi ashaka gufasha TeraPlot gukura mu turere twose 30.</div>
         </div>
         <div class="team-card">
           <div class="team-avatar" style="background:#1e1e2a">—</div>
           <div class="team-name">Open role</div>
           <div class="team-role">Legal & Compliance</div>
-          <div class="team-bio">Rwanda land law expertise needed. Help us build the trust layer that makes TeraPlot the safest place to transact land online.</div>
+          <div class="team-bio">Uburambe mu mategeko y'ubutaka rw'u Rwanda burakenewe. Dufashe kubaka inzego zo kwizera zitura TeraPlot aho hiza ho gukora amasezerano y'ubutaka kuri internet.</div>
         </div>
       </div>
     </div>
 
     <div class="about-contact">
-      <div class="about-contact-title">Get in touch</div>
-      <div class="about-contact-sub">Questions, partnerships, press, or just want to talk about land in Rwanda?</div>
-      <div class="about-contact-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8ee6ebe2e2e1cefaebfceffee2e1faa0fcf9">[email&#160;protected]</a></div>
+      <div class="about-contact-title">Twandikire</div>
+      <div class="about-contact-sub">Ibibazo, ubufatanye, itangazamakuru, cyangwa urashaka guvuga ku butaka bw'u Rwanda?</div>
+      <div class="about-contact-email">hello@teraplot.rw</div>
     </div>
 
   </div>
@@ -1856,9 +1856,14 @@ loadSavedPlots();
 <div id="submit-modal" style="display:none;position:fixed;inset:0;z-index:900;background:rgba(12,11,9,0.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
   <div style="background:var(--bg2);border:1px solid var(--border2);max-width:440px;width:92%;padding:44px 40px;text-align:center;position:relative;">
     <div style="font-size:44px;margin-bottom:18px;">📍</div>
-    <div style="font-family:var(--serif);font-size:26px;color:var(--cream);font-style:italic;margin-bottom:10px;">Plot submitted!</div>
-    <div style="font-size:14px;color:var(--mist);line-height:1.75;margin-bottom:28px;font-weight:300;">Your plot has been listed and pinned on the map. It will be reviewed by our team before going fully public — usually within 24 hours.</div>
+    <div style="font-family:var(--serif);font-size:26px;color:var(--cream);font-style:italic;margin-bottom:10px;">Ubutaka bwatangaziwe!</div>
+    <div style="font-size:14px;color:var(--mist);line-height:1.75;margin-bottom:28px;font-weight:300;">Ubutaka bwawe bwashyizwe mu isoko kandi bwashyizwe ku ikarita. Buzasuzumwa na team yacu mbere yo gushyirwa mu isoko ryose — gusumbya amasaha 24.</div>
     <div id="modal-plot-summary" style="background:var(--bg);border:1px solid var(--border);padding:16px 18px;margin-bottom:28px;text-align:left;"></div>
     <div style="display:flex;gap:10px;justify-content:center;">
-      <button class="btn btn-ghost" onclick="closeModal()">Back to home</button>
-      
+      <button class="btn btn-ghost" onclick="closeModal()">Subira ahabanza</button>
+      <button class="btn btn-primary" onclick="goToMap()">Reba ku ikarita →</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
