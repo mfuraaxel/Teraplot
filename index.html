@@ -34,7 +34,7 @@
   --sans:     'DM Sans', system-ui, sans-serif;
   --nav-h:    54px;
   --tab-h:    40px;
-  --chrome:   94px; /* nav + tab combined */
+  --chrome:   54px; /* nav only */
 }
 
 html, body { height: 100%; overflow: hidden; }
@@ -831,6 +831,7 @@ body {
     <button class="nav-link" onclick="switchTab('map')">Ikarita</button>
     <button class="nav-link" onclick="switchTab('detail')">Amakuru y'ubutaka</button>
     <button class="nav-link" onclick="switchTab('how')">Uko bigenda</button>
+    <button class="nav-link" onclick="switchTab('post')">Tangaza ubutaka</button>
   </div>
   <div class="nav-actions">
     <button class="btn btn-ghost">Injira</button>
@@ -839,12 +840,6 @@ body {
 </nav>
 
 <!-- ══════════════════════════════ TABS ══════════════════════════════ -->
-<div class="tabs">
-  <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">Ahabanza</button>
-  <button class="tab-btn" data-tab="map"  onclick="switchTab('map')">Ikarita</button>
-  <button class="tab-btn" data-tab="detail" onclick="switchTab('detail')">Amakuru y'ubutaka</button>
-  <button class="tab-btn" data-tab="post" onclick="switchTab('post')">Tangaza ubutaka</button>
-</div>
 
 <!-- ═══════════════════════════════ HOME ═════════════════════════════ -->
 <div id="page-home" class="page active">
