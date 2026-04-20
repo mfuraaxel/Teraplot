@@ -34,7 +34,7 @@
   --sans:     'DM Sans', system-ui, sans-serif;
   --nav-h:    54px;
   --tab-h:    40px;
-  --chrome:   94px; /* nav + tab combined */
+  --chrome:   54px; /* nav only */
 }
 
 html, body { height: 100%; overflow: hidden; }
@@ -77,11 +77,12 @@ body {
   cursor: pointer;
 }
 .nav-logo span { color: var(--terra); font-style: normal; }
-.nav-links { display: flex; gap: 32px; }
+.nav-links { display: flex; gap: 20px; }
 .nav-link {
-  font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  font-size: 10.5px; letter-spacing: 0.7px; text-transform: uppercase;
   color: var(--mist); cursor: pointer; transition: color 0.15s;
   background: none; border: none; font-family: var(--sans);
+  white-space: nowrap;
 }
 .nav-link:hover { color: var(--sand); }
 .nav-actions { display: flex; gap: 10px; }
@@ -109,14 +110,7 @@ body {
 .btn-outline:hover { background: var(--terra); color: var(--cream); }
 
 /* ─── TABS ──────────────────────────────────────────────────────── */
-.tabs {
-  position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 499;
-  height: var(--tab-h);
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: stretch;
-  padding: 0 40px;
-}
+.tabs { display: none; }
 .tab-btn {
   font-family: var(--sans); font-size: 11px; letter-spacing: 0.8px;
   text-transform: uppercase; color: var(--fog); cursor: pointer;
@@ -802,12 +796,15 @@ body {
 <nav class="nav">
   <div class="nav-logo" onclick="switchTab('home')">Tera<span>Plot</span></div>
   <div class="nav-links">
+    <button class="nav-link" onclick="switchTab('home')">Ahabanza</button>
     <button class="nav-link" onclick="switchTab('home')">Shakisha</button>
     <button class="nav-link" onclick="switchTab('map')">Ikarita</button>
+    <button class="nav-link" onclick="switchTab('detail')">Amakuru y'ubutaka</button>
     <button class="nav-link" onclick="switchTab('how')">Uko bigenda</button>
     <button class="nav-link" onclick="switchTab('about')">Abo turi bo</button>
   </div>
   <div class="nav-actions">
+    <button class="nav-link" onclick="switchTab('post')">Tangaza ubutaka</button>
     <button class="btn btn-ghost">Injira</button>
     <button class="btn btn-primary" onclick="switchTab('post')">Andika ubutaka</button>
   </div>
