@@ -817,7 +817,7 @@ body {
 <div class="tabs">
   <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">Ahabanza</button>
   <button class="tab-btn" data-tab="map"  onclick="switchTab('map')">Ikarita</button>
-  <button class="tab-btn" data-tab="detail" onclick="switchTab('detail')">Amakuru y'ubutaka</button>
+  <button class="tab-btn" data-tab="detail" onclick="openDetail(plot.id)">Amakuru y'ubutaka</button>
   <button class="tab-btn" data-tab="post" onclick="switchTab('post')">Tangaza ubutaka</button>
 </div>
 
@@ -887,7 +887,7 @@ body {
           </g>
         </svg>
       </div>
-      <div class="hero-featured" onclick="switchTab('detail')">
+      <div class="hero-featured" onclick="openDetail(1)">
         <div class="featured-tag">Tangaza ryatanzwe</div>
         <div class="featured-title">Ubutaka bw'amazu bwa 600 sqm</div>
         <div class="featured-loc">📍 Kicukiro, Kigali &middot; Title deed available</div>
@@ -922,7 +922,7 @@ body {
 
     <div class="cards-grid">
       <!-- Card 1 -->
-      <div class="listing-card" data-type="residential" data-title="600 sqm plot kicukiro kigali" onclick="switchTab('detail')">
+      <div class="listing-card" data-type="residential" data-title="600 sqm plot kicukiro kigali" onclick="openDetail(1)">
         <div class="card-image" style="background:#181512">
           <svg width="100%" height="100%" viewBox="0 0 400 185"><rect width="400" height="185" fill="#181512"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.08"><line x1="0" y1="46" x2="400" y2="46"/><line x1="0" y1="92" x2="400" y2="92"/><line x1="0" y1="138" x2="400" y2="138"/><line x1="80" y1="0" x2="80" y2="185"/><line x1="160" y1="0" x2="160" y2="185"/><line x1="240" y1="0" x2="240" y2="185"/><line x1="320" y1="0" x2="320" y2="185"/></g><rect x="95" y="38" width="210" height="109" stroke="#c2622a" stroke-width="1" fill="rgba(194,98,42,0.08)"/><circle cx="200" cy="92" r="5" fill="#c2622a" opacity="0.7"/></svg>
           <div class="card-type-badge" style="color:#c2622a;border-color:rgba(194,98,42,0.3)">Amazu</div>
@@ -946,7 +946,7 @@ body {
       </div>
 
       <!-- Card 2 -->
-      <div class="listing-card" data-type="commercial" data-title="1200 sqm commercial nyarugenge kigali" onclick="switchTab('detail')">
+      <div class="listing-card" data-type="commercial" data-title="1200 sqm commercial nyarugenge kigali" onclick="openDetail(2)">
         <div class="card-image" style="background:#151310">
           <svg width="100%" height="100%" viewBox="0 0 400 185"><rect width="400" height="185" fill="#151310"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.08"><line x1="0" y1="46" x2="400" y2="46"/><line x1="0" y1="92" x2="400" y2="92"/><line x1="0" y1="138" x2="400" y2="138"/><line x1="80" y1="0" x2="80" y2="185"/><line x1="200" y1="0" x2="200" y2="185"/><line x1="320" y1="0" x2="320" y2="185"/></g><rect x="52" y="26" width="296" height="133" stroke="#b87830" stroke-width="1" fill="rgba(184,120,48,0.07)"/><rect x="115" y="52" width="84" height="74" stroke="#b87830" stroke-width="0.8" fill="rgba(184,120,48,0.05)"/></svg>
           <div class="card-type-badge" style="color:#b87830;border-color:rgba(184,120,48,0.3)">Ubucuruzi</div>
@@ -970,7 +970,7 @@ body {
       </div>
 
       <!-- Card 3 -->
-      <div class="listing-card" data-type="agricultural" data-title="2 acres farmland musanze northern province" onclick="switchTab('detail')">
+      <div class="listing-card" data-type="agricultural" data-title="2 acres farmland musanze northern province" onclick="openDetail(3)">
         <div class="card-image" style="background:#111520">
           <svg width="100%" height="100%" viewBox="0 0 400 185"><rect width="400" height="185" fill="#111520"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.07"><line x1="0" y1="62" x2="400" y2="62"/><line x1="0" y1="124" x2="400" y2="124"/><line x1="100" y1="0" x2="100" y2="185"/><line x1="200" y1="0" x2="200" y2="185"/><line x1="300" y1="0" x2="300" y2="185"/></g><path d="M52 152 L172 48 L348 94 L400 64 L400 164 L52 164 Z" stroke="#4a7a8a" stroke-width="1" fill="rgba(74,122,138,0.07)"/></svg>
           <div class="card-type-badge" style="color:#6a9eb5;border-color:rgba(74,122,138,0.3)">Ubuhinzi</div>
@@ -1028,15 +1028,15 @@ body {
   </div>
 </div>
 
-<!-- ═══════════════════════════════ DETAIL ═══════════════════════════ -->
+<!-- ═══════════════════════════════ DETAIL ═════════════════════════ -->
 <div id="page-detail" class="page">
   <div class="detail-layout">
     <div class="detail-main">
-      <div class="detail-eyebrow">Residential &middot; Kigali</div>
-      <h1 class="detail-title">Ubutaka bwa 600 sqm mu Karere ka Kicukiro</h1>
-      <div class="detail-meta">📍 Kicukiro, Kigali &nbsp;&middot;&nbsp; Posted 3 days ago &nbsp;&middot;&nbsp; Ref: TP-2024-0812</div>
+      <div class="detail-eyebrow" id="d-eyebrow">Amazu · Kigali</div>
+      <h1 class="detail-title" id="d-title">Ubutaka bwa 600 sqm mu Karere ka Kicukiro</h1>
+      <div class="detail-meta" id="d-meta">📍 Kicukiro, Kigali &nbsp;·&nbsp; Yatangazwe hashize iminsi 3 &nbsp;·&nbsp; Ref: TP-2024-0001</div>
       <div class="detail-image">
-        <svg width="100%" height="100%" viewBox="0 0 720 300"><rect width="720" height="300" fill="#161410"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.08"><line x1="0" y1="75" x2="720" y2="75"/><line x1="0" y1="150" x2="720" y2="150"/><line x1="0" y1="225" x2="720" y2="225"/><line x1="120" y1="0" x2="120" y2="300"/><line x1="240" y1="0" x2="240" y2="300"/><line x1="360" y1="0" x2="360" y2="300"/><line x1="480" y1="0" x2="480" y2="300"/><line x1="600" y1="0" x2="600" y2="300"/></g><rect x="155" y="58" width="410" height="184" stroke="#c2622a" stroke-width="1.5" fill="rgba(194,98,42,0.08)"/><g stroke="#d4b896" opacity="0.12" stroke-width="1" stroke-dasharray="5 5"><line x1="155" y1="58" x2="90" y2="30"/><line x1="565" y1="58" x2="630" y2="30"/><line x1="155" y1="242" x2="90" y2="270"/><line x1="565" y1="242" x2="630" y2="270"/></g><circle cx="360" cy="150" r="7" fill="#c2622a" opacity="0.85"/><circle cx="360" cy="150" r="20" fill="#c2622a" opacity="0.1"/><text x="360" y="175" font-family="serif" font-size="13" fill="#d4b896" opacity="0.28" text-anchor="middle">600 m²</text><g transform="translate(44,44)"><line x1="0" y1="14" x2="0" y2="-14" stroke="#d4b896" stroke-width="1" opacity="0.25"/><polygon points="0,-14 -4,-6 0,-10 4,-6" fill="#d4b896" opacity="0.25"/><text x="0" y="26" font-family="sans-serif" font-size="9" fill="#d4b896" opacity="0.22" text-anchor="middle">N</text></g><g transform="translate(640,272)"><line x1="0" y1="0" x2="64" y2="0" stroke="#d4b896" stroke-width="1" opacity="0.22"/><line x1="0" y1="-4" x2="0" y2="4" stroke="#d4b896" stroke-width="1" opacity="0.22"/><line x1="64" y1="-4" x2="64" y2="4" stroke="#d4b896" stroke-width="1" opacity="0.22"/><text x="32" y="-8" font-family="sans-serif" font-size="9" fill="#d4b896" opacity="0.2" text-anchor="middle">20m</text></g></svg>
+        <svg width="100%" height="100%" viewBox="0 0 720 300"><rect width="720" height="300" fill="#161410"/><g stroke="#d4b896" stroke-width="0.4" opacity="0.08"><line x1="0" y1="75" x2="720" y2="75"/><line x1="0" y1="150" x2="720" y2="150"/><line x1="0" y1="225" x2="720" y2="225"/><line x1="120" y1="0" x2="120" y2="300"/><line x1="240" y1="0" x2="240" y2="300"/><line x1="360" y1="0" x2="360" y2="300"/><line x1="480" y1="0" x2="480" y2="300"/><line x1="600" y1="0" x2="600" y2="300"/></g><rect id="d-svg-rect" x="155" y="58" width="410" height="184" stroke="#c2622a" stroke-width="1.5" fill="rgba(194,98,42,0.08)"/><circle cx="360" cy="150" r="7" fill="#c2622a" opacity="0.85"/><circle cx="360" cy="150" r="20" fill="#c2622a" opacity="0.1"/><text id="d-svg-text" x="360" y="175" font-family="serif" font-size="13" fill="#d4b896" opacity="0.28" text-anchor="middle">600 m²</text></svg>
       </div>
       <div class="detail-thumbs">
         <div class="detail-thumb active"></div>
@@ -1045,46 +1045,39 @@ body {
         <div class="detail-thumb"></div>
       </div>
       <div class="detail-specs">
-        <div class="detail-spec"><div class="detail-spec-val">600 m²</div><div class="detail-spec-key">Ingano yose</div></div>
-        <div class="detail-spec"><div class="detail-spec-val">RWF 20k</div><div class="detail-spec-key">Kuri buri m²</div></div>
-        <div class="detail-spec"><div class="detail-spec-val">Level</div><div class="detail-spec-key">Imiterere</div></div>
-        <div class="detail-spec"><div class="detail-spec-val">Zone R1</div><div class="detail-spec-key">Icyiciro</div></div>
+        <div class="detail-spec"><div class="detail-spec-val" id="d-area">600 m²</div><div class="detail-spec-key">Ingano yose</div></div>
+        <div class="detail-spec"><div class="detail-spec-val" id="d-perm2">RWF 20k</div><div class="detail-spec-key">Kuri buri m²</div></div>
+        <div class="detail-spec"><div class="detail-spec-val" id="d-terrain">Buringanye</div><div class="detail-spec-key">Imiterere</div></div>
+        <div class="detail-spec"><div class="detail-spec-val" id="d-zone">Zone R1</div><div class="detail-spec-key">Icyiciro</div></div>
       </div>
-      <div class="detail-tags">
-        <div class="detail-tag">Impapuro z'ubutaka</div>
-        <div class="detail-tag">Tarmac road access</div>
-        <div class="detail-tag">Amazi</div>
-        <div class="detail-tag">Amashanyarazi hafi</div>
-        <div class="detail-tag">Nta yubatse</div>
-        <div class="detail-tag">Bishobora kuganirwaho</div>
-      </div>
-      <p class="detail-description">Ubutaka bwo kubaka amazu bwa 600 sqm, buherereye neza mu mutima wa Kicukiro, hafi y'inzira za tarmac n'ubwikorezi rusange. Ubutaka buringanye neza. Amazi n'amashanyarazi bihari mu muhanda. Impapuro z'ubutaka ziri mu izina ry'nyir'ubutaka kandi ziteguye gurekura. Nta nkomyi cyangwa amakimbirane ku butaka.</p>
+      <div class="detail-tags" id="d-tags"></div>
+      <p class="detail-description" id="d-desc"></p>
       <div class="docs-heading">Impapuro zatanzwe n'umuguzi</div>
       <div class="doc-row">
         <div class="doc-icon">📄</div>
-        <div><div class="doc-name">Impapuro z'ubutaka — Kicukiro.pdf</div><div class="doc-sub">Request access from seller to view</div></div>
+        <div><div class="doc-name" id="d-doc1">Impapuro z'ubutaka.pdf</div><div class="doc-sub">Saba uburenganzira ku muguzi kugirango urebe</div></div>
         <div class="doc-arrow">→</div>
       </div>
       <div class="doc-row">
         <div class="doc-icon">🗺️</div>
-        <div><div class="doc-name">Ikarita y'ubutaka.pdf</div><div class="doc-sub">Request access from seller to view</div></div>
+        <div><div class="doc-name">Ikarita y'ubutaka.pdf</div><div class="doc-sub">Saba uburenganzira ku muguzi kugirango urebe</div></div>
         <div class="doc-arrow">→</div>
       </div>
     </div>
     <div class="detail-sidebar">
       <div class="price-label">Igiciro cyasabwe</div>
-      <div class="price-main">RWF 12,000,000</div>
-      <div class="price-sub">≈ RWF 20,000 / m² &middot; Bishobora kuganirwaho</div>
+      <div class="price-main" id="d-price">RWF 12,000,000</div>
+      <div class="price-sub" id="d-pricesub">≈ RWF 20,000 / m² &middot; Bishobora kuganirwaho</div>
       <button class="action-btn action-primary">📞 Vugana n'umuguzi</button>
       <button class="action-btn action-secondary">💬 Ohereza ubutumwa</button>
       <div class="disclaimer">TeraPlot ihuza abaguzi n'abagunzi kuri buryo bwa kigezweho. Ntitwitangira mu makurirane kandi ntitwita ingaruka z'amasezerano.</div>
       <hr class="sidebar-divider">
       <div class="seller-section-title">Yatangazwe na</div>
       <div class="seller-row">
-        <div class="seller-avatar" style="background:#3a2a22">JN</div>
+        <div class="seller-avatar" id="d-av" style="background:#3a2a22">JN</div>
         <div>
-          <div class="seller-name-main">Jean Nkusi</div>
-          <div class="seller-since">✓ Verified seller &middot; Since 2024</div>
+          <div class="seller-name-main" id="d-seller">Jean Nkusi</div>
+          <div class="seller-since">✓ Byemejwe &middot; Kuva 2024</div>
         </div>
       </div>
       <div class="seller-stats">
@@ -1401,7 +1394,7 @@ function placeMapMarkers(plots) {
       '    <div style="text-align:center"><div style="font-size:13px;font-weight:600;color:' + color + ';text-transform:capitalize">' + plot.type + '</div><div style="font-size:10px;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.3px">Type</div></div>',
       '    <div style="text-align:center"><div style="font-size:13px;font-weight:600;color:' + (plot.verified ? '#2e8c50' : '#aaa') + '">' + (plot.verified ? '✓ Verified' : 'Unverified') + '</div><div style="font-size:10px;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.3px">Seller</div></div>',
       '  </div>',
-      '  <button onclick="switchTab(\'detail\')" style="width:100%;padding:10px;background:' + color + ';color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.3px">View listing →</button>',
+      '  <button onclick="openDetail(' + plot.id + ')" style="width:100%;padding:10px;background:' + color + ';color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.3px">Reba ubutaka →</button>',
       '</div>'
     ].join('');
 
@@ -1655,6 +1648,110 @@ function goToMap() {
 
 // Load saved plots on startup
 loadSavedPlots();
+
+
+// ════════════════════════════════════════════════════════════════════
+//  DETAIL PAGE — dynamic per plot
+// ════════════════════════════════════════════════════════════════════
+
+var DETAIL_DATA = {
+  1: {
+    eyebrow:   'Amazu · Kigali',
+    title:     'Ubutaka bwa 600 sqm mu Karere ka Kicukiro',
+    meta:      '📍 Kicukiro, Kigali · Yatangazwe hashize iminsi 3 · Ref: TP-2024-0001',
+    area:      '600 m²',
+    perm2:     'RWF 20,000',
+    terrain:   'Buringanye',
+    zone:      'Zone R1',
+    price:     'RWF 12,000,000',
+    pricesub:  '≈ RWF 20,000 / m² · Bishobora kuganirwaho',
+    tags:      ['Impapuro z'ubutaka', 'Inzira ya tarmac', 'Amazi', 'Amashanyarazi hafi', 'Nta yubatse', 'Bishobora kuganirwaho'],
+    desc:      'Ubutaka bwo kubaka amazu bwa 600 sqm, buherereye neza mu mutima wa Kicukiro, hafi y'inzira za tarmac n'ubwikorezi rusange. Ubutaka buringanye neza. Amazi n'amashanyarazi bihari mu muhanda. Impapuro z'ubutaka ziri mu izina ry'nyir'ubutaka kandi ziteguye gurekura. Nta nkomyi cyangwa amakimbirane ku butaka.',
+    doc1:      'Impapuro z'ubutaka — Kicukiro.pdf',
+    seller:    'Jean Nkusi',
+    av:        'JN',
+    avbg:      '#3a2a22',
+    svgtext:   '600 m²',
+    svgcolor:  '#c2622a'
+  },
+  2: {
+    eyebrow:   'Ubucuruzi · Kigali',
+    title:     'Ubutaka bw'ubucuruzi bwa 1,200 sqm i Nyarugenge',
+    meta:      '📍 Nyarugenge, Kigali · Yatangazwe hashize icyumweru · Ref: TP-2024-0002',
+    area:      '1,200 m²',
+    perm2:     'RWF 37,500',
+    terrain:   'Buringanye',
+    zone:      'Zone C2',
+    price:     'RWF 45,000,000',
+    pricesub:  '≈ RWF 37,500 / m² · Bishobora kuganirwaho',
+    tags:      ['Impapuro z'ubutaka', 'Inzira ya tarmac', 'Amazi', 'Amashanyarazi', 'Nta yubatse', 'Bishobora kuganirwaho'],
+    desc:      'Ubutaka bw'ubucuruzi bwa 1,200 sqm, buherereye neza mu Nyarugenge, hagati h'umujyi wa Kigali. Hafi y'inzira nyamukuru, amazu y'ubucuruzi n'ubwikorezi rusange. Bwiza cyane kubaka ibikorwa by'ubucuruzi, amavuriro, cyangwa amazu y'ubucuruzi. Impapuro zose ziteguye.',
+    doc1:      'Impapuro z'ubutaka — Nyarugenge.pdf',
+    seller:    'Alice Mukamana',
+    av:        'AM',
+    avbg:      '#352514',
+    svgtext:   '1,200 m²',
+    svgcolor:  '#b87830'
+  },
+  3: {
+    eyebrow:   'Ubuhinzi · Intara y'Amajyaruguru',
+    title:     'Ubutaka bw'ubuhinzi bwa hegitari 2, Musanze',
+    meta:      '📍 Musanze, Intara y'Amajyaruguru · Yatangazwe uyu munsi · Ref: TP-2024-0003',
+    area:      '8,094 m²',
+    perm2:     'RWF 1,050',
+    terrain:   'Biteye indiri',
+    zone:      'Ubuhinzi',
+    price:     'RWF 8,500,000',
+    pricesub:  '≈ RWF 1,050 / m² · Bishobora kuganirwaho',
+    tags:      ['Icyemezo cy'ubutaka', 'Amazi y'imvura', 'Ubutaka bwiza', 'Nta yubatse', 'Bishobora kuganirwaho'],
+    desc:      'Ubutaka bw'ubuhinzi bwa hegitari 2 i Musanze, mu majyaruguru y'u Rwanda. Ubutaka bwiza cyane gutera imbuto zinyuranye bitewe n'imiterere y'ikirere cyo mu majyaruguru. Hafi y'amashyamba ya Nyungwe no ku nzira y'ubucuruzi. Icyemezo cy'ubutaka gihari kandi giteguye gurekurwa.',
+    doc1:      'Impapuro z'ubutaka — Musanze.pdf',
+    seller:    'Patrick Habimana',
+    av:        'PH',
+    avbg:      '#182030',
+    svgtext:   '2 ha',
+    svgcolor:  '#4a7a8a'
+  }
+};
+
+function openDetail(id) {
+  var d = DETAIL_DATA[id];
+  if (!d) { openDetail(plot.id); return; }
+
+  // Populate all fields
+  document.getElementById('d-eyebrow').textContent  = d.eyebrow;
+  document.getElementById('d-title').textContent    = d.title;
+  document.getElementById('d-meta').innerHTML       = d.meta;
+  document.getElementById('d-area').textContent     = d.area;
+  document.getElementById('d-perm2').textContent    = d.perm2;
+  document.getElementById('d-terrain').textContent  = d.terrain;
+  document.getElementById('d-zone').textContent     = d.zone;
+  document.getElementById('d-price').textContent    = d.price;
+  document.getElementById('d-pricesub').innerHTML   = d.pricesub;
+  document.getElementById('d-desc').textContent     = d.desc;
+  document.getElementById('d-doc1').textContent     = d.doc1;
+  document.getElementById('d-seller').textContent   = d.seller;
+  document.getElementById('d-av').textContent       = d.av;
+  document.getElementById('d-av').style.background  = d.avbg;
+  document.getElementById('d-svg-text').textContent = d.svgtext;
+  document.getElementById('d-svg-rect').setAttribute('stroke', d.svgcolor);
+  document.getElementById('d-svg-rect').setAttribute('fill', d.svgcolor.replace('#', 'rgba(') + ',0.08)');
+
+  // Tags
+  var tagsEl = document.getElementById('d-tags');
+  tagsEl.innerHTML = '';
+  d.tags.forEach(function(tag) {
+    var el = document.createElement('div');
+    el.className = 'detail-tag';
+    el.textContent = tag;
+    tagsEl.appendChild(el);
+  });
+
+  openDetail(plot.id);
+}
+
+// Also fix map popup View listing buttons to use openDetail
+// Already handled via openDetail(plot.id) in map — update to use id
 
 </script>
 
