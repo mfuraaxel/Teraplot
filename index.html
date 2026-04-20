@@ -817,7 +817,7 @@ body {
 <div class="tabs">
   <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">Ahabanza</button>
   <button class="tab-btn" data-tab="map"  onclick="switchTab('map')">Ikarita</button>
-  <button class="tab-btn" data-tab="detail" onclick="openDetail(plot.id)">Amakuru y'ubutaka</button>
+  <button class="tab-btn" data-tab="detail" onclick="switchTab('detail')">Amakuru y'ubutaka</button>
   <button class="tab-btn" data-tab="post" onclick="switchTab('post')">Tangaza ubutaka</button>
 </div>
 
@@ -1665,9 +1665,9 @@ var DETAIL_DATA = {
     zone:      'Zone R1',
     price:     'RWF 12,000,000',
     pricesub:  '≈ RWF 20,000 / m² · Bishobora kuganirwaho',
-    tags:      ['Impapuro z'ubutaka', 'Inzira ya tarmac', 'Amazi', 'Amashanyarazi hafi', 'Nta yubatse', 'Bishobora kuganirwaho'],
-    desc:      'Ubutaka bwo kubaka amazu bwa 600 sqm, buherereye neza mu mutima wa Kicukiro, hafi y'inzira za tarmac n'ubwikorezi rusange. Ubutaka buringanye neza. Amazi n'amashanyarazi bihari mu muhanda. Impapuro z'ubutaka ziri mu izina ry'nyir'ubutaka kandi ziteguye gurekura. Nta nkomyi cyangwa amakimbirane ku butaka.',
-    doc1:      'Impapuro z'ubutaka — Kicukiro.pdf',
+    tags:      ['Impapuro z\'ubutaka', 'Inzira ya tarmac', 'Amazi', 'Amashanyarazi hafi', 'Nta yubatse', 'Bishobora kuganirwaho'],
+    desc:      'Ubutaka bwo kubaka amazu bwa 600 sqm, buherereye neza mu mutima wa Kicukiro, hafi y\'inzira za tarmac n\'ubwikorezi rusange. Ubutaka buringanye neza. Amazi n\'amashanyarazi bihari mu muhanda. Impapuro z\'ubutaka ziri mu izina ry\'nyir\'ubutaka kandi ziteguye gurekura. Nta nkomyi cyangwa amakimbirane ku butaka.',
+    doc1:      'Impapuro z\'ubutaka — Kicukiro.pdf',
     seller:    'Jean Nkusi',
     av:        'JN',
     avbg:      '#3a2a22',
@@ -1676,7 +1676,7 @@ var DETAIL_DATA = {
   },
   2: {
     eyebrow:   'Ubucuruzi · Kigali',
-    title:     'Ubutaka bw'ubucuruzi bwa 1,200 sqm i Nyarugenge',
+    title:     'Ubutaka bw\'ubucuruzi bwa 1,200 sqm i Nyarugenge',
     meta:      '📍 Nyarugenge, Kigali · Yatangazwe hashize icyumweru · Ref: TP-2024-0002',
     area:      '1,200 m²',
     perm2:     'RWF 37,500',
@@ -1684,9 +1684,9 @@ var DETAIL_DATA = {
     zone:      'Zone C2',
     price:     'RWF 45,000,000',
     pricesub:  '≈ RWF 37,500 / m² · Bishobora kuganirwaho',
-    tags:      ['Impapuro z'ubutaka', 'Inzira ya tarmac', 'Amazi', 'Amashanyarazi', 'Nta yubatse', 'Bishobora kuganirwaho'],
-    desc:      'Ubutaka bw'ubucuruzi bwa 1,200 sqm, buherereye neza mu Nyarugenge, hagati h'umujyi wa Kigali. Hafi y'inzira nyamukuru, amazu y'ubucuruzi n'ubwikorezi rusange. Bwiza cyane kubaka ibikorwa by'ubucuruzi, amavuriro, cyangwa amazu y'ubucuruzi. Impapuro zose ziteguye.',
-    doc1:      'Impapuro z'ubutaka — Nyarugenge.pdf',
+    tags:      ['Impapuro z\'ubutaka', 'Inzira ya tarmac', 'Amazi', 'Amashanyarazi', 'Nta yubatse', 'Bishobora kuganirwaho'],
+    desc:      'Ubutaka bw\'ubucuruzi bwa 1,200 sqm, buherereye neza mu Nyarugenge, hagati h\'umujyi wa Kigali. Hafi y\'inzira nyamukuru, amazu y\'ubucuruzi n\'ubwikorezi rusange. Bwiza cyane kubaka ibikorwa by\'ubucuruzi, amavuriro, cyangwa amazu y\'ubucuruzi. Impapuro zose ziteguye.',
+    doc1:      'Impapuro z\'ubutaka — Nyarugenge.pdf',
     seller:    'Alice Mukamana',
     av:        'AM',
     avbg:      '#352514',
@@ -1694,18 +1694,18 @@ var DETAIL_DATA = {
     svgcolor:  '#b87830'
   },
   3: {
-    eyebrow:   'Ubuhinzi · Intara y'Amajyaruguru',
-    title:     'Ubutaka bw'ubuhinzi bwa hegitari 2, Musanze',
-    meta:      '📍 Musanze, Intara y'Amajyaruguru · Yatangazwe uyu munsi · Ref: TP-2024-0003',
+    eyebrow:   'Ubuhinzi · Intara y\'Amajyaruguru',
+    title:     'Ubutaka bw\'ubuhinzi bwa hegitari 2, Musanze',
+    meta:      '📍 Musanze, Intara y\'Amajyaruguru · Yatangazwe uyu munsi · Ref: TP-2024-0003',
     area:      '8,094 m²',
     perm2:     'RWF 1,050',
     terrain:   'Biteye indiri',
     zone:      'Ubuhinzi',
     price:     'RWF 8,500,000',
     pricesub:  '≈ RWF 1,050 / m² · Bishobora kuganirwaho',
-    tags:      ['Icyemezo cy'ubutaka', 'Amazi y'imvura', 'Ubutaka bwiza', 'Nta yubatse', 'Bishobora kuganirwaho'],
-    desc:      'Ubutaka bw'ubuhinzi bwa hegitari 2 i Musanze, mu majyaruguru y'u Rwanda. Ubutaka bwiza cyane gutera imbuto zinyuranye bitewe n'imiterere y'ikirere cyo mu majyaruguru. Hafi y'amashyamba ya Nyungwe no ku nzira y'ubucuruzi. Icyemezo cy'ubutaka gihari kandi giteguye gurekurwa.',
-    doc1:      'Impapuro z'ubutaka — Musanze.pdf',
+    tags:      ['Icyemezo cy\'ubutaka', 'Amazi y\'imvura', 'Ubutaka bwiza', 'Nta yubatse', 'Bishobora kuganirwaho'],
+    desc:      'Ubutaka bw\'ubuhinzi bwa hegitari 2 i Musanze, mu majyaruguru y\'u Rwanda. Ubutaka bwiza cyane gutera imbuto zinyuranye bitewe n\'imiterere y\'ikirere cyo mu majyaruguru. Hafi y\'amashyamba ya Nyungwe no ku nzira y\'ubucuruzi. Icyemezo cy\'ubutaka gihari kandi giteguye gurekurwa.',
+    doc1:      'Impapuro z\'ubutaka — Musanze.pdf',
     seller:    'Patrick Habimana',
     av:        'PH',
     avbg:      '#182030',
@@ -1716,7 +1716,7 @@ var DETAIL_DATA = {
 
 function openDetail(id) {
   var d = DETAIL_DATA[id];
-  if (!d) { openDetail(plot.id); return; }
+  if (!d) { switchTab('detail'); return; }
 
   // Populate all fields
   document.getElementById('d-eyebrow').textContent  = d.eyebrow;
@@ -1747,11 +1747,10 @@ function openDetail(id) {
     tagsEl.appendChild(el);
   });
 
-  openDetail(plot.id);
+  switchTab('detail');
 }
 
-// Also fix map popup View listing buttons to use openDetail
-// Already handled via openDetail(plot.id) in map — update to use id
+// Map popup listing buttons to use openDetail
 
 </script>
 
