@@ -837,6 +837,28 @@ body {
   padding: 6px 12px; outline: none; cursor: pointer; border-radius: 2px;
 }
 .search-sort option { background: var(--bg2); }
+
+.search-page{height:calc(100vh - var(--chrome));display:flex;flex-direction:column;overflow:hidden}
+.search-header{padding:32px 52px 24px;border-bottom:1px solid var(--border);flex-shrink:0}
+.search-header-title{font-family:var(--serif);font-size:32px;color:var(--cream);font-style:italic;margin-bottom:6px}
+.search-header-sub{font-size:13px;color:var(--mist);margin-bottom:22px}
+.sbar-big{display:flex;align-items:stretch;background:rgba(255,255,255,0.06);border:2px solid rgba(212,184,150,0.55);border-radius:8px;overflow:hidden;max-width:760px;height:58px}
+.sbar-big input{flex:1;background:transparent;border:none;outline:none;font-family:var(--sans);font-size:16px;color:var(--cream);padding:0 22px}
+.sbar-big input::placeholder{color:rgba(240,235,227,0.5)}
+.sbar-big button{background:var(--terra);border:none;color:var(--cream);padding:0 36px;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;flex-shrink:0}
+.sbar-big button:hover{background:var(--terra-h)}
+.sfilters{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center}
+.sflabel{font-size:11px;color:var(--fog);letter-spacing:.5px;text-transform:uppercase}
+.sbody{flex:1;overflow-y:auto;padding:28px 52px 52px}
+.scount{font-size:13px;color:var(--mist);margin-bottom:20px}
+.scount span{color:var(--cream);font-weight:500}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.sempty{text-align:center;padding:72px 40px;color:var(--mist)}
+.sempty-icon{font-size:48px;margin-bottom:16px;opacity:.4}
+.sempty-title{font-family:var(--serif);font-size:22px;color:var(--cream);margin-bottom:8px;font-style:italic}
+.sempty-sub{font-size:14px;font-weight:300}
+.pinput{background:var(--bg2);border:1px solid var(--border2);color:var(--cream);font-family:var(--sans);font-size:13px;padding:6px 12px;outline:none;border-radius:3px;width:130px}
+.pinput::placeholder{color:var(--fog)}
 </style>
 </head>
 <body>
@@ -846,9 +868,9 @@ body {
   <div class="nav-logo" onclick="switchTab('home')">Tera<span>Plot</span></div>
   <div class="nav-links">
     <button class="nav-link" onclick="switchTab('home')">Ahabanza</button>
-    <button class="nav-link" onclick="switchTab('home')">Shakisha</button>
+    <button class="nav-link" onclick="switchTab('search')">Shakisha</button>
     <button class="nav-link" onclick="switchTab('about')">Abo turi bo</button>
-    <button class="nav-link" onclick="switchTab('map')">Ikarita</button>
+    <button class="nav-link" onclick="switchTab('search')">Shakisha</button>
     <button class="nav-link" onclick="switchTab('detail')">Amakuru y'ubutaka</button>
     <button class="nav-link" onclick="switchTab('how')">Uko bigenda</button>
   </div>
@@ -862,6 +884,7 @@ body {
 <!-- ══════════════════════════════ TABS ══════════════════════════════ -->
 <div class="tabs">
   <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">Ahabanza</button>
+  <button class="tab-btn" data-tab="search" onclick="switchTab('search')">Shakisha</button>
   <button class="tab-btn" data-tab="map"  onclick="switchTab('map')">Ikarita</button>
   <button class="tab-btn" data-tab="detail" onclick="switchTab('detail')">Amakuru y'ubutaka</button>
   <button class="tab-btn" data-tab="post" onclick="switchTab('post')">Tangaza ubutaka</button>
@@ -1965,6 +1988,91 @@ switchTab = function(tabId) {
   if (tabId === 'search') runSearch();
 };
 
+
+var searchTypeFilter = 'all';
+function setSearchType(type,btn){
+  document.querySelectorAll('#page-search .filter-chip').forEach(function(x){x.classList.remove('active');});
+  btn.classList.add('active');
+  searchTypeFilter=type;
+  runSearch();
+}
+function runSearch(){
+  var q=(document.getElementById('s-input').value||'').toLowerCase().trim();
+  var minP=parseInt(document.getElementById('s-min').value)||0;
+  var maxP=parseInt(document.getElementById('s-max').value)||999999999;
+  var grid=document.getElementById('s-grid');
+  var countEl=document.getElementById('s-count');
+  var TL={residential:'Amazu',commercial:'Ubucuruzi',agricultural:'Ubuhinzi'};
+  var TC={residential:'#c2622a',commercial:'#b87830',agricultural:'#4a7a8a'};
+  var AVBG=['#3a2a22','#352514','#182030','#2a1e2e','#1e2a1e','#1e1e2a'];
+  var results=PLOTS.filter(function(p){
+    var mt=searchTypeFilter==='all'||p.type===searchTypeFilter;
+    var mq=!q||p.title.toLowerCase().indexOf(q)>-1||p.sector.toLowerCase().indexOf(q)>-1||p.type.toLowerCase().indexOf(q)>-1;
+    var pn=parseInt((p.price||'').replace(/[^0-9]/g,''))||0;
+    var mp=pn>=minP&&pn<=maxP;
+    return mt&&mq&&mp;
+  });
+  grid.innerHTML='';
+  countEl.innerHTML='Ubutaka <span>'+results.length+'</span> bwabonetse';
+  if(results.length===0){
+    grid.style.background='transparent';
+    grid.innerHTML='<div class="sempty"><div class="sempty-icon">&#128269;</div><div class="sempty-title">Nta butaka bwabonetse</div><div class="sempty-sub">Gerageza amagambo atandukanye cyangwa ukuremo filters.</div></div>';
+    return;
+  }
+  grid.style.background='var(--border)';
+  results.forEach(function(p,i){
+    var col=TC[p.type]||'#c2622a';
+    var lbl=TL[p.type]||p.type;
+    var avbg=AVBG[i%AVBG.length];
+    var ini=(p.seller||'TP').split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
+    var card=document.createElement('div');
+    card.className='listing-card';
+    card.innerHTML=
+      '<div class="card-image" style="background:var(--bg2)">'+
+        '<svg width="100%" height="100%" viewBox="0 0 400 185">'+
+          '<rect width="400" height="185" fill="var(--bg2)"/>'+
+          '<g stroke="#d4b896" stroke-width="0.4" opacity="0.07">'+
+            '<line x1="0" y1="46" x2="400" y2="46"/><line x1="0" y1="92" x2="400" y2="92"/>'+
+            '<line x1="80" y1="0" x2="80" y2="185"/><line x1="200" y1="0" x2="200" y2="185"/><line x1="320" y1="0" x2="320" y2="185"/>'+
+          '</g>'+
+          '<rect x="95" y="38" width="210" height="109" stroke="'+col+'" stroke-width="1" fill="'+col+'22"/>'+
+          '<circle cx="200" cy="92" r="5" fill="'+col+'" opacity="0.7"/>'+
+        '</svg>'+
+        '<div class="card-type-badge" style="color:'+col+';border-color:'+col+'55">'+lbl+'</div>'+
+        '<div class="card-save">&#9825;</div>'+
+      '</div>'+
+      '<div class="card-body">'+
+        '<div class="card-price" style="color:var(--sand)">'+p.price+'</div>'+
+        '<div class="card-title">'+p.title+'</div>'+
+        '<div class="card-location">&#128205; '+p.sector+', Kigali</div>'+
+        '<div class="card-specs">'+
+          '<div class="spec-item"><div class="spec-val">'+p.size+'</div><div class="spec-key">Ingano</div></div>'+
+          '<div class="spec-item"><div class="spec-val">'+lbl+'</div><div class="spec-key">Ubwoko</div></div>'+
+          '<div class="spec-item"><div class="spec-val">'+(p.verified?'&#10003; Yemejwe':'Ntabwo')+'</div><div class="spec-key">Umuguzi</div></div>'+
+        '</div>'+
+        '<div class="card-seller">'+
+          '<div class="seller-av" style="background:'+avbg+'">'+ini+'</div>'+
+          '<div class="seller-name">'+(p.seller||'')+'</div>'+
+          (p.verified?'<div class="verified-tag">&#10003; Byemejwe</div>':'')+
+        '</div>'+
+      '</div>';
+    card.addEventListener('click',function(){
+      if(typeof DETAIL_DATA!=='undefined'&&DETAIL_DATA[p.id]){openDetail(p.id);}
+      else{switchTab('detail');}
+    });
+    grid.appendChild(card);
+  });
+}
+var _origST=switchTab;
+switchTab=function(id){
+  _origST(id);
+  if(id==='search'){setTimeout(runSearch,60);}
+};
+document.addEventListener('DOMContentLoaded',function(){
+  var si=document.getElementById('s-input');
+  if(si)si.addEventListener('keydown',function(e){if(e.key==='Enter')runSearch();});
+});
+
 </script>
 
 <!-- ═══════════════════════════════ HOW IT WORKS ══════════════════ -->
@@ -2171,6 +2279,34 @@ switchTab = function(tabId) {
     <div style="display:flex;gap:10px;justify-content:center;">
       <button class="btn btn-ghost" onclick="closeModal()">Subira ahabanza</button>
       <button class="btn btn-primary" onclick="goToMap()">Reba ku ikarita →</button>
+    </div>
+  </div>
+</div>
+
+<div id="page-search" class="page">
+  <div class="search-page">
+    <div class="search-header">
+      <div class="search-header-title">Shakisha ubutaka</div>
+      <div class="search-header-sub">Ubutaka bose bugaragara kuri TeraPlot &mdash; Shakisha, huza kandi ubona ibyo ushaka.</div>
+      <div class="sbar-big">
+        <input id="s-input" type="text" placeholder="Injira akarere, umurenge, ubwoko...">
+        <button onclick="runSearch()">Shakisha</button>
+      </div>
+      <div class="sfilters">
+        <span class="sflabel">Ubwoko:</span>
+        <button class="filter-chip active" onclick="setSearchType('all',this)">Byose</button>
+        <button class="filter-chip" onclick="setSearchType('residential',this)">Amazu</button>
+        <button class="filter-chip" onclick="setSearchType('commercial',this)">Ubucuruzi</button>
+        <button class="filter-chip" onclick="setSearchType('agricultural',this)">Ubuhinzi</button>
+        <span class="sflabel" style="margin-left:12px">Igiciro (RWF):</span>
+        <input class="pinput" id="s-min" type="number" placeholder="Hasi">
+        <span style="color:var(--fog)">&mdash;</span>
+        <input class="pinput" id="s-max" type="number" placeholder="Hejuru">
+      </div>
+    </div>
+    <div class="sbody">
+      <div class="scount" id="s-count"></div>
+      <div class="sgrid" id="s-grid"></div>
     </div>
   </div>
 </div>
