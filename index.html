@@ -34,7 +34,7 @@
   --sans:     'DM Sans', system-ui, sans-serif;
   --nav-h:    54px;
   --tab-h:    40px;
-  --chrome:   54px; /* nav only */
+  --chrome:   94px; /* nav + tab combined */
 }
 
 html, body { height: 100%; overflow: hidden; }
@@ -77,12 +77,11 @@ body {
   cursor: pointer;
 }
 .nav-logo span { color: var(--terra); font-style: normal; }
-.nav-links { display: flex; gap: 20px; }
+.nav-links { display: flex; gap: 32px; }
 .nav-link {
-  font-size: 10.5px; letter-spacing: 0.7px; text-transform: uppercase;
+  font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
   color: var(--mist); cursor: pointer; transition: color 0.15s;
   background: none; border: none; font-family: var(--sans);
-  white-space: nowrap;
 }
 .nav-link:hover { color: var(--sand); }
 .nav-actions { display: flex; gap: 10px; }
@@ -110,7 +109,14 @@ body {
 .btn-outline:hover { background: var(--terra); color: var(--cream); }
 
 /* ─── TABS ──────────────────────────────────────────────────────── */
-.tabs { display: none; }
+.tabs {
+  position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 499;
+  height: var(--tab-h);
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: stretch;
+  padding: 0 40px;
+}
 .tab-btn {
   font-family: var(--sans); font-size: 11px; letter-spacing: 0.8px;
   text-transform: uppercase; color: var(--fog); cursor: pointer;
@@ -789,55 +795,7 @@ body {
 .about-contact-sub { font-size: 14px; color: var(--mist); margin-bottom: 24px; font-weight: 300; }
 .about-contact-email { font-size: 18px; color: var(--terra); font-family: var(--serif); }
 
-/* ─── SEARCH PAGE ──────────────────────────────────────────────── */
-.search-page { max-width: 900px; margin: 0 auto; padding: 48px 40px 80px; }
-.search-hero { text-align: center; margin-bottom: 40px; }
-.search-hero-title { font-family: var(--serif); font-size: 36px; color: var(--cream); font-style: italic; margin-bottom: 10px; }
-.search-hero-sub { font-size: 14px; color: var(--mist); font-weight: 300; }
-.search-bar-wrap {
-  display: flex;
-  background: rgba(255,255,255,0.06);
-  border: 2px solid rgba(212,184,150,0.6);
-  border-radius: 8px;
-  overflow: hidden;
-  height: 62px;
-  margin-bottom: 24px;
-}
-.search-bar-wrap input {
-  flex: 1; background: transparent; border: none; outline: none;
-  font-family: var(--sans); font-size: 16px; color: var(--cream);
-  padding: 0 24px;
-}
-.search-bar-wrap input::placeholder { color: rgba(240,235,227,0.5); }
-.search-bar-wrap button {
-  background: var(--terra); border: none; color: var(--cream);
-  padding: 0 36px; font-family: var(--sans); font-size: 15px;
-  font-weight: 700; cursor: pointer; transition: background 0.15s;
-  white-space: nowrap;
-}
-.search-bar-wrap button:hover { background: var(--terra-h); }
-.search-filters {
-  display: flex; gap: 10px; flex-wrap: wrap;
-  margin-bottom: 32px; align-items: center;
-}
-.search-filter-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--fog); }
-.search-results-count { font-size: 13px; color: var(--mist); margin-bottom: 20px; }
-.search-results-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); }
-.search-empty {
-  text-align: center; padding: 64px 40px; color: var(--mist);
-  grid-column: 1/-1;
-}
-.search-empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
-.search-empty-text { font-size: 15px; margin-bottom: 8px; color: var(--cream); }
-.search-empty-sub { font-size: 13px; color: var(--fog); font-weight: 300; }
-.search-sort {
-  margin-left: auto;
-  background: transparent; border: 1px solid var(--border);
-  color: var(--mist); font-family: var(--sans); font-size: 12px;
-  padding: 6px 12px; outline: none; cursor: pointer; border-radius: 2px;
-}
-.search-sort option { background: var(--bg2); }
-
+/* SEARCH PAGE */
 .search-page{height:calc(100vh - var(--chrome));display:flex;flex-direction:column;overflow:hidden}
 .search-header{padding:32px 52px 24px;border-bottom:1px solid var(--border);flex-shrink:0}
 .search-header-title{font-family:var(--serif);font-size:32px;color:var(--cream);font-style:italic;margin-bottom:6px}
@@ -853,7 +811,7 @@ body {
 .scount{font-size:13px;color:var(--mist);margin-bottom:20px}
 .scount span{color:var(--cream);font-weight:500}
 .sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
-.sempty{text-align:center;padding:72px 40px;color:var(--mist)}
+.sempty{text-align:center;padding:72px 40px;color:var(--mist);grid-column:1/-1}
 .sempty-icon{font-size:48px;margin-bottom:16px;opacity:.4}
 .sempty-title{font-family:var(--serif);font-size:22px;color:var(--cream);margin-bottom:8px;font-style:italic}
 .sempty-sub{font-size:14px;font-weight:300}
@@ -867,14 +825,12 @@ body {
 <nav class="nav">
   <div class="nav-logo" onclick="switchTab('home')">Tera<span>Plot</span></div>
   <div class="nav-links">
-    <button class="nav-link" onclick="switchTab('home')">Ahabanza</button>
     <button class="nav-link" onclick="switchTab('search')">Shakisha</button>
     <button class="nav-link" onclick="switchTab('map')">Ikarita</button>
     <button class="nav-link" onclick="switchTab('how')">Uko bigenda</button>
     <button class="nav-link" onclick="switchTab('about')">Abo turi bo</button>
   </div>
   <div class="nav-actions">
-    <button class="nav-link" onclick="switchTab('post')">Tangaza ubutaka</button>
     <button class="btn btn-ghost">Injira</button>
     <button class="btn btn-primary" onclick="switchTab('post')">Andika ubutaka</button>
   </div>
@@ -1155,39 +1111,6 @@ body {
       </div>
       <a class="report-link">Tanga ikibazo kuri iri tangazo</a>
     </div>
-  </div>
-</div>
-
-
-<!-- ════════════════════════════════ SEARCH ══════════════════════ -->
-<div id="page-search" class="page">
-  <div class="search-page">
-    <div class="search-hero">
-      <h1 class="search-hero-title">Shakisha ubutaka</h1>
-      <p class="search-hero-sub">Shakisha mu butaka bwose butangazwa kuri TeraPlot mu turere twose tw'u Rwanda</p>
-    </div>
-
-    <div class="search-bar-wrap">
-      <input id="s-input" type="text" placeholder="Injira akarere, umurenge, ubwoko bw'ubutaka, igiciro...">
-      <button onclick="runSearch()">Shakisha</button>
-    </div>
-
-    <div class="search-filters">
-      <span class="search-filter-label">Ubwoko:</span>
-      <button class="filter-chip active" onclick="setSearchType('all',this)">Byose</button>
-      <button class="filter-chip" onclick="setSearchType('residential',this)">Amazu</button>
-      <button class="filter-chip" onclick="setSearchType('commercial',this)">Ubucuruzi</button>
-      <button class="filter-chip" onclick="setSearchType('agricultural',this)">Ubuhinzi</button>
-      <select class="search-sort" id="s-sort" onchange="runSearch()">
-        <option value="newest">Bushya bwa mbere</option>
-        <option value="price-asc">Igiciro: Hasi → Hejuru</option>
-        <option value="price-desc">Igiciro: Hejuru → Hasi</option>
-        <option value="size-desc">Kinini bwa mbere</option>
-      </select>
-    </div>
-
-    <div class="search-results-count" id="s-count">Plots 12 zibonetse</div>
-    <div class="search-results-grid" id="s-results"></div>
   </div>
 </div>
 
@@ -1853,140 +1776,6 @@ function openDetail(id) {
 // Map popup listing buttons to use openDetail
 
 
-// ════════════════════════════════════════════════════════════════════
-//  SEARCH PAGE
-// ════════════════════════════════════════════════════════════════════
-
-var searchTypeFilter = 'all';
-
-// All available plots — static + user submitted
-function getAllPlots() {
-  var base = [
-    { id:1,  title:'Ubutaka bwa 600 sqm',           sector:'Kicukiro',   district:'Kigali',              type:'residential', price:'RWF 12,000,000', priceNum:12000000, size:'600 m²',   sizeNum:600    },
-    { id:2,  title:'Ubutaka bw\'ubucuruzi bwa 1,200 sqm', sector:'Nyarugenge', district:'Kigali',      type:'commercial',  price:'RWF 45,000,000', priceNum:45000000, size:'1,200 m²', sizeNum:1200   },
-    { id:3,  title:'Ubutaka bw\'ubuhinzi bwa hegitari 2', sector:'Musanze',    district:'Amajyaruguru', type:'agricultural',price:'RWF 8,500,000',  priceNum:8500000,  size:'8,094 m²', sizeNum:8094   },
-    { id:4,  title:'Ubutaka bwa 800 sqm',           sector:'Remera',     district:'Kigali',              type:'commercial',  price:'RWF 28,000,000', priceNum:28000000, size:'800 m²',   sizeNum:800    },
-    { id:5,  title:'Ubutaka bwa 300 sqm',           sector:'Kimironko',  district:'Kigali',              type:'residential', price:'RWF 7,200,000',  priceNum:7200000,  size:'300 m²',   sizeNum:300    },
-    { id:6,  title:'Ubutaka bw\'inganda bwa 1,500 sqm',   sector:'Gikondo',    district:'Kigali',      type:'commercial',  price:'RWF 62,000,000', priceNum:62000000, size:'1,500 m²', sizeNum:1500   },
-    { id:7,  title:'Ubutaka bwa 500 sqm',           sector:'Kanombe',    district:'Kigali',              type:'residential', price:'RWF 10,800,000', priceNum:10800000, size:'500 m²',   sizeNum:500    },
-    { id:8,  title:'Ubutaka bwa 700 sqm',           sector:'Kinyinya',   district:'Kigali',              type:'residential', price:'RWF 14,500,000', priceNum:14500000, size:'700 m²',   sizeNum:700    },
-    { id:9,  title:'Ubutaka bw\'ubuhinzi bwa 2,000 sqm',  sector:'Rusororo',   district:'Kigali',      type:'agricultural',price:'RWF 8,000,000',  priceNum:8000000,  size:'2,000 m²', sizeNum:2000   },
-    { id:10, title:'Ubutaka bwa 450 sqm',           sector:'Gisozi',     district:'Kigali',              type:'residential', price:'RWF 11,000,000', priceNum:11000000, size:'450 m²',   sizeNum:450    },
-    { id:11, title:'Ubutaka bw\'ibiro bwa 900 sqm',       sector:'Muhima',     district:'Kigali',      type:'commercial',  price:'RWF 38,500,000', priceNum:38500000, size:'900 m²',   sizeNum:900    },
-    { id:12, title:'Ubutaka bw\'ubuhinzi bwa hegitari 1.8',sector:'Jabana',    district:'Kigali',      type:'agricultural',price:'RWF 6,500,000',  priceNum:6500000,  size:'1,800 m²', sizeNum:1800   }
-  ];
-  // Add user submitted plots from localStorage
-  try {
-    var saved = JSON.parse(localStorage.getItem('teraplot_user_plots') || '[]');
-    saved.forEach(function(p, i) {
-      base.push({
-        id: 100 + i,
-        title: p.title || 'Ubutaka bushya',
-        sector: p.sector || '',
-        district: p.district || '',
-        type: p.type || 'residential',
-        price: p.price || '',
-        priceNum: parseInt((p.price || '0').replace(/\D/g,'')),
-        size: p.size || '',
-        sizeNum: parseInt((p.size || '0').replace(/\D/g,''))
-      });
-    });
-  } catch(e) {}
-  return base;
-}
-
-var TYPE_COLORS_S = { residential:'#c2622a', commercial:'#b87830', agricultural:'#4a7a8a' };
-var TYPE_LABELS   = { residential:'Amazu', commercial:'Ubucuruzi', agricultural:'Ubuhinzi' };
-
-function runSearch() {
-  var query = (document.getElementById('s-input').value || '').toLowerCase().trim();
-  var sort  = document.getElementById('s-sort').value;
-  var all   = getAllPlots();
-
-  var filtered = all.filter(function(p) {
-    var matchType = searchTypeFilter === 'all' || p.type === searchTypeFilter;
-    var matchQ = !query ||
-      p.title.toLowerCase().includes(query) ||
-      p.sector.toLowerCase().includes(query) ||
-      p.district.toLowerCase().includes(query) ||
-      p.type.toLowerCase().includes(query) ||
-      (TYPE_LABELS[p.type] || '').toLowerCase().includes(query);
-    return matchType && matchQ;
-  });
-
-  // Sort
-  if (sort === 'price-asc')  filtered.sort(function(a,b){ return a.priceNum - b.priceNum; });
-  if (sort === 'price-desc') filtered.sort(function(a,b){ return b.priceNum - a.priceNum; });
-  if (sort === 'size-desc')  filtered.sort(function(a,b){ return b.sizeNum  - a.sizeNum;  });
-
-  var count = filtered.length;
-  document.getElementById('s-count').textContent = 'Ubutaka ' + count + ' ' + (count === 1 ? 'bubonetse' : 'bubonetse');
-
-  var grid = document.getElementById('s-results');
-  grid.innerHTML = '';
-
-  if (count === 0) {
-    grid.innerHTML = '<div class="search-empty"><div class="search-empty-icon">🔍</div><div class="search-empty-text">Nta butaka bubonetse</div><div class="search-empty-sub">Gerageza amagambo menshi cyangwa hindura filteri</div></div>';
-    return;
-  }
-
-  filtered.forEach(function(p) {
-    var col   = TYPE_COLORS_S[p.type] || '#c2622a';
-    var label = TYPE_LABELS[p.type]   || p.type;
-    var card  = document.createElement('div');
-    card.className = 'listing-card';
-    card.style.cursor = 'pointer';
-    card.innerHTML =
-      '<div class="card-image" style="background:var(--bg2);height:140px;display:flex;align-items:center;justify-content:center;position:relative">' +
-        '<svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="10" y="10" width="60" height="60" stroke="' + col + '" stroke-width="1.5" fill="' + col + '" fill-opacity="0.07"/><circle cx="40" cy="40" r="5" fill="' + col + '" opacity="0.8"/></svg>' +
-        '<div class="card-type-badge" style="position:absolute;top:10px;left:10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;background:rgba(12,11,9,0.8);color:' + col + ';border:1px solid ' + col + '44;border-radius:2px">' + label + '</div>' +
-      '</div>' +
-      '<div class="card-body">' +
-        '<div class="card-price" style="color:' + col + '">' + p.price + '</div>' +
-        '<div class="card-title">' + p.title + '</div>' +
-        '<div class="card-location">📍 ' + p.sector + (p.district ? ', ' + p.district : '') + '</div>' +
-        '<div class="card-specs" style="display:flex;border-top:1px solid var(--border);padding-top:10px;margin-top:10px">' +
-          '<div style="flex:1"><div style="font-size:12px;color:var(--cream);font-weight:500">' + p.size + '</div><div style="font-size:10px;color:var(--fog)">Ingano</div></div>' +
-          '<div style="flex:1"><div style="font-size:12px;color:' + col + ';text-transform:capitalize">' + label + '</div><div style="font-size:10px;color:var(--fog)">Ubwoko</div></div>' +
-        '</div>' +
-      '</div>';
-
-    card.addEventListener('click', function() {
-      if (p.id <= 3) {
-        openDetail(p.id);
-      } else {
-        switchTab('detail');
-      }
-    });
-    grid.appendChild(card);
-  });
-}
-
-function setSearchType(type, btn) {
-  document.querySelectorAll('#page-search .filter-chip').forEach(function(c) { c.classList.remove('active'); });
-  btn.classList.add('active');
-  searchTypeFilter = type;
-  runSearch();
-}
-
-// Run search on Enter key
-document.addEventListener('DOMContentLoaded', function() {
-  var si = document.getElementById('s-input');
-  if (si) {
-    si.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') runSearch();
-    });
-  }
-});
-
-// Auto-run search when switching to search tab
-var _origSwitchTab = switchTab;
-switchTab = function(tabId) {
-  _origSwitchTab(tabId);
-  if (tabId === 'search') runSearch();
-};
-
-
 var searchTypeFilter = 'all';
 function setSearchType(type,btn){
   document.querySelectorAll('#page-search .filter-chip').forEach(function(x){x.classList.remove('active');});
@@ -2055,7 +1844,7 @@ function runSearch(){
         '</div>'+
       '</div>';
     card.addEventListener('click',function(){
-      if(typeof DETAIL_DATA!=='undefined'&&DETAIL_DATA[p.id]){openDetail(p.id);}
+      if(typeof openDetail!=='undefined'&&typeof DETAIL_DATA!=='undefined'&&DETAIL_DATA[p.id]){openDetail(p.id);}
       else{switchTab('detail');}
     });
     grid.appendChild(card);
