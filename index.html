@@ -817,6 +817,178 @@ body {
 .sempty-sub{font-size:14px;font-weight:300}
 .pinput{background:var(--bg2);border:1px solid var(--border2);color:var(--cream);font-family:var(--sans);font-size:13px;padding:6px 12px;outline:none;border-radius:3px;width:130px}
 .pinput::placeholder{color:var(--fog)}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RESPONSIVE — Tablets (max 1024px) & Phones (max 640px)
+═══════════════════════════════════════════════════════════════════ */
+
+/* ── Hamburger button (hidden on desktop) ── */
+.ham-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.ham-btn span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--sand);
+  border-radius: 2px;
+  transition: all 0.25s;
+}
+.ham-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.ham-btn.open span:nth-child(2) { opacity: 0; }
+.ham-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile nav drawer */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: var(--nav-h);
+  left: 0; right: 0;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  z-index: 490;
+  padding: 12px 0;
+  flex-direction: column;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav button {
+  background: none; border: none;
+  font-family: var(--sans); font-size: 13px; letter-spacing: 0.6px;
+  text-transform: uppercase; color: var(--mist);
+  padding: 13px 24px; text-align: left; cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.15s, background 0.15s;
+}
+.mobile-nav button:hover { color: var(--sand); background: var(--bg3); }
+.mobile-nav button:last-child { border-bottom: none; }
+
+/* ── TABLET (≤1024px) ── */
+@media (max-width: 1024px) {
+  .nav { padding: 0 20px; }
+  .nav-links { gap: 18px; }
+  .nav-link { font-size: 10px; letter-spacing: 0.5px; }
+
+  .hero { grid-template-columns: 1fr; }
+  .hero-r { display: none; }
+  .hero-left { padding: 48px 32px; }
+  .hero-title { font-size: 42px; }
+
+  .listings-section { padding: 40px 24px; }
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .detail-layout { grid-template-columns: 1fr; }
+  .detail-sidebar { border-top: 1px solid var(--border); }
+
+  .map-sidebar { width: 280px; min-width: 280px; }
+
+  .hiw-steps { grid-template-columns: 1fr; }
+  .hiw-step::after { display: none; }
+  .about-hero { grid-template-columns: 1fr; }
+  .about-art { display: none; }
+  .about-values { grid-template-columns: 1fr 1fr; }
+  .about-stats { grid-template-columns: repeat(2, 1fr); }
+  .about-team-grid { grid-template-columns: 1fr 1fr; }
+
+  .search-header { padding: 24px 24px 18px; }
+  .sbody { padding: 20px 24px 40px; }
+  .sgrid { grid-template-columns: repeat(2, 1fr); }
+  .sbar-big { max-width: 100%; }
+}
+
+/* ── PHONE (≤640px) ── */
+@media (max-width: 640px) {
+  :root { --nav-h: 52px; --chrome: 52px; }
+
+  /* Nav — show hamburger, hide links */
+  .nav { padding: 0 16px; }
+  .nav-links { display: none; }
+  .nav-actions .btn-ghost { display: none; }
+  .nav-actions .btn-primary { padding: 8px 14px; font-size: 11px; }
+  .ham-btn { display: flex; }
+
+  /* Hero */
+  .hero { height: auto; min-height: calc(100vh - var(--chrome)); }
+  .hero-r { display: none; }
+  .hero-left { padding: 36px 20px 40px; }
+  .hero-title { font-size: 34px; letter-spacing: -0.5px; }
+  .hero-desc { font-size: 14px; }
+  .hero-search { flex-wrap: wrap; height: auto; border-radius: 8px; }
+  .hero-search select { width: 100%; max-width: 100%; border-right: none; border-bottom: 2px solid rgba(212,184,150,0.55); font-size: 14px; padding: 14px 16px; }
+  .hero-search input { width: 100%; font-size: 14px; padding: 14px 16px; }
+  .hero-search .btn-primary { width: 100%; padding: 14px; text-align: center; border-radius: 0 0 6px 6px; }
+  .hero-stats { gap: 20px; }
+  .stat-num { font-size: 26px; }
+
+  /* Listings */
+  .listings-section { padding: 28px 16px; }
+  .section-header { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .section-controls { width: 100%; flex-wrap: wrap; }
+  .filter-group { flex-wrap: wrap; }
+  .cards-grid { grid-template-columns: 1fr; }
+
+  /* Map */
+  #page-map { flex-direction: column; }
+  .map-sidebar { width: 100%; min-width: unset; height: 45vh; border-right: none; border-bottom: 1px solid var(--border); }
+  .map-canvas-wrap { height: 55vh; }
+
+  /* Detail */
+  .detail-layout { grid-template-columns: 1fr; }
+  .detail-main { padding: 24px 16px; }
+  .detail-title { font-size: 26px; }
+  .detail-specs { grid-template-columns: repeat(2, 1fr); }
+  .detail-sidebar { padding: 24px 16px; }
+  .d-thumbs { display: none; }
+
+  /* Post form */
+  .form-page { padding: 28px 16px 60px; }
+  .form-title { font-size: 26px; }
+  .form-row-2 { grid-template-columns: 1fr; }
+  .land-type-grid { grid-template-columns: repeat(2, 1fr); }
+  .progress-steps { gap: 0; }
+  .step-label { font-size: 9px; }
+
+  /* How it works */
+  .hiw-page { padding: 32px 16px 60px; }
+  .hiw-title { font-size: 28px; }
+  .hiw-steps { grid-template-columns: 1fr; gap: 1px; }
+  .hiw-arrow { display: none; }
+  .hiw-cta { padding: 32px 20px; }
+  .hiw-cta-btns { flex-direction: column; }
+
+  /* About */
+  .about-page { padding: 32px 16px 60px; }
+  .about-title { font-size: 26px; }
+  .about-hero { grid-template-columns: 1fr; gap: 24px; }
+  .about-art { display: none; }
+  .about-mission { grid-template-columns: 1fr; gap: 12px; padding: 28px 0; }
+  .about-values { grid-template-columns: 1fr; }
+  .about-stats { grid-template-columns: repeat(2, 1fr); }
+  .about-team-grid { grid-template-columns: 1fr; }
+  .about-contact { padding: 28px 20px; }
+
+  /* Search page */
+  .search-header { padding: 20px 16px 14px; }
+  .search-header-title { font-size: 24px; }
+  .sbar-big { height: auto; flex-wrap: wrap; }
+  .sbar-big input { width: 100%; padding: 14px 16px; font-size: 14px; }
+  .sbar-big button { width: 100%; padding: 13px; text-align: center; }
+  .sfilters { gap: 7px; }
+  .pinput { width: 100px; }
+  .sbody { padding: 16px 16px 40px; }
+  .sgrid { grid-template-columns: 1fr; }
+
+  /* Modal */
+  #submit-modal > div { padding: 28px 20px; }
+
+  /* Pages fixed positioning */
+  .page { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+}
 </style>
 </head>
 <body>
@@ -836,8 +1008,22 @@ body {
   <div class="nav-actions">
     <button class="btn btn-ghost">Injira</button>
     <button class="btn btn-primary" onclick="switchTab('post')">Andika ubutaka</button>
+    <button class="ham-btn" id="ham-btn" onclick="toggleMobileNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<!-- Mobile nav drawer -->
+<div class="mobile-nav" id="mobile-nav">
+  <button onclick="mobileGo('home')">Ahabanza</button>
+  <button onclick="mobileGo('search')">Shakisha</button>
+  <button onclick="mobileGo('about')">Abo turi bo</button>
+  <button onclick="mobileGo('map')">Ikarita</button>
+  <button onclick="mobileGo('detail')">Amakuru y'ubutaka</button>
+  <button onclick="mobileGo('how')">Uko bigenda</button>
+  <button onclick="mobileGo('post')">Tangaza ubutaka</button>
+</div>
 
 <!-- ══════════════════════════════ TABS ══════════════════════════════ -->
 
@@ -1856,6 +2042,19 @@ document.addEventListener('DOMContentLoaded',function(){
   var si=document.getElementById('s-input');
   if(si)si.addEventListener('keydown',function(e){if(e.key==='Enter')runSearch();});
 });
+
+
+function toggleMobileNav() {
+  var nav = document.getElementById('mobile-nav');
+  var btn = document.getElementById('ham-btn');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+function mobileGo(tab) {
+  switchTab(tab);
+  document.getElementById('mobile-nav').classList.remove('open');
+  document.getElementById('ham-btn').classList.remove('open');
+}
 
 </script>
 
