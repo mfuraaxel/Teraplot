@@ -1331,6 +1331,11 @@ body {
           </div>
         </div>
         <div class="form-group">
+          <label class="form-label">Aderesi (Adresse) <span class="form-required">*</span></label>
+          <input class="form-input" id="f-address" type="text" placeholder="Urugero: KG 123 St, hafi ya Total Remera">
+          <div style="font-size:11px;color:var(--fog);margin-top:5px;">Andika aderesi nyayo y'ubutaka kugirango abakunzi babone aho buherereye neza ku ikarita.</div>
+        </div>
+        <div class="form-group">
           <label class="form-label">Ibisobanuro</label>
           <textarea class="form-textarea" placeholder="Inzira z'ubutaka, ibyiciro, imiterere, ibintu abaguzi bagomba kumenya..."></textarea>
         </div>
@@ -1743,9 +1748,18 @@ var SECTOR_OFFSETS = {
   'jabana':    { dlat:  0.053, dlng:  0.099 }
 };
 
-function getCoords(district, sector) {
+function getCoords(district, sector, address) {
   var base = DISTRICT_COORDS[(district || 'kigali').toLowerCase()] || DISTRICT_COORDS['kigali'];
   var off  = SECTOR_OFFSETS[(sector || '').toLowerCase()] || { dlat: (Math.random()-0.5)*0.04, dlng: (Math.random()-0.5)*0.04 };
+  // Add tiny jitter based on address string so two plots in same sector don't overlap
+  var jitter = 0;
+  if (address) {
+    for (var i = 0; i < address.length; i++) jitter += address.charCodeAt(i);
+    off = {
+      dlat: off.dlat + ((jitter % 100) - 50) * 0.00005,
+      dlng: off.dlng + ((jitter % 77)  - 38) * 0.00005
+    };
+  }
   return { lat: base.lat + off.dlat, lng: base.lng + off.dlng };
 }
 
@@ -1790,8 +1804,10 @@ function submitPlot() {
   if (!size)         { alert('Please enter the plot size.'); return; }
   if (!price)        { alert('Please enter the asking price.'); return; }
 
-  // Build coords from district + sector
-  var coords = getCoords(district, sector);
+  // Build coords from district + sector + address
+  var address = (document.getElementById('f-address') || {}).value || '';
+  if (!address.trim()) { alert('Injiza aderesi y\'ubutaka.'); return; }
+  var coords = getCoords(district, sector, address);
 
   // Build new plot object
   var newPlot = {
@@ -1799,6 +1815,7 @@ function submitPlot() {
     title:    title.trim() || (size + ' ' + unit + ' plot'),
     sector:   sector.trim() || district,
     district: district,
+    address:  address.trim(),
     type:     landType,
     price:    formatPrice(price),
     size:     size + ' ' + unit,
@@ -1819,7 +1836,8 @@ function submitPlot() {
   summary.innerHTML =
     '<div style="font-family:var(--serif);font-size:16px;color:var(--sand);margin-bottom:6px">' + newPlot.price + '</div>' +
     '<div style="font-size:13px;color:var(--cream);margin-bottom:3px">' + newPlot.title + '</div>' +
-    '<div style="font-size:12px;color:var(--mist);margin-bottom:10px">&#128205; ' + newPlot.sector + ', ' + newPlot.district + '</div>' +
+    '<div style="font-size:12px;color:var(--mist);margin-bottom:6px">&#128205; ' + newPlot.sector + ', ' + newPlot.district + '</div>' +
+      (newPlot.address ? '<div style="font-size:12px;color:var(--fog);margin-bottom:10px">&#127968; ' + newPlot.address + '</div>' : '') +
     '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
       '<span style="font-size:11px;padding:3px 9px;border:1px solid var(--border);color:var(--mist);border-radius:2px">' + newPlot.size + '</span>' +
       '<span style="font-size:11px;padding:3px 9px;border:1px solid rgba(194,98,42,.3);color:var(--terra);border-radius:2px;text-transform:capitalize">' + newPlot.type + '</span>' +
