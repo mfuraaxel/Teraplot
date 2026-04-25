@@ -989,6 +989,34 @@ body {
   /* Pages fixed positioning */
   .page { overflow-y: auto; -webkit-overflow-scrolling: touch; }
 }
+
+/* ─── LANGUAGE TOGGLE ──────────────────────────────────────────── */
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.lang-btn {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  color: var(--fog);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.lang-btn.active {
+  background: var(--terra);
+  color: var(--cream);
+  border-radius: 20px;
+}
 </style>
 </head>
 <body>
@@ -997,17 +1025,21 @@ body {
 <nav class="nav">
   <div class="nav-logo" onclick="switchTab('home')">Tera<span>Plot</span></div>
   <div class="nav-links">
-    <button class="nav-link" onclick="switchTab('home')">Ahabanza</button>
-    <button class="nav-link" onclick="switchTab('search')">Shakisha</button>
-    <button class="nav-link" onclick="switchTab('about')">Abo turi bo</button>
-    <button class="nav-link" onclick="switchTab('map')">Ikarita</button>
+    <button class="nav-link" onclick="switchTab('home')" data-i18n="nav-home">Ahabanza</button>
+    <button class="nav-link" onclick="switchTab('search')" data-i18n="nav-search">Shakisha</button>
+    <button class="nav-link" onclick="switchTab('about')" data-i18n="nav-about">Abo turi bo</button>
+    <button class="nav-link" onclick="switchTab('map')" data-i18n="nav-map">Ikarita</button>
     <button class="nav-link" onclick="switchTab('detail')">Amakuru y'ubutaka</button>
-    <button class="nav-link" onclick="switchTab('how')">Uko bigenda</button>
-    <button class="nav-link" onclick="switchTab('post')">Tangaza ubutaka</button>
+    <button class="nav-link" onclick="switchTab('how')" data-i18n="nav-how">Uko bigenda</button>
+    <button class="nav-link" onclick="switchTab('post')" data-i18n="nav-post">Tangaza ubutaka</button>
   </div>
   <div class="nav-actions">
-    <button class="btn btn-ghost">Injira</button>
-    <button class="btn btn-primary" onclick="switchTab('post')">Andika ubutaka</button>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-rw" onclick="setLang('rw')">RW</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="btn btn-ghost" id="nav-signin" data-i18n="nav-signin">Injira</button>
+    <button class="btn btn-primary" onclick="switchTab('post')" data-i18n="nav-cta">Andika ubutaka</button>
     <button class="ham-btn" id="ham-btn" onclick="toggleMobileNav()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -1016,13 +1048,13 @@ body {
 
 <!-- Mobile nav drawer -->
 <div class="mobile-nav" id="mobile-nav">
-  <button onclick="mobileGo('home')">Ahabanza</button>
-  <button onclick="mobileGo('search')">Shakisha</button>
-  <button onclick="mobileGo('about')">Abo turi bo</button>
-  <button onclick="mobileGo('map')">Ikarita</button>
+  <button onclick="mobileGo('home')" data-i18n="nav-home">Ahabanza</button>
+  <button onclick="mobileGo('search')" data-i18n="nav-search">Shakisha</button>
+  <button onclick="mobileGo('about')" data-i18n="nav-about">Abo turi bo</button>
+  <button onclick="mobileGo('map')" data-i18n="nav-map">Ikarita</button>
   <button onclick="mobileGo('detail')">Amakuru y'ubutaka</button>
-  <button onclick="mobileGo('how')">Uko bigenda</button>
-  <button onclick="mobileGo('post')">Tangaza ubutaka</button>
+  <button onclick="mobileGo('how')" data-i18n="nav-how">Uko bigenda</button>
+  <button onclick="mobileGo('post')" data-i18n="nav-post">Tangaza ubutaka</button>
 </div>
 
 <!-- ══════════════════════════════ TABS ══════════════════════════════ -->
@@ -1032,9 +1064,9 @@ body {
 
   <div class="hero">
     <div class="hero-left">
-      <div class="hero-eyebrow">Isoko y'Ubutaka rw'u Rwanda</div>
+      <div class="hero-eyebrow" data-i18n="hero-eyebrow">Isoko y'Ubutaka rw'u Rwanda</div>
       <h1 class="hero-title">Ba umuntu w'ubutaka bw'<em>u Rwanda</em>.</h1>
-      <p class="hero-desc">Isoko rigezweho ryunganira igura n'igurisha ry'ubutaka mu turere twose mirongo itatu(30). Gurisha kandi unagure ubutaka mugihe gito muburyo bwizewe kandi bwihuse.</p>
+      <p class="hero-desc" data-i18n="hero-desc">Isoko rigezweho ryunganira igura n'igurisha ry'ubutaka mu turere twose mirongo itatu(30). Gurisha kandi unagure ubutaka mugihe gito muburyo bwizewe kandi bwihuse.</p>
       <div class="hero-search">
         <select>
           <option>Turere twose</option>
@@ -1108,7 +1140,7 @@ body {
   <div class="listings-section">
     <div class="section-header">
       <div>
-        <div class="section-hed">Ubutaka bushya</div>
+        <div class="section-hed" data-i18n="listings-title">Ubutaka bushya</div>
         <div class="section-sub">Ubutaka 1,240 bugaragara mu Rwanda</div>
       </div>
       <div class="section-controls">
@@ -1206,7 +1238,7 @@ body {
 <div id="page-map" class="page">
   <div class="map-sidebar">
     <div class="map-sidebar-head">
-      <div class="map-sidebar-title">Ubutaka i Kigali</div>
+      <div class="map-sidebar-title" data-i18n="map-title">Ubutaka i Kigali</div>
       <div class="map-search-bar">
         <input id="map-search" type="text" placeholder="Shakisha akarere, ijambo...">
         <button onclick="applyMapFilter()">→</button>
@@ -1252,10 +1284,10 @@ body {
         <div class="detail-thumb"></div>
       </div>
       <div class="detail-specs">
-        <div class="detail-spec"><div class="detail-spec-val" id="d-area">600 m²</div><div class="detail-spec-key">Ingano yose</div></div>
+        <div class="detail-spec"><div class="detail-spec-val" id="d-area">600 m²</div><div class="detail-spec-key" data-i18n="spec-area">Ingano yose</div></div>
         <div class="detail-spec"><div class="detail-spec-val" id="d-perm2">RWF 20k</div><div class="detail-spec-key">Kuri buri m²</div></div>
-        <div class="detail-spec"><div class="detail-spec-val" id="d-terrain">Buringanye</div><div class="detail-spec-key">Imiterere</div></div>
-        <div class="detail-spec"><div class="detail-spec-val" id="d-zone">Zone R1</div><div class="detail-spec-key">Icyiciro</div></div>
+        <div class="detail-spec"><div class="detail-spec-val" id="d-terrain">Buringanye</div><div class="detail-spec-key" data-i18n="spec-terrain">Imiterere</div></div>
+        <div class="detail-spec"><div class="detail-spec-val" id="d-zone">Zone R1</div><div class="detail-spec-key" data-i18n="spec-zone">Icyiciro</div></div>
       </div>
       <div class="detail-tags" id="d-tags"></div>
       <p class="detail-description" id="d-desc"></p>
@@ -1272,14 +1304,14 @@ body {
       </div>
     </div>
     <div class="detail-sidebar">
-      <div class="price-label">Igiciro cyasabwe</div>
+      <div class="price-label" data-i18n="detail-asking">Igiciro cyasabwe</div>
       <div class="price-main" id="d-price">RWF 12,000,000</div>
       <div class="price-sub" id="d-pricesub">≈ RWF 20,000 / m² &middot; Bishobora kuganirwaho</div>
-      <button class="action-btn action-primary">📞 Vugana n'umuguzi</button>
-      <button class="action-btn action-secondary">💬 Ohereza ubutumwa</button>
+      <button class="action-btn action-primary" data-i18n="detail-contact">📞 Vugana n'umuguzi</button>
+      <button class="action-btn action-secondary" data-i18n="detail-msg">💬 Ohereza ubutumwa</button>
       <div class="disclaimer">TeraPlot ihuza abaguzi n'abagunzi kuri buryo bwa kigezweho. Ntitwitangira mu makurirane kandi ntitwita ingaruka z'amasezerano.</div>
       <hr class="sidebar-divider">
-      <div class="seller-section-title">Yatangazwe na</div>
+      <div class="seller-section-title" data-i18n="detail-listedby">Yatangazwe na</div>
       <div class="seller-row">
         <div class="seller-avatar" id="d-av" style="background:#3a2a22">JN</div>
         <div>
@@ -1293,7 +1325,7 @@ body {
         <div class="seller-stat"><div class="seller-stat-val">3</div><div class="seller-stat-key">Amasezerano</div></div>
         <div class="seller-stat"><div class="seller-stat-val">~2h</div><div class="seller-stat-key">Igihe cyo gusubiza</div></div>
       </div>
-      <a class="report-link">Tanga ikibazo kuri iri tangazo</a>
+      <a class="report-link" data-i18n="detail-report">Tanga ikibazo kuri iri tangazo</a>
     </div>
   </div>
 </div>
@@ -2121,6 +2153,229 @@ function mobileGo(tab) {
   document.getElementById('ham-btn').classList.remove('open');
 }
 
+
+// ════════════════════════════════════════════════════════════════════
+//  LANGUAGE TOGGLE — Kinyarwanda / English
+// ════════════════════════════════════════════════════════════════════
+var currentLang = 'rw';
+
+var TRANSLATIONS = {
+  rw: {
+    // Nav
+    'nav-home':    'Ahabanza',
+    'nav-search':  'Shakisha',
+    'nav-about':   'Abo turi bo',
+    'nav-map':     'Ikarita',
+    'nav-detail':  'Amakuru y\'ubutaka',
+    'nav-how':     'Uko bigenda',
+    'nav-post':    'Tangaza ubutaka',
+    'nav-signin':  'Injira',
+    'nav-cta':     'Andika ubutaka',
+    // Hero
+    'hero-eyebrow': 'Isoko y\'Ubutaka rw\'u Rwanda',
+    'hero-title':   'Ba umuntu w\'ubutaka bw\'<em>u Rwanda</em>.',
+    'hero-desc':    'Isoko rigezweho ryunganira igura n\'igurisha ry\'ubutaka mu turere twose mirongo itatu(30). Gurisha kandi unagure ubutaka mugihe gito muburyo bwizewe kandi bwihuse.',
+    'hero-search-placeholder': 'Injira akarere, umurenge, ubwoko bw\'ubutaka...',
+    'hero-search-btn': 'Shakisha',
+    'hero-select': 'Turere twose',
+    'hero-stat1-lbl': 'Ubutaka bugaragara',
+    'hero-stat2-lbl': 'Abatanga bemewe',
+    'hero-stat3-lbl': 'Turere twakwiwe',
+    // Listings
+    'listings-title': 'Ubutaka bushya',
+    'listings-sub':   '1,240 plots available across Rwanda',
+    'filter-all':     'Byose',
+    'filter-res':     'Amazu',
+    'filter-com':     'Ubucuruzi',
+    'filter-agr':     'Ubuhinzi',
+    'sort-newest':    'Bushya bwa mbere',
+    'sort-price':     'Igiciro: Hasi kugeza hejuru',
+    'sort-largest':   'Kinini bwa mbere',
+    // Map
+    'map-title':      'Ubutaka i Kigali',
+    'map-search-ph':  'Shakisha akarere, ijambo...',
+    'map-count':      'plots found',
+    'map-badge':      'active plots',
+    // Search page
+    'search-title':   'Shakisha ubutaka',
+    'search-sub':     'Ubutaka bose bugaragara kuri TeraPlot — Shakisha, huza kandi ubona ibyo ushaka.',
+    'search-ph':      'Injira akarere, umurenge, ubwoko...',
+    'search-btn':     'Shakisha',
+    'price-min':      'Hasi',
+    'price-max':      'Hejuru',
+    // Detail
+    'detail-asking':  'Igiciro cyasabwe',
+    'detail-contact': '📞 Vugana n\'umuguzi',
+    'detail-msg':     '💬 Ohereza ubutumwa',
+    'detail-disclaimer': 'TeraPlot ihuza abaguzi n\'abagunzi kuri buryo bwa kigezweho. Ntitwitangira mu makurirane kandi ntitwita ingaruka z\'amasezerano.',
+    'detail-listedby': 'Yatangazwe na',
+    'detail-report':  'Tanga ikibazo kuri iri tangazo',
+    'spec-area':      'Ingano yose',
+    'spec-perm2':     'Kuri buri m²',
+    'spec-terrain':   'Imiterere',
+    'spec-zone':      'Icyiciro',
+    // Form
+    'form-title':     'Tangaza ubutaka bwawe',
+    'form-sub':       'Itangazo ryawe rizasuzumwa mbere yo gushyirwa mu isoko.',
+    'form-step1':     'Konti',
+    'form-step2':     'Amakuru y\'ubutaka',
+    'form-step3':     'Amafoto n\'impapuro',
+    'form-step4':     'Isuzuma',
+    'form-alert':     'Gutanga amakuru y\'ikinyoma bizatuma konti yawe isibwa burundu.',
+    'form-basic':     'Amakuru Rusange',
+    'form-title-lbl': 'Umutwe w\'itangazo',
+    'form-district':  'Akarere',
+    'form-sector':    'Umurenge',
+    'form-address':   'Andika aderesi nyayo y\'ubutaka',
+    'form-desc':      'Ibisobanuro',
+    'form-specs':     'Ibisobanuro by\'ubutaka',
+    'form-type':      'Ubwoko bw\'ubutaka',
+    'form-size':      'Ingano y\'ubutaka',
+    'form-price':     'Igiciro (RWF)',
+    'form-neg':       'Igiciro gishobora kuganirwaho?',
+    'form-photos':    'Amafoto n\'impapuro',
+    'form-save':      'Bika',
+    'form-continue':  'Komeza →',
+    'form-submit':    'Ohereza itangazo →',
+    // How it works
+    'how-eyebrow':    'Uburyo bigenda',
+    'how-title':      'Byoroshye. Kuri buryo bwa kigezweho.<br>Nta bantu baho hagati.',
+    // About
+    'about-eyebrow':  'Abo turi bo',
+    'about-mission-lbl': 'Intego yacu',
+    // Modal
+    'modal-title':    'Ubutaka bwatangaziwe!',
+    'modal-sub':      'Ubutaka bwawe bwashyizwe mu isoko kandi bwashyizwe ku ikarita.',
+    'modal-back':     'Subira ahabanza',
+    'modal-map':      'Reba ku ikarita →',
+  },
+  en: {
+    // Nav
+    'nav-home':    'Home',
+    'nav-search':  'Search',
+    'nav-about':   'About',
+    'nav-map':     'Map view',
+    'nav-detail':  'Listing detail',
+    'nav-how':     'How it works',
+    'nav-post':    'Post a plot',
+    'nav-signin':  'Sign in',
+    'nav-cta':     'List your plot',
+    // Hero
+    'hero-eyebrow': 'Rwanda Land Marketplace',
+    'hero-title':   'Own a piece of <em>Rwanda\'s</em> soil.',
+    'hero-desc':    'A direct marketplace connecting land owners and buyers across all 30 districts. No agents. No commission. Just people and land.',
+    'hero-search-placeholder': 'Location, keyword, size...',
+    'hero-search-btn': 'Search',
+    'hero-select': 'All districts',
+    'hero-stat1-lbl': 'Active plots',
+    'hero-stat2-lbl': 'Verified sellers',
+    'hero-stat3-lbl': 'Districts covered',
+    // Listings
+    'listings-title': 'Recent plots',
+    'listings-sub':   '1,240 plots available across Rwanda',
+    'filter-all':     'All',
+    'filter-res':     'Residential',
+    'filter-com':     'Commercial',
+    'filter-agr':     'Agricultural',
+    'sort-newest':    'Newest first',
+    'sort-price':     'Price: Low to high',
+    'sort-largest':   'Largest first',
+    // Map
+    'map-title':      'Plots in Kigali',
+    'map-search-ph':  'Search sector, keyword...',
+    'map-count':      'plots found',
+    'map-badge':      'active plots',
+    // Search
+    'search-title':   'Search plots',
+    'search-sub':     'All plots available on TeraPlot — Search, filter and find what you need.',
+    'search-ph':      'Enter district, sector, type...',
+    'search-btn':     'Search',
+    'price-min':      'Min',
+    'price-max':      'Max',
+    // Detail
+    'detail-asking':  'Asking price',
+    'detail-contact': '📞 Contact seller',
+    'detail-msg':     '💬 Send a message',
+    'detail-disclaimer': 'TeraPlot connects buyers and sellers directly. We are not party to any transaction and bear no responsibility for deal outcomes.',
+    'detail-listedby': 'Listed by',
+    'detail-report':  'Report this listing',
+    'spec-area':      'Total area',
+    'spec-perm2':     'Per m²',
+    'spec-terrain':   'Terrain',
+    'spec-zone':      'Zoning',
+    // Form
+    'form-title':     'List your plot',
+    'form-sub':       '<span data-i18n="form-sub">Your listing will be reviewed before going live.</span>',
+    'form-step1':     'Account',
+    'form-step2':     'Plot details',
+    'form-step3':     'Photos & docs',
+    'form-step4':     'Review',
+    'form-alert':     'Providing false information will result in permanent account suspension.',
+    'form-basic':     'Basic information',
+    'form-title-lbl': 'Listing title',
+    'form-district':  'District',
+    'form-sector':    'Sector',
+    'form-address':   'Specific plot address',
+    'form-desc':      'Description',
+    'form-specs':     'Plot specifications',
+    'form-type':      'Land type',
+    'form-size':      'Plot size',
+    'form-price':     'Asking price (RWF)',
+    'form-neg':       'Price negotiable?',
+    'form-photos':    'Photos & documents',
+    'form-save':      'Save draft',
+    'form-continue':  'Continue →',
+    'form-submit':    'Submit listing →',
+    // How it works
+    'how-eyebrow':    'The process',
+    'how-title':      'Simple. Direct.<br>No middlemen.',
+    // About
+    'about-eyebrow':  'Who we are',
+    'about-mission-lbl': 'Our mission',
+    // Modal
+    'modal-title':    'Plot submitted!',
+    'modal-sub':      'Your plot has been listed and pinned on the map.',
+    'modal-back':     'Back to home',
+    'modal-map':      'View on map →',
+  }
+};
+
+function t(key) {
+  return TRANSLATIONS[currentLang][key] || TRANSLATIONS['rw'][key] || key;
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('tp_lang', lang);
+
+  // Toggle button states
+  document.getElementById('btn-rw').classList.toggle('active', lang === 'rw');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+  // Apply translations to all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    var val = t(key);
+    if (el.tagName === 'INPUT') {
+      el.placeholder = val;
+    } else if (el.tagName === 'OPTION' && el.getAttribute('data-i18n-val')) {
+      el.textContent = val;
+    } else {
+      el.innerHTML = val;
+    }
+  });
+
+  // Re-render map sidebar and search if open
+  if (typeof renderMapSidebar === 'function') renderMapSidebar();
+  if (typeof runSearch === 'function' && document.getElementById('page-search').classList.contains('active')) runSearch();
+}
+
+// Load saved language on startup
+document.addEventListener('DOMContentLoaded', function() {
+  var saved = localStorage.getItem('tp_lang');
+  if (saved && saved !== 'rw') setLang(saved);
+});
+
 </script>
 
 <!-- ═══════════════════════════════ HOW IT WORKS ══════════════════ -->
@@ -2207,7 +2462,7 @@ function mobileGo(tab) {
       <div class="hiw-cta-sub">Shakisha ubutaka bugaragara cyangwa tangaza ubutaka bwawe uyu munsi — ubuntu, vuba kandi kuri buryo bwa kigezweho.</div>
       <div class="hiw-cta-btns">
         <button class="btn btn-ghost" onclick="switchTab('home')">Shakisha ubutaka</button>
-        <button class="btn btn-primary" onclick="switchTab('post')">Andika ubutaka</button>
+        <button class="btn btn-primary" onclick="switchTab('post')" data-i18n="nav-cta">Andika ubutaka</button>
       </div>
     </div>
   </div>
@@ -2325,8 +2580,8 @@ function mobileGo(tab) {
     <div style="font-size:14px;color:var(--mist);line-height:1.75;margin-bottom:28px;font-weight:300;">Ubutaka bwawe bwashyizwe mu isoko kandi bwashyizwe ku ikarita. Buzasuzumwa na team yacu mbere yo gushyirwa mu isoko ryose — gusumbya amasaha 24.</div>
     <div id="modal-plot-summary" style="background:var(--bg);border:1px solid var(--border);padding:16px 18px;margin-bottom:28px;text-align:left;"></div>
     <div style="display:flex;gap:10px;justify-content:center;">
-      <button class="btn btn-ghost" onclick="closeModal()">Subira ahabanza</button>
-      <button class="btn btn-primary" onclick="goToMap()">Reba ku ikarita →</button>
+      <button class="btn btn-ghost" onclick="closeModal()" data-i18n="modal-back">Subira ahabanza</button>
+      <button class="btn btn-primary" onclick="goToMap()" data-i18n="modal-map">Reba ku ikarita →</button>
     </div>
   </div>
 </div>
@@ -2334,7 +2589,7 @@ function mobileGo(tab) {
 <div id="page-search" class="page">
   <div class="search-page">
     <div class="search-header">
-      <div class="search-header-title">Shakisha ubutaka</div>
+      <div class="search-header-title" data-i18n="search-title">Shakisha ubutaka</div>
       <div class="search-header-sub">Ubutaka bose bugaragara kuri TeraPlot &mdash; Shakisha, huza kandi ubona ibyo ushaka.</div>
       <div class="sbar-big">
         <input id="s-input" type="text" placeholder="Injira akarere, umurenge, ubwoko...">
