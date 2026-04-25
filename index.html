@@ -1239,6 +1239,7 @@ body {
   <div class="detail-layout">
     <div class="detail-main">
       <div class="detail-eyebrow" id="d-eyebrow">Amazu · Kigali</div>
+      <div id="d-new-badge" style="display:none;font-size:11px;background:rgba(194,98,42,0.15);color:var(--terra);border:1px solid rgba(194,98,42,0.3);padding:4px 10px;border-radius:3px;margin-bottom:10px;width:fit-content;">&#10003; Nshya — Itegerezwa isuzuma</div>
       <h1 class="detail-title" id="d-title">Ubutaka bwa 600 sqm mu Karere ka Kicukiro</h1>
       <div class="detail-meta" id="d-meta">📍 Kicukiro, Kigali &nbsp;·&nbsp; Yatangazwe hashize iminsi 3 &nbsp;·&nbsp; Ref: TP-2024-0001</div>
       <div class="detail-image">
@@ -1283,7 +1284,7 @@ body {
         <div class="seller-avatar" id="d-av" style="background:#3a2a22">JN</div>
         <div>
           <div class="seller-name-main" id="d-seller">Jean Nkusi</div>
-          <div class="seller-since">✓ Byemejwe &middot; Kuva 2024</div>
+          <div class="seller-since" id="d-seller-since">✓ Byemejwe &middot; Kuva 2024</div>
         </div>
       </div>
       <div class="seller-stats">
@@ -1794,6 +1795,7 @@ function submitPlot() {
   var unit       = (document.getElementById('f-unit')       || {}).value || 'm²';
   var price      = (document.getElementById('f-price')      || {}).value || '';
   var negotiable = (document.getElementById('f-negotiable') || {}).value || 'Yes';
+  var desc       = document.querySelector('#page-post .form-textarea') ? document.querySelector('#page-post .form-textarea').value : '';
   var landTypeBtn = document.querySelector('.land-type-btn.active');
   var landType   = landTypeBtn ? landTypeBtn.textContent.trim().toLowerCase() : 'residential';
 
@@ -1816,6 +1818,7 @@ function submitPlot() {
     sector:   sector.trim() || district,
     district: district,
     address:  address.trim(),
+    description: desc.trim(),
     type:     landType,
     price:    formatPrice(price),
     size:     size + ' ' + unit,
@@ -1939,10 +1942,46 @@ var DETAIL_DATA = {
 };
 
 function openDetail(id) {
+  // Try static DETAIL_DATA first, then fall back to dynamic PLOTS data
   var d = DETAIL_DATA[id];
+  var p = PLOTS.find(function(x){ return x.id == id; });
+
+  // Build detail object from PLOTS data if not in DETAIL_DATA
+  if (!d && p) {
+    var TL = {residential:'Amazu', commercial:'Ubucuruzi', agricultural:'Ubuhinzi'};
+    var TC = {residential:'#c2622a', commercial:'#b87830', agricultural:'#4a7a8a'};
+    var priceNum = parseInt((p.price||'').replace(/[^0-9]/g,''))||0;
+    var sizeNum  = parseInt((p.size||'').replace(/[^0-9]/g,''))||1;
+    var perm2    = sizeNum > 0 ? Math.round(priceNum/sizeNum).toLocaleString() : '—';
+    var ini      = (p.seller||'TP').split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
+    var AVBG     = ['#3a2a22','#352514','#182030','#2a1e2e','#1e2a1e','#1e1e2a','#2a2a1e'];
+    var avbg     = AVBG[id % AVBG.length];
+    d = {
+      eyebrow:  (TL[p.type]||p.type) + ' · ' + (p.district||'Kigali'),
+      title:    p.title + (p.sector ? ', ' + p.sector : ''),
+      meta:     '&#128205; ' + p.sector + ', ' + (p.district||'Kigali') + (p.address ? ' &nbsp;&middot;&nbsp; ' + p.address : '') + ' &nbsp;&middot;&nbsp; Ref: TP-' + id,
+      area:     p.size,
+      perm2:    'RWF ' + perm2,
+      terrain:  'Buringanye',
+      zone:     TL[p.type]||p.type,
+      price:    p.price,
+      pricesub: '&asymp; RWF ' + perm2 + ' / m&sup2; &middot; Bishobora kuganirwaho',
+      desc:     p.description || 'Ubutaka bugaragara kuri TeraPlot. Vugana na nyir\'ubutaka kugirango ubone amakuru menshi.',
+      doc1:     'Impapuro z\'ubutaka — ' + p.sector + '.pdf',
+      tags:     [TL[p.type]||p.type, p.sector, p.district||'Kigali', 'Bishobora kuganirwaho'],
+      seller:   p.seller || 'Umuguzi',
+      av:       ini,
+      avbg:     avbg,
+      svgtext:  p.size,
+      svgcolor: TC[p.type]||'#c2622a',
+      verified: p.verified || false,
+      newListing: p.isNew || false
+    };
+  }
+
   if (!d) { switchTab('detail'); return; }
 
-  // Populate all fields
+  // ── Populate all detail page fields ──────────────────────────
   document.getElementById('d-eyebrow').textContent  = d.eyebrow;
   document.getElementById('d-title').textContent    = d.title;
   document.getElementById('d-meta').innerHTML       = d.meta;
@@ -1959,12 +1998,20 @@ function openDetail(id) {
   document.getElementById('d-av').style.background  = d.avbg;
   document.getElementById('d-svg-text').textContent = d.svgtext;
   document.getElementById('d-svg-rect').setAttribute('stroke', d.svgcolor);
-  document.getElementById('d-svg-rect').setAttribute('fill', d.svgcolor.replace('#', 'rgba(') + ',0.08)');
+  document.getElementById('d-svg-rect').setAttribute('fill', d.svgcolor + '22');
+
+  // Verified badge
+  var sinceEl = document.getElementById('d-seller-since');
+  if (sinceEl) sinceEl.textContent = d.verified ? '✓ Byemejwe · Kuva 2024' : 'Ntabwo yemejwe';
+
+  // New listing badge
+  var newBadge = document.getElementById('d-new-badge');
+  if (newBadge) newBadge.style.display = d.newListing ? 'inline-block' : 'none';
 
   // Tags
   var tagsEl = document.getElementById('d-tags');
   tagsEl.innerHTML = '';
-  d.tags.forEach(function(tag) {
+  (d.tags||[]).forEach(function(tag) {
     var el = document.createElement('div');
     el.className = 'detail-tag';
     el.textContent = tag;
