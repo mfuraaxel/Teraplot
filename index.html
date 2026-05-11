@@ -1002,12 +1002,12 @@ body {
     <button class="nav-link" onclick="switchTab('about')">Abo turi bo</button>
     <button class="nav-link" onclick="switchTab('map')">Ikarita</button>
     <button class="nav-link" onclick="switchTab('detail')">Amakuru y'ubutaka</button>
-    <button class="nav-link" onclick="switchTab('how')">Uko bigenda</button>
-    <button class="nav-link" onclick="switchTab('post')">Tangaza ubutaka</button>
+    <button class="nav-link" onclick="switchTab('how')">Uko bikorwa</button>
+    <button class="nav-link" onclick="switchTab('post')">Tangaza ubutaka bwawe</button>
   </div>
   <div class="nav-actions">
     <button class="btn btn-ghost">Injira</button>
-    <button class="btn btn-primary" onclick="switchTab('post')">Andika ubutaka</button>
+    <button class="btn btn-primary" onclick="switchTab('post')">TANGAZA</button>
     <button class="ham-btn" id="ham-btn" onclick="toggleMobileNav()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -1021,8 +1021,8 @@ body {
   <button onclick="mobileGo('about')">Abo turi bo</button>
   <button onclick="mobileGo('map')">Ikarita</button>
   <button onclick="mobileGo('detail')">Amakuru y'ubutaka</button>
-  <button onclick="mobileGo('how')">Uko bigenda</button>
-  <button onclick="mobileGo('post')">Tangaza ubutaka</button>
+  <button onclick="mobileGo('how')">Uko bikorwa</button>
+  <button onclick="mobileGo('post')">Tangaza ubutaka bwawe</button>
 </div>
 
 <!-- ══════════════════════════════ TABS ══════════════════════════════ -->
@@ -1032,12 +1032,12 @@ body {
 
   <div class="hero">
     <div class="hero-left">
-      <div class="hero-eyebrow">Isoko y'Ubutaka rw'u Rwanda</div>
-      <h1 class="hero-title">Ba umuntu w'ubutaka bw'<em>u Rwanda</em>.</h1>
-      <p class="hero-desc">Isoko rigezweho ryunganira igura n'igurisha ry'ubutaka mu turere twose mirongo itatu(30). Gurisha kandi unagure ubutaka mugihe gito muburyo bwizewe kandi bwihuse.</p>
+      <div class="hero-eyebrow">Isoko ry'Ubutaka mu Rwanda</div>
+      <h1 class="hero-title">Shora imari mu butaka bw'ejo hazaza.<em>u Rwanda</em>.</h1>
+      <p class="hero-desc">Urubuga rugufasha kubona, kugura no kugurisha ubutaka mu buryo bworoshye, bwihuse kandi bwizewe.</p>
       <div class="hero-search">
         <select>
-          <option>Turere twose</option>
+          <option>Uturere twose</option>
           <option>Kigali</option>
           <option>Musanze</option>
           <option>Huye</option>
@@ -1051,15 +1051,15 @@ body {
       <div class="hero-stats">
         <div>
           <div class="stat-num">1,240</div>
-          <div class="stat-label">Ubutaka bugaragara</div>
+          <div class="stat-label">Ubutaka buboneka</div>
         </div>
         <div>
           <div class="stat-num">430+</div>
-          <div class="stat-label">Abatanga bemewe</div>
+          <div class="stat-label">Abacuruzi bemejwe</div>
         </div>
         <div>
           <div class="stat-num">30</div>
-          <div class="stat-label">Turere twakwiwe</div>
+          <div class="stat-label">Dukorera mu turere 30 twose</div>
         </div>
       </div>
     </div>
@@ -1094,9 +1094,9 @@ body {
         </svg>
       </div>
       <div class="hero-featured" onclick="openDetail(1)">
-        <div class="featured-tag">Tangaza ryatanzwe</div>
+        <div class="featured-tag">Ubutaka bwatoranyijwe</div>
         <div class="featured-title">Ubutaka bw'amazu bwa 600 sqm</div>
-        <div class="featured-loc">📍 Kicukiro, Kigali &middot; Title deed available</div>
+        <div class="featured-loc">📍 Kicukiro, Kigali &middot; Gifite icyangombwa cy'ubutaka</div>
         <div class="featured-row">
           <div class="featured-price">RWF 12,000,000</div>
           <button class="btn btn-outline">Reba ubutaka →</button>
@@ -1108,20 +1108,20 @@ body {
   <div class="listings-section">
     <div class="section-header">
       <div>
-        <div class="section-hed">Ubutaka bushya</div>
-        <div class="section-sub">Ubutaka 1,240 bugaragara mu Rwanda</div>
+        <div class="section-hed">Ubutaka bushyashya</div>
+        <div class="section-sub">Ubutaka 1,240 buboneka mu Rwanda</div>
       </div>
       <div class="section-controls">
         <div class="filter-group">
-          <button class="filter-chip active">Byose</button>
-          <button class="filter-chip">Amazu</button>
-          <button class="filter-chip">Ubucuruzi</button>
-          <button class="filter-chip">Ubuhinzi</button>
+          <button class="filter-chip active">Bwose</button>
+          <button class="filter-chip">Ubutaka bw'amazu</button>
+          <button class="filter-chip">Ubutaka bw'ubucuruzi</button>
+          <button class="filter-chip">Ubutaka bw'ubuhinzi</button>
         </div>
         <select class="sort-select">
-          <option>Bushya bwa mbere</option>
-          <option>Igiciro: Hasi kugeza hejuru</option>
-          <option>Kinini bwa mbere</option>
+          <option>Ubushyashya</option>
+          <option>Igiciro gito</option>
+          <option>Ingano nini</option>
         </select>
       </div>
     </div>
@@ -1140,8 +1140,8 @@ body {
           <div class="card-location">📍 Kicukiro, Kigali</div>
           <div class="card-specs">
             <div class="spec-item"><div class="spec-val">600 m²</div><div class="spec-key">Ingano</div></div>
-            <div class="spec-item"><div class="spec-val">Impapuro z'ubutaka</div><div class="spec-key">Impapuro</div></div>
-            <div class="spec-item"><div class="spec-val">Hashize iminsi 3</div><div class="spec-key">Yatangazwe</div></div>
+            <div class="spec-item"><div class="spec-val">Icyangombwa cy'ubutaka</div><div class="spec-key">Icyangombwa</div></div>
+            <div class="spec-item"><div class="spec-val">nyuma y'iminsi 3</div><div class="spec-key">Bwatangajwe</div></div>
           </div>
           <div class="card-seller">
             <div class="seller-av" style="background:#3a2a22">JN</div>
